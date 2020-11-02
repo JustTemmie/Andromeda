@@ -60,7 +60,7 @@ class Fun(Cog):
         await ctx.message.delete()
         await ctx.send(message)
         
-    @command(name="fact", aliases=["info", "animal", "fun fact"])
+    @command(name="fact", aliases=["info", "animal", "fun fact"], brief="brief description", description="The list of animals you can ask facts about are, dog, cat, panda, fox, bird, koala")
     @cooldown(1, 2.5, BucketType.guild)
     async def animal_fact(self, ctx, animal: str):
         if (animal := animal.lower()) in ("dog", "cat", "panda", "fox", "bird", "koala"):
@@ -90,7 +90,7 @@ class Fun(Cog):
                     await ctx.send(f"API returned a {response.status} status.")
         
         else:
-            await ctx.send("No facts are available for that animal.")
+            await ctx.send("No facts are available for that animal, The list of animals you can ask facts about are dog, cat, panda, fox, bird, koala.")
     
     @Cog.listener()
     async def on_ready(self):

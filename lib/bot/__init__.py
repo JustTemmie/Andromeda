@@ -4,6 +4,7 @@ from glob import glob
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+from discord import Intents
 from discord import Embed, File
 from discord.errors import HTTPException, Forbidden
 from discord.ext.commands import Bot as BotBase
@@ -48,7 +49,11 @@ class Bot(BotBase):
         self.scheduler = AsyncIOScheduler()
         
         db.autosave(self.scheduler)                
-        super().__init__(command_prefix=get_prefix, owner_ids=OWNER_IDS)
+        super().__init__(
+            command_prefix=get_prefix,
+            owner_ids=OWNER_IDS,
+            intents=Intents.all(),
+        )
         
     def setup(self):
         for cog in COGS:
@@ -93,7 +98,7 @@ class Bot(BotBase):
             await args[0].send("Sorry, something unexpected went wrong.")
             
             #await self.stdout.send("an error occured")   
-            raise
+            #raise
     
     async def on_command_error(self, ctx, exc):
         if any([isinstance(exc, error) for error in IGNORE_EXCEPTIONS]):
@@ -124,7 +129,7 @@ class Bot(BotBase):
     async def on_ready(self):
         if not self.ready:
             self.ready = True
-            #self.guild = self.get_guild(628212961218920477)
+            self.guild = self.get_guild(628212961218920477)
             self.stdout = self.get_channel(767861117216227338)
             await self.stdout.send("Andromeda is ready!")
             self.scheduler.start()
