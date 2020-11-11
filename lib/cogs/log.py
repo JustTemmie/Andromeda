@@ -11,6 +11,8 @@ class Log(Cog):
 
 	@Cog.listener()
 	async def on_ready(self):
+		await self.bot.stdout.send("Log cog ready!")
+  
 		if not self.bot.ready:
 			self.log_channel = self.bot.get_channel(772591539423281172)
 			self.bot.cogs_ready.ready_up("log")
@@ -28,7 +30,7 @@ class Log(Cog):
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)
 
-			await self.log_channel.send(embed=embed)
+			await self.bot.get_channel(772591539423281172).send(embed=embed)
 
 		if before.discriminator != after.discriminator:
 			embed = Embed(title="Discriminator change",
@@ -41,7 +43,7 @@ class Log(Cog):
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)
 
-			await self.log_channel.send(embed=embed)
+			await self.bot.get_channel(772591539423281172).send(embed=embed)
 
 		if before.avatar_url != after.avatar_url:
 			embed = Embed(title="Avatar change",
@@ -52,12 +54,13 @@ class Log(Cog):
 			embed.set_thumbnail(url=before.avatar_url)
 			embed.set_image(url=after.avatar_url)
 
-			await self.log_channel.send(embed=embed)
+			await self.bot.get_channel(772591539423281172).send(embed=embed)
 
 	@Cog.listener()
 	async def on_member_update(self, before, after):
 		if before.display_name != after.display_name:
 			embed = Embed(title="Nickname change",
+                          #description=f"{author.display_name}",
 						  colour=after.colour,
 						  timestamp=datetime.utcnow())
 
@@ -67,7 +70,7 @@ class Log(Cog):
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)
 
-			await self.log_channel.send(embed=embed)
+			await self.bot.get_channel(772591539423281172).send(embed=embed)
 
 		elif before.roles != after.roles:
 			embed = Embed(title="Role updates",
@@ -80,7 +83,7 @@ class Log(Cog):
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)
 
-			await self.log_channel.send(embed=embed)
+			await self.bot.get_channel(772591539423281172).send(embed=embed)
 
 	@Cog.listener()
 	async def on_message_edit(self, before, after):
@@ -97,7 +100,7 @@ class Log(Cog):
 				for name, value, inline in fields:
 					embed.add_field(name=name, value=value, inline=inline)
 
-				await self.log_channel.send(embed=embed)
+				await self.bot.get_channel(772591539423281172).send(embed=embed)
 
 	@Cog.listener()
 	async def on_message_delete(self, message):
@@ -112,7 +115,7 @@ class Log(Cog):
 			for name, value, inline in fields:
 				embed.add_field(name=name, value=value, inline=inline)
 
-			await self.log_channel.send(embed=embed)
+			await self.bot.get_channel(772591539423281172).send(embed=embed)
 
 
 def setup(bot):

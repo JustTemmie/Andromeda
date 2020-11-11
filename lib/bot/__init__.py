@@ -12,6 +12,7 @@ from discord.ext.commands import Context
 from discord.ext.commands import (CommandNotFound, BadArgument, MissingRequiredArgument,
                                   CommandOnCooldown)
 from discord.ext.commands import when_mentioned_or
+from discord.ext.commands import command, has_permissions, bot_has_permissions
 
 from ..db import db
 
@@ -88,7 +89,7 @@ class Bot(BotBase):
         
         
     async def on_connect(self):
-        print(" Connected!")
+        print(f" Connected to Discord (latency: {self.latency*1000:,.0f} ms).")
 
     async def on_disconnect(self):
         print("bot disconnected")
@@ -106,7 +107,7 @@ class Bot(BotBase):
             pass
         
         elif isinstance(exc, MissingRequiredArgument):
-            await ctx.send("One or more required arguments are missing.")
+            await ctx.send("One or more of the required arguments are missing")
         
         elif isinstance(exc, CommandOnCooldown):
             await ctx.send(f"That command is on {str(exc.cooldown.type).split('.')[-1]} cooldown. Please try again in {exc.retry_after:,.2f} seconds.")
@@ -157,12 +158,12 @@ class Bot(BotBase):
 
         else:
             print("bot reconnected")
-
+       
     async def on_message(self, message):
-        #if message.author.bot and message.author != message.guild.me:
-        #    pass
-        if not message.author.bot:
-            await self.process_commands(message)
+            #if message.author.bot and message.author != message.guild.me:
+            #    pass
+            if not message.author.bot:
+                await self.process_commands(message)
 
     
 

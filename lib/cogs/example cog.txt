@@ -1,6 +1,6 @@
-from discord import Forbidden
-from discord.ext.commands import command
+from discord.ext.commands import command, has_permissions, bot_has_permissions
 from discord.ext.commands import Cog
+from discord.ext.commands import CheckFailure
 
 
 class INSERTCOGNAMEHERE(Cog):
@@ -17,3 +17,7 @@ class INSERTCOGNAMEHERE(Cog):
             
 def setup(bot):
     bot.add_cog(INSERTCOGNAMEHERE(bot))
+
+
+
+if (ctx.guild.me.top_role.posistion > target.top_role.position and not target.guild_permission.administrator):
