@@ -32,7 +32,7 @@ class Welcome(Cog):
 	@Cog.listener()
 	async def on_member_remove(self, member):
 		db.execute("DELETE FROM exp WHERE UserID = ?", member.id)
-		await self.bot.get_channel(628212961218920479).send(f"{member.display_name} has left {member.guild.name}.")
+		await self.bot.get_channel(770411215301246976).send(f"{member.display_name} has left {member.guild.name}.")
 
 
 def setup(bot):

@@ -60,12 +60,12 @@ class Fun(Cog):
         await ctx.message.delete()
         await ctx.send(message)
         
-    @command(name="fact", aliases=["info", "animal", "fun fact"], brief="brief description", description="The list of animals you can ask facts about are, dog, cat, panda, fox, bird, koala")
+    @command(name="fact", aliases=["info", "animal", "fun fact"], brief="brief description", description="The list of animals you can ask facts about are, dog, cat, panda, fox, birb, koala")
     @cooldown(1, 2.5, BucketType.guild)
     async def animal_fact(self, ctx, animal: str):
-        if (animal := animal.lower()) in ("dog", "cat", "panda", "fox", "bird", "koala"):
-            fact_url = f"https://some-random-api.ml/facts/{animal}"
-            image_url = f"https://some-random-api.ml/img/{'birb' if animal == 'bird' else animal}"
+        if (animal := animal.lower()) in ("dog", "cat", "panda", "fox", "birb", "koala"):
+            fact_url = f"https://some-random-api.ml/facts/{'bird' if animal == 'birb' else animal}"
+            image_url = f"https://some-random-api.ml/img/{animal}"
             
             async with request("GET", image_url, headers={}) as response:
                 if response.status == 200:
@@ -90,7 +90,7 @@ class Fun(Cog):
                     await ctx.send(f"API returned a {response.status} status.")
         
         else:
-            await ctx.send("No facts are available for that animal, The list of animals you can ask facts about are dog, cat, panda, fox, bird, koala.")
+            await ctx.send("No facts are available for that animal, The list of animals you can ask facts about are dog, cat, panda, fox, birb, koala.")
     
     @Cog.listener()
     async def on_ready(self):
