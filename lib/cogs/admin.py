@@ -14,7 +14,7 @@ class Admin(Cog):
     def __init__(self, bot):
         self.bot = bot
         
-    @command(name="kick")
+    @command(name="kick", brief="Kicks the specified user")
     @bot_has_permissions(kick_members=True)
     @has_permissions(kick_members=True)
     async def kick_members(self, ctx, targets: Greedy[Member], *, reason:Optional[str] = "No reason provided"):
@@ -49,7 +49,7 @@ class Admin(Cog):
         if isinstance(exc, CheckFailure):
             await ctx.send("Insufficient permissions to perform tat task")
     
-    @command(name="ban")
+    @command(name="ban", brief="Bans the specified user")
     @bot_has_permissions(ban_members=True)
     @has_permissions(ban_members=True)
     async def ban_members(self, ctx, targets: Greedy[Member], *, reason:Optional[str] = "No reason provided"):
@@ -87,7 +87,7 @@ class Admin(Cog):
         if isinstance(exc, CheckFailure):
             await ctx.send("Insufficient permissions to perform tat task")
     
-    @command(name="clear", aliases=["purge"])
+    @command(name="clear", aliases=["purge"], brief="Clears sum messages")
     @bot_has_permissions(manage_messages=True)
     @has_permissions(manage_messages=True)
     async def clear_messages(self, ctx, targets: Greedy[Member], limit: Optional[int] = 5):

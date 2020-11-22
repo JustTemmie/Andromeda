@@ -13,19 +13,19 @@ class Fun(Cog):
     def __init__(self, bot):
         self.bot = bot
         
-    @command(name="some_command", aliases=["command", "c"]
-             #, hidden=True hides from the default help command
+    @command(name="some_command", aliases=["command", "c"], brief="honestly, i have no idea"
+             # , hidden=True hides from the default help command
              )
     @cooldown(1, 3, BucketType.user)
     async def semecommand(self, ctx):
         pass
     
-    @command(name="hello", aliases=["hi", "hey"])
+    @command(name="hello", aliases=["hi", "hey"], brief="Gives you a warm greeting")
     @cooldown(1, 0.7, BucketType.guild)
     async def say_hello(self, ctx):
         await ctx.send(f"{choice(('Hello', 'Greetings', 'Bonjour', 'hi-ya','Sup', 'Privet', 'Привет', 'Hi', 'Good day', 'Howdy', 'Hey', 'Heyya'))} {ctx.author.mention}!")
         
-    @command(name="dice", aliases=["roll"])
+    @command(name="dice", aliases=["roll"], brief="Roll some virtual dice! dice <amount of dice>d<wanted sides on dice>")
     @cooldown(1, 3, BucketType.user)
     async def roll_dice(self, ctx, die_string: str):
         dice, value = (int(value) for value in die_string.split("d"))
@@ -44,7 +44,7 @@ class Fun(Cog):
 #            await ctx.send("The result was too large. Please try a lower number.")
 # instead of using this we rather limited the number of dice as HTTPException is wack
             
-    @command(name="slap", aliases=["hit"])
+    @command(name="slap", aliases=["hit"], brief="Slaps whomever you want, brutal")
     @cooldown(2, 3, BucketType.user)
     async def slap_member(self, ctx, member: Member, *, reason: Optional[str] = "for no real reason"):
         await ctx.send(f"{ctx.author.display_name} slapped {member.mention} {reason}!")  
@@ -54,13 +54,13 @@ class Fun(Cog):
         if isinstance(exc, BadArgument):
             await ctx.send("I can't find that member.")
             
-    @command(name="echo", aliases=["please say", "repeat after me"])
+    @command(name="echo", aliases=["please say", "repeat after me"], brief="Repeats the message you send")
     @cooldown(1, 3, BucketType.user)
     async def echo_message(self, ctx, *, message):
         await ctx.message.delete()
         await ctx.send(message)
         
-    @command(name="fact", aliases=["info", "animal", "fun fact"], brief="brief description", description="The list of animals you can ask facts about are, dog, cat, panda, fox, birb, koala")
+    @command(name="fact", aliases=["info", "animal", "fun fact"], brief="Tells you a random fact about the specified animal", description="The list of animals you can ask facts about are, dog, cat, panda, fox, birb, koala")
     @cooldown(1, 2.5, BucketType.guild)
     async def animal_fact(self, ctx, animal: str):
         if (animal := animal.lower()) in ("dog", "cat", "panda", "fox", "birb", "koala"):
