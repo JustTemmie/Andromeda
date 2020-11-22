@@ -61,7 +61,7 @@ class Fun(Cog):
         await ctx.send(message)
         
     @command(name="fact", aliases=["info", "animal", "fun fact"], brief="Tells you a random fact about the specified animal", description="The list of animals you can ask facts about are, dog, cat, panda, fox, birb, koala")
-    @cooldown(1, 2.5, BucketType.guild)
+    @cooldown(1, 1, BucketType.guild)
     async def animal_fact(self, ctx, animal: str):
         if (animal := animal.lower()) in ("dog", "cat", "panda", "fox", "birb", "koala"):
             fact_url = f"https://some-random-api.ml/facts/{'bird' if animal == 'birb' else animal}"
