@@ -1,7 +1,11 @@
 *.db
 *.db-journal
 __pycache__
-lib/bot/token.0
+token.0
+reddit_app_id
+reddit_app_secret
+eye_bleach.txt
+global(disabled)
 .vscode/settings.json
 data/yay
 lib/ye.txt
