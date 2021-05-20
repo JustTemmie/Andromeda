@@ -16,12 +16,17 @@ from discord.ext.commands import command, has_permissions, bot_has_permissions
 
 from ..db import db
 
+#these are variables that are used for different funcions like setting the bot's prefix and making commands only the onwer can execute
 PREFIX = "+"
 OWNER_IDS = [368423564229083137]
+
+#i need to get back to this lmao HI READ ME
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
+
+#ignore these errors so they don't get printed in the command line
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
 
-
+#tells the bot to execute a command whenever the bot is mentioned OR the prefix is used, in this case "+"
 def get_prefix(bot, message):
     return when_mentioned_or(PREFIX)(bot, message)
 
