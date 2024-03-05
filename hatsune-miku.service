@@ -1,0 +1,16 @@
+[Unit]
+Description=Hatsune Miku!
+
+[Service]
+Type=simple
+
+NoNewPrivileges=true
+ReadWritePaths=META_INSTALL_PATH
+ExecStart=META_INSTALL_PATH/venv/bin/python -u META_INSTALL_PATH/main.py
+
+Nice=19
+SuccessExitStatus=130
+ProtectSystem=strict
+
+[Install]
+WantedBy=default.target
