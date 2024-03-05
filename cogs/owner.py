@@ -5,19 +5,9 @@ from discord.ext.commands import bot_has_permissions
 import ast
 import sys
 import os
-import asyncio
-
-
-
 import subprocess
-import datetime
-import re
-import json
-import time
-import random
-import contextlib
-import io
 
+import hatsune_miku.decorators as decorators
 
 def insert_returns(body):
     # insert return stmt if the last expression is a expression statement
@@ -34,7 +24,18 @@ def insert_returns(body):
     if isinstance(body[-1], ast.With):
         insert_returns(body[-1].body)
 
-
+async def send_long_message(ctx, msg, preset_output = ""):
+    chunks = msg.splitlines()# send this at the very top
+    
+    while chunks:
+        output = ""
+        while chunks and len(output) + len(chunks[0]) < 1994:
+            output += chunks[0] + "\n"
+            chunks.pop(0)
+        
+        await ctx.send(f"{preset_output}```{output}```")
+        preset_output = ""
+        
 class Owner(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
@@ -56,6 +57,7 @@ class Owner(commands.Cog):
     @commands.is_owner()
     @commands.command(name="shutdown")
     async def shutdown(self, ctx):
+        print(dir(ctx))
         await ctx.send("Turning off the miku...")
         await self.miku.change_presence(
             status=discord.Status.idle,
@@ -67,43 +69,26 @@ class Owner(commands.Cog):
         await self.miku.close()
         print("Terminated using `shutdown` command.")
 
-    @commands.is_owner()
+    @decorators.is_host_owner()
     @commands.command(name="bash", aliases=["sh"])
     async def run_bash(self, ctx, *, command):
         shell_output = subprocess.getoutput(command)
         
-        output = f"`{command}` returned output:\n"
-        chunks = shell_output.splitlines()
-
-        while chunks:
-            while chunks and len(output) + len(chunks[0]) < 1994:
-                output += chunks[0] + "\n"
-                chunks.pop(0)
-            
-            await ctx.send(f"```{output}```")
-            output = ""
+        await send_long_message(ctx, shell_output, f"`{command}` returned output:\n")
     
-    @commands.command(name="update", brief="Updates the bot by pulling from github")
     @commands.is_owner()
+    @commands.command(name="update", brief="Updates the bot by pulling from github")
     async def update_git_pull(self, ctx, restart="False"):
         try:
             subprocess.call(["git", "fetch"])
-            git_commit = subprocess.check_output(["git", "log", "--name-status", "HEAD..origin"]).decode("utf-8")
+            git_commit = ""#subprocess.check_output(["git", "log", "--name-status", "master..origin"]).decode("utf-8")
             var = subprocess.check_output(["git", "pull"])
             shell_output = f"{git_commit}\n\n{var.decode('utf-8')}"
         except Exception as error:
             await ctx.send(f"```py\n{error}```")
             return
 
-        chunks = shell_output.splitlines()
-
-        while chunks:
-            output = ""
-            while chunks and len(output) + len(chunks[0]) < 1994:
-                output += chunks[0] + "\n"
-                chunks.pop(0)
-            
-            await ctx.send(f"```{output}```")
+        await send_long_message(ctx, shell_output)
 
         if var.decode("utf-8") != "Already up to date.\n":
             if restart.lower() == "true":

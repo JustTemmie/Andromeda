@@ -43,6 +43,10 @@ miku = Miku(
     intents=discord.Intents.all(),
 )
 
+miku.custom_data = {
+    "HOST_OWNERS": config["HOST_OWNERS"]
+}
+
 tree = miku.tree
 # miku.remove_command("help")
 
