@@ -10,6 +10,8 @@ if os.getenv('SUDO_USER'):
     print("--------------------------------------")
     exit()
 
+HOME = os.path.expanduser('~')
+
 print("patching up service file for this system")
 with open("hatsune-miku.service", "r") as f:
     content = f.read()
@@ -25,10 +27,10 @@ subprocess.run(["./venv/bin/python3", "-m", "pip", "install", "-r", "requirement
 
 print("creating folders")
 os.makedirs("logs", exist_ok=True)
-os.makedirs("~/.config/systemd/user", exist_ok=True)
+os.makedirs(f"{HOME}/.config/systemd/user", exist_ok=True)
 
 print("copying files")
 shutil.copy("config_example.json", "config.json")
-shutil.copy("hatsune-miku.service", "~/.config/systemd/user/hatsune-miku.service")
+shutil.copy("hatsune-miku.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
 
 print("Please fill in config.json, then run `systemctl --user enable --now hatsune-miku.service`")
