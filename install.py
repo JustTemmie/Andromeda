@@ -10,10 +10,13 @@ if os.getenv('SUDO_USER'):
     print("--------------------------------------")
     exit()
 
-with open("hatsune-miku.service", "rw") as f:
+with open("hatsune-miku.service", "r") as f:
     content = f.read()
     # replace META_INSTALL_PATH with the file this file is installed
-    content.replace("META_INSTALL_PATH", os.path.dirname(os.path.realpath(__file__)))
+    content = content.replace("META_INSTALL_PATH", os.path.dirname(os.path.realpath(__file__)))
+
+with open("hatsune-miku.service", "w") as f:
+    f.write(content)
 
 subprocess.run(["python3", "-m", "venv", "venv/"], check=True)
 subprocess.run(["./venv/bin/python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
