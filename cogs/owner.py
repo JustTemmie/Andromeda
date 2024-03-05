@@ -86,10 +86,14 @@ class Owner(commands.Cog):
     @commands.command(name="update", brief="Updates the bot by pulling from github")
     @commands.is_owner()
     async def update_git_pull(self, ctx, restart="False"):
-        subprocess.call(["git", "fetch"])
-        git_commit = subprocess.check_output(["git", "log", "--name-status", "HEAD..origin"]).decode("utf-8")
-        var = subprocess.check_output(["git", "pull"])
-        shell_output = f"{git_commit}\n\n{var.decode('utf-8')}"
+        try:
+            subprocess.call(["git", "fetch"])
+            git_commit = subprocess.check_output(["git", "log", "--name-status", "HEAD..origin"]).decode("utf-8")
+            var = subprocess.check_output(["git", "pull"])
+            shell_output = f"{git_commit}\n\n{var.decode('utf-8')}"
+        except Exception as error:
+            await ctx.send(f"```py\n{error}```")
+            return
 
         chunks = shell_output.splitlines()
 
