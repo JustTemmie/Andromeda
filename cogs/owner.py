@@ -89,7 +89,7 @@ class Owner(commands.Cog):
         subprocess.call(["git", "fetch"])
         git_commit = subprocess.check_output(["git", "log", "--name-status", "HEAD..origin"]).decode("utf-8")
         var = subprocess.check_output(["git", "pull"])
-        shell_output = f"{git_commit}\n\n{var.decode("utf-8")}"
+        shell_output = f"{git_commit}\n\n{var.decode('utf-8')}"
 
         chunks = shell_output.splitlines()
 
