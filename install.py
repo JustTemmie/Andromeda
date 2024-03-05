@@ -10,6 +10,7 @@ if os.getenv('SUDO_USER'):
     print("--------------------------------------")
     exit()
 
+print("patching up service file for this system")
 with open("hatsune-miku.service", "r") as f:
     content = f.read()
     # replace META_INSTALL_PATH with the file this file is installed
@@ -18,12 +19,15 @@ with open("hatsune-miku.service", "r") as f:
 with open("hatsune-miku.service", "w") as f:
     f.write(content)
 
+print("creating virtual environment")
 subprocess.run(["python3", "-m", "venv", "venv/"], check=True)
 subprocess.run(["./venv/bin/python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
 
+print("creating folders")
 os.makedirs("logs", exist_ok=True)
 os.makedirs("~/.config/systemd/user", exist_ok=True)
 
+print("copying files")
 shutil.copy("config_example.json", "config.json")
 shutil.copy("hatsune-miku.service", "~/.config/systemd/user/hatsune-miku.service")
 
