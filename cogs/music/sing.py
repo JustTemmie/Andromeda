@@ -46,7 +46,7 @@ class Sing(commands.Cog):
         
     @commands.command(name="sing", aliases=["play"])
     async def singCommand(self, ctx):
-        if ctx.guild.id in self.data:
+        if discord.utils.get(self.miku.voice_clients, guild=ctx.guild):
             await ctx.send("sorry, i'm already busy playing another banger in this server")
             return
 
