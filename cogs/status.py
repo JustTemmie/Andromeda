@@ -30,7 +30,7 @@ class StatusChanger(commands.Cog):
         if self.song_end_at < time.time():
             getRandomSongData()
             await self.miku.change_presence(
-                status=discord.Status.idle,
+                status=discord.Status.online,
                 activity=discord.Activity(
                     type=discord.ActivityType.listening,
                     name=self.song_name),
