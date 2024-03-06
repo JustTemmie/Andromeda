@@ -18,12 +18,11 @@ class StatusChanger(commands.Cog):
         
     @tasks.loop(seconds=5)
     async def changeStatusTask(self):
-        await asyncio.sleep(5)
         def getRandomSongData():
             song = helpers.getRandomSong()
             audio_data = MP3(song)
             if audio_data.info.length > 5:
-                self.song_end_at = round(time.time() + audio_data.info.length),
+                self.song_end_at = round(time.time() + audio_data.info.length)
                 self.song_name = audio_data["TIT2"].text[0]
             else:
                 getRandomSongData()
