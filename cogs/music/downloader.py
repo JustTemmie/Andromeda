@@ -1,7 +1,6 @@
 from discord.ext import commands, tasks
 
 import os
-import subprocess
 import random
 import logging
 import asyncio
@@ -9,27 +8,27 @@ import asyncio
 class Downloader(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
-        self.change_status_task.start()
+        self.downloadSpotifyLists.start()
     
         
     @tasks.loop(hours=27)
-    async def change_status_task(self):
+    async def downloadSpotifyLists(self):
         # download assets from spotify
         logging.info("downloading music from Spotify")
         path = os.path.dirname(os.path.realpath(__name__))
         os.chdir("assets/music")
         for i in self.miku.custom_data["SPOTIFY_PLAYLISTS"]:
-            logging.info(f"downloading {i}")\
+            logging.info(f"downloading {i}")
 
             process = await asyncio.create_subprocess_exec(
                 "screen", "-dmS", f"spotdl-{random.randint(0, 9999999)}", "../.././venv/bin/python", "-m", "spotdl", f"{i}",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
-            # Wait for the subprocess to finish
+            # wait for the subprocess to finish
             stdout, stderr = await process.communicate()
 
-            # Handle stdout and stderr if needed
+            # handle stdout and stderr if needed
             if stdout:
                 print(f'STDOUT: {stdout.decode()}')
                 logging.info(f'STDOUT: {stdout.decode()}')

@@ -3,7 +3,6 @@ from discord.ext import commands
 
 import hatsune_miku.helpers as helpers
 
-
 class Song(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
