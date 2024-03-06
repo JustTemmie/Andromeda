@@ -19,13 +19,13 @@ except:
     exit()
 
 try:
-    subprocess.run(["ffmpeg", "-v"])
+    subprocess.run(["ffmpeg", "--version"])
 except:
     print("`ffmpeg` isn't installed, please to install it using your distro's package manager")
     exit()
 
 def log(output):
-    print(f"-----------\n{output}\n")
+    print(f"-----------\n\n{output}\n")
 
 HOME = os.path.expanduser('~')
 LOCAL_PATH = os.path.dirname(os.path.realpath(__name__))
@@ -56,7 +56,9 @@ shutil.copy("config_example.json", "config.json")
 shutil.copy("misc/hatsune-miku.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
 
 log("starting download of hatsune miku songs in the background")
-def run_yt_dlp():    
+def run_yt_dlp():
+    # you can also execute this manually if you'd prefer with this command
+    # ./venv/bin/python misc/music_downloader.py https://www.youtube.com/playlist?list=PLYVt6sUD_amTtozqHuhl0uPs2oy34HQLm assets/music
     subprocess.run(["./venv/bin/python", "misc/music_downloader.py", "https://www.youtube.com/playlist?list=PLYVt6sUD_amTtozqHuhl0uPs2oy34HQLm", "assets/music"], stdout=subprocess.DEVNULL)
 
 # start the yt-dlp script on a different thread
