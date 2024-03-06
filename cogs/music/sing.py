@@ -1,0 +1,111 @@
+import discord
+from discord.ext import commands
+
+from mutagen.mp3 import MP3
+import asyncio
+
+import hatsune_miku.helpers as helpers
+
+
+class Sing(commands.Cog):
+    def __init__(self, miku):
+        self.miku = miku
+        self.data = {}
+
+    async def sendNowPlayingEmbed(self, ctx):
+        if ctx.guild.id not in self.data:
+            await ctx.send("sorry, i'm not playing any songs within this server")
+            return
+        
+        audio_data = MP3(self.data[ctx.guild.id]["song_path"])
+        audio_duration = round(audio_data.info.length)
+        
+        embed = discord.Embed()
+        try:
+            embed.title = audio_data["TIT2"].text[0]
+        except:  # noqa: E722
+            embed.title = self.data[ctx.guild.id]["song_path"]
+        embed.description = ""
+        embed.colour = discord.Colour.from_str("#86cecb")
+        # embed.set_author(name=audio_data["TIT2"].text[0], icon_url=ctx.me.display_avatar.url)
+        embed.set_footer(
+            text=f"Requested by {ctx.author.display_name}",
+            icon_url=ctx.author.display_avatar.url
+        )
+        
+        embed.add_field(
+            name = "Duration",
+            value = f"{audio_duration // 60}m {audio_duration % 60}s"
+        )
+        embed.add_field(
+            name = "Author",
+            value = "Hatsune Miku"
+        )
+
+        await ctx.send(embed=embed)
+        
+    @commands.command(name="sing", aliases=["play"])
+    async def singCommand(self, ctx):
+        if ctx.guild.id in self.data:
+            await ctx.send("sorry, i'm already busy playing another banger in this server")
+            return
+
+        voice_channel = ctx.author.voice.channel
+        
+        if voice_channel is not None:
+            async def playSong(err):
+                try:
+                    # make sure there's actually usable data in the data dictionary
+                    if ctx.guild.id not in self.data:
+                        return
+                    
+                    song = helpers.getRandomSong()
+                    self.data[ctx.guild.id]["song_path"] = song
+                    
+                    await self.sendNowPlayingEmbed(ctx)
+                    vc.play(discord.FFmpegPCMAudio(song), after=lambda e: asyncio.run_coroutine_threadsafe(playSong(None), self.miku.loop))
+                
+                except Exception as err:
+                    # delete the data assocaited with this server
+                    del self.data[ctx.guild.id]
+                    await ctx.send(f"whoopsie, it looks like i encountered an error\n```{err}```")
+            
+            vc = await voice_channel.connect(self_deaf=True)
+            self.data[ctx.guild.id] = {}
+            self.data[ctx.guild.id]["vc"] = vc
+            
+            await playSong(None)
+            
+        else:
+            await ctx.send("it doesn't seem like you're in a voice channel")
+    
+    @commands.command(name="nowplaying", aliases=["now-playing", "np"])
+    async def nowplayingCommand(self, ctx):
+        await self.sendNowPlayingEmbed(ctx)
+
+    # @commands.command(name="psps")
+    # async def pspsCommand(self, ctx):
+    #     voice_channel = ctx.author.voice.channel
+        
+    #     if voice_channel is not None:
+    #         await self.data[ctx.guild.id]["vc"].move_to(voice_channel)
+    #         self.data[ctx.guild.id]["vc"].stop()
+    #     else:
+    #         await ctx.send("it doesn't seem like you're in a voice channel")
+    
+    @commands.command(name="skip")
+    async def skipCommand(self, ctx):
+        # this stops the song, making the next song automatically start
+        self.data[ctx.guild.id]["vc"].stop()
+    
+    @commands.command(name="disconnect", aliases=["leave"])
+    async def disconnectCommand(self, ctx):
+        if ctx.guild.id in self.data:
+            data = self.data[ctx.guild.id].copy()
+            del self.data[ctx.guild.id]
+            await data["vc"].disconnect()
+        else:
+            await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
+
+async def setup(miku):
+    await miku.add_cog(Sing(miku))
