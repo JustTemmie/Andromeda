@@ -1,8 +1,7 @@
 from discord.ext import commands, tasks
 
 import os
-import subprocess
-import threading
+import random
 import logging
 import asyncio
 
@@ -19,8 +18,21 @@ class Downloader(commands.Cog):
         path = os.path.dirname(os.path.realpath(__name__))
         os.chdir("assets/music")
         for i in self.miku.custom_data["SPOTIFY_PLAYLISTS"]:
-            logging.info(f"downloading {i}")
-            subprocess.run(["../.././venv/bin/python", "-m", "spotdl", i], stdout=subprocess.DEVNULL)
+            logging.info(f"downloading {i}")\
+
+            process = await asyncio.create_subprocess_exec(
+                "screen", "-dmS", f"spotdl-{random.randint(0, 9999999)}", "../.././venv/bin/python", "-m", "spotdl", i,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            # Wait for the subprocess to finish
+            stdout, stderr = await process.communicate()
+
+            # Handle stdout and stderr if needed
+            if stdout:
+                print(f'STDOUT: {stdout.decode()}')
+            if stderr:
+                print(f'STDERR: {stderr.decode()}')
         os.chdir(path)
         logging.info("finished downloading music from Spotify")
     

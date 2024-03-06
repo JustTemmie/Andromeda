@@ -43,35 +43,21 @@ class Owner(commands.Cog):
         self.miku = miku
 
     @commands.is_owner()
-    @commands.command(name="restart", aliases=["reboot"])
+    @commands.command(name="restart")
     async def restartCommand(self, ctx):
-        await self.miku.change_presence(
-            status=discord.Status.idle,
-            activity=discord.Activity(
-                type=discord.ActivityType.watching,
-                name="Restarting - won't respond!",
-            ),
-        )
-        await ctx.send("Restarting miku...")
-        python = sys.executable
-        os.execl(python, python, *sys.argv)
-
-    @commands.is_owner()
-    @commands.command(name="shutdown")
-    async def shutdownCommand(self, ctx):
         print(dir(ctx))
         await ctx.send("Turning off the miku...")
         await self.miku.change_presence(
             status=discord.Status.idle,
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name="About to go offline - won't respond!",
+                name="restarting - won't respond",
             ),
         )
         await self.miku.close()
-        print("Terminated using `shutdown` command.")
+        print("Terminated using `restart` command.")
 
-    @decorators.is_host_owner()
+    @commands.is_owner()
     @commands.command(name="bash", aliases=["sh"])
     async def bashCommand(self, ctx, *, command):
         shell_output = subprocess.getoutput(command)
@@ -103,8 +89,7 @@ class Owner(commands.Cog):
                         name="restarting - won't respond",
                     ),
                 )
-                os.execv(sys.executable, ["python3"] + sys.argv)
-                return
+                await self.miku.close()
 
 
 async def setup(miku):
