@@ -5,14 +5,13 @@ Description=Hatsune Miku!
 Type=simple
 
 ReadWritePaths=META_INSTALL_PATH
-ReadOnlyPaths=/run/screen
 WorkingDirectory=META_INSTALL_PATH
 ExecStart=META_INSTALL_PATH/venv/bin/python -u META_INSTALL_PATH/main.py
-NoNewPrivileges=true
 
 Nice=19
 SuccessExitStatus=130
 ProtectSystem=strict
+NoNewPrivileges=true
 
 [Install]
 WantedBy=default.target

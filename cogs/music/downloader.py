@@ -18,7 +18,6 @@ class Downloader(commands.Cog):
         logging.info("downloading music from Spotify")
         path = os.path.dirname(os.path.realpath(__name__))
         os.chdir("assets/music")
-        subprocess.run(["chmod", "777", "/usr/bin/screen"])
         for i in self.miku.custom_data["SPOTIFY_PLAYLISTS"]:
             logging.info(f"downloading {i}")\
 
