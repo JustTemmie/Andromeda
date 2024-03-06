@@ -47,7 +47,13 @@ miku = Miku(
 
 miku.custom_data = {
     "HOST_OWNERS": config["HOST_OWNERS"],
-    "FFMPEG_PATH": "/usr/bin/ffmpeg"
+    "FFMPEG_PATH": "/usr/bin/ffmpeg",
+    "SPOTIFY_PLAYLISTS": [
+        "https://open.spotify.com/playlist/37i9dQZF1DWZipvLjDtZYe",
+        "https://open.spotify.com/playlist/5lmxGE4yfbWGpXOtKL9eOB"
+        "https://open.spotify.com/album/0h6FjVSgPLOVJ37AduWrNZ?si=trT7KaH_Q3iFJ5qZyd893w",
+        "https://open.spotify.com/track/7aux5UvnlBDYlrlwoczifW?si=ce097ea45e604e04",
+    ]
 }
 
 tree = miku.tree
