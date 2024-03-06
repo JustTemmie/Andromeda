@@ -21,7 +21,7 @@ class Downloader(commands.Cog):
             logging.info(f"downloading {i}")\
 
             process = await asyncio.create_subprocess_exec(
-                "screen", "-dmS", f"spotdl-{random.randint(0, 9999999)}", "../.././venv/bin/python", "-m", "spotdl", i,
+                "screen", "-dmS", f"spotdl-{random.randint(0, 9999999)}", "../.././venv/bin/python", "-m", "spotdl", f"{i}",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
@@ -31,8 +31,11 @@ class Downloader(commands.Cog):
             # Handle stdout and stderr if needed
             if stdout:
                 print(f'STDOUT: {stdout.decode()}')
+                logging.info(f'STDOUT: {stdout.decode()}')
             if stderr:
                 print(f'STDERR: {stderr.decode()}')
+                logging.info(f'STDERR: {stderr.decode()}')
+            
         os.chdir(path)
         logging.info("finished downloading music from Spotify")
     
