@@ -57,16 +57,4 @@ if not os.path.exists("config.json"):
 if not os.path.exists(f"{HOME}/.config/systemd/user/hatsune-miku.service"):
     shutil.copy("misc/hatsune-miku.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
 
-log("""DO NOT CLOSE THIS TERMINAL YET, we're still downloading stuff in the background
-    Please open a new tab or window, and fill in config.json, then run `systemctl --user enable --now hatsune-miku.service` to start the bot :3""")
-
-time.sleep(5)
-
-log("starting download of hatsune miku songs in the background")
-def download_songs():
-    os.chdir("assets/music")
-    subprocess.run(["../.././venv/bin/python", "-m", "spotdl", "https://open.spotify.com/playlist/37i9dQZF1DWZipvLjDtZYe"], stdout=subprocess.DEVNULL)
-
-# start downloading spotify songs on a different thread
-yt_dlp_thread = threading.Thread(target=download_songs)
-yt_dlp_thread.start()
+log("please fill in config.json, then run `systemctl --user enable --now hatsune-miku.service` to start the bot :3")
