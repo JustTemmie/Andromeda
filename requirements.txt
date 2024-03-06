@@ -1,1 +1,3 @@
 discord.py
+pyttsx3
+yt-dlp
