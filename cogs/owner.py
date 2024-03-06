@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import bot_has_permissions
 
 import ast
 import sys
@@ -8,6 +7,7 @@ import os
 import subprocess
 
 import hatsune_miku.decorators as decorators
+
 
 def insert_returns(body):
     # insert return stmt if the last expression is a expression statement
@@ -24,25 +24,27 @@ def insert_returns(body):
     if isinstance(body[-1], ast.With):
         insert_returns(body[-1].body)
 
-async def send_long_message(ctx, msg, preset_output = ""):
-    chunks = msg.splitlines()# send this at the very top
-    
+
+async def send_long_message(ctx, msg, preset_output=""):
+    chunks = msg.splitlines()  # send this at the very top
+
     while chunks:
         output = ""
         while chunks and len(output) + len(chunks[0]) < 1994:
             output += chunks[0] + "\n"
             chunks.pop(0)
-        
+
         await ctx.send(f"{preset_output}```{output}```")
         preset_output = ""
-        
+
+
 class Owner(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
 
     @commands.is_owner()
     @commands.command(name="restart", aliases=["reboot"])
-    async def restart(self, ctx):
+    async def restartCommand(self, ctx):
         await self.miku.change_presence(
             status=discord.Status.idle,
             activity=discord.Activity(
@@ -56,7 +58,7 @@ class Owner(commands.Cog):
 
     @commands.is_owner()
     @commands.command(name="shutdown")
-    async def shutdown(self, ctx):
+    async def shutdownCommand(self, ctx):
         print(dir(ctx))
         await ctx.send("Turning off the miku...")
         await self.miku.change_presence(
@@ -71,17 +73,18 @@ class Owner(commands.Cog):
 
     @decorators.is_host_owner()
     @commands.command(name="bash", aliases=["sh"])
-    async def run_bash(self, ctx, *, command):
+    async def bashCommand(self, ctx, *, command):
         shell_output = subprocess.getoutput(command)
-        
+
         await send_long_message(ctx, shell_output, f"`{command}` returned output:\n")
-    
+
     @commands.is_owner()
-    @commands.command(name="update", brief="Updates the bot by pulling from github")
-    async def update_git_pull(self, ctx, restart="False"):
+    @commands.command(name="update")
+    async def updateCommand(self, ctx, restart="False"):
         try:
             subprocess.call(["git", "fetch"])
-            git_commit = ""#subprocess.check_output(["git", "log", "--name-status", "master..origin"]).decode("utf-8")
+            # subprocess.check_output(["git", "log", "--name-status", "master..origin"]).decode("utf-8")
+            git_commit = ""
             var = subprocess.check_output(["git", "pull"])
             shell_output = f"{git_commit}\n\n{var.decode('utf-8')}"
         except Exception as error:
@@ -102,6 +105,7 @@ class Owner(commands.Cog):
                 )
                 os.execv(sys.executable, ["python3"] + sys.argv)
                 return
-        
+
+
 async def setup(miku):
     await miku.add_cog(Owner(miku))

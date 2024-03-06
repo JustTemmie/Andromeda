@@ -1,3 +1,5 @@
-discord.py
+discord.py # main discord library
 pyttsx3
-yt-dlp
+#PyNaCls     # used for voice
+yt-dlp      # used to download audio
+spotdl      # used to download audio ( from spotify )

@@ -2,7 +2,7 @@ import threading
 import subprocess
 import shutil
 import os
-
+import time
 
 if os.getenv('SUDO_USER'):
     print("--------------------------------------")
@@ -14,13 +14,13 @@ if os.getenv('SUDO_USER'):
 
 try:
     subprocess.run(["screen", "-v"])
-except:
+except:  # noqa: E722
     print("`screen` isn't installed, please to install it using your distro's package manager")
     exit()
 
 try:
-    subprocess.run(["ffmpeg", "--version"])
-except:
+    subprocess.run(["ffmpeg", "-version"])
+except:  # noqa: E722
     print("`ffmpeg` isn't installed, please to install it using your distro's package manager")
     exit()
 
@@ -41,7 +41,7 @@ with open("misc/hatsune-miku.service", "w") as f:
 
 log("creating virtual environment")
 subprocess.run(["python3", "-m", "venv", "venv/"], check=True)
-subprocess.run(["./venv/bin/python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
+subprocess.run(["./venv/bin/pip", "install", "-r", "requirements.txt"], check=True)
 
 log("creating folders")
 os.makedirs("logs", exist_ok=True)
@@ -52,19 +52,21 @@ os.makedirs("assets/images", exist_ok=True)
 os.makedirs(f"{HOME}/.config/systemd/user", exist_ok=True)
 
 log("copying files")
-shutil.copy("config_example.json", "config.json")
-shutil.copy("misc/hatsune-miku.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
-
-log("starting download of hatsune miku songs in the background")
-def run_yt_dlp():
-    # you can also execute this manually if you'd prefer with this command
-    # ./venv/bin/python misc/music_downloader.py https://www.youtube.com/playlist?list=PLYVt6sUD_amTtozqHuhl0uPs2oy34HQLm assets/music
-    subprocess.run(["./venv/bin/python", "misc/music_downloader.py", "https://www.youtube.com/playlist?list=PLYVt6sUD_amTtozqHuhl0uPs2oy34HQLm", "assets/music"], stdout=subprocess.DEVNULL)
-
-# start the yt-dlp script on a different thread
-yt_dlp_thread = threading.Thread(target=run_yt_dlp)
-yt_dlp_thread.start()
-
+if not os.path.exists("config.json"):
+    shutil.copy("config_example.json", "config.json")
+if not os.path.exists(f"{HOME}/.config/systemd/user/hatsune-miku.service"):
+    shutil.copy("misc/hatsune-miku.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
 
 log("""DO NOT CLOSE THIS TERMINAL YET, we're still downloading stuff in the background
-    Please open a new tab or window, and fill in config.json, then run `systemctl --user enable --now hatsune-miku.service`""")
+    Please open a new tab or window, and fill in config.json, then run `systemctl --user enable --now hatsune-miku.service` to start the bot :3""")
+
+time.sleep(5)
+
+log("starting download of hatsune miku songs in the background")
+def download_songs():
+    os.chdir("assets/music")
+    subprocess.run(["../.././venv/bin/python", "-m", "spotdl", "https://open.spotify.com/playlist/37i9dQZF1DWZipvLjDtZYe"], stdout=subprocess.DEVNULL)
+
+# start downloading spotify songs on a different thread
+yt_dlp_thread = threading.Thread(target=download_songs)
+yt_dlp_thread.start()
