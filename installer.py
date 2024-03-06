@@ -11,7 +11,7 @@ if os.getenv('SUDO_USER'):
     exit()
 
 try:
-    subprocess.run(["screen"])
+    subprocess.run(["screen", "-v"])
 except:
     print("`screen` isn't installed, please to install it using your distro's package manager")
     exit()
@@ -34,6 +34,7 @@ subprocess.run(["./venv/bin/python3", "-m", "pip", "install", "-r", "requirement
 
 print("creating folders")
 os.makedirs("logs", exist_ok=True)
+os.makedirs("assets/music", exist_ok=True)
 os.makedirs("assets/audio", exist_ok=True)
 os.makedirs("assets/videos", exist_ok=True)
 os.makedirs("assets/images", exist_ok=True)
