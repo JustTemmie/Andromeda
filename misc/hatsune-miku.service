@@ -7,9 +7,11 @@ Type=simple
 ReadWritePaths=META_INSTALL_PATH
 WorkingDirectory=META_INSTALL_PATH
 ExecStart=META_INSTALL_PATH/venv/bin/python -u META_INSTALL_PATH/main.py
+NoNewPrivileges=true
 
 Nice=19
 SuccessExitStatus=130
+ProtectSystem=strict
 
 [Install]
 WantedBy=default.target
