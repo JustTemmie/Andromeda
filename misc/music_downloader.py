@@ -1,3 +1,4 @@
+import argparse
 import yt_dlp
 
 def download(URL, output_dir):
@@ -15,4 +16,10 @@ def download(URL, output_dir):
         ydl.download([URL])
 
 if __name__ == "__main__":
-    download("https://www.youtube.com/playlist?list=PLYVt6sUD_amTtozqHuhl0uPs2oy34HQLm", "assets/music")
+    parser = argparse.ArgumentParser(description="Download audio from YouTube using yt-dlp.")
+    parser.add_argument("url", help="URL of the YouTube video or playlist")
+    parser.add_argument("output_dir", help="Output directory to save the downloaded audio files")
+
+    args = parser.parse_args()
+
+    download(args.url, args.output_dir)

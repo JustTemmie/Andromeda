@@ -4,9 +4,9 @@ Description=Hatsune Miku!
 [Service]
 Type=simple
 
-ReadWritePaths=META_INSTALL_PATH
-WorkingDirectory=META_INSTALL_PATH
-ExecStart=META_INSTALL_PATH/venv/bin/python -u META_INSTALL_PATH/main.py
+ReadWritePaths=/home/temmie/Development/GitHub/miku-bot
+WorkingDirectory=/home/temmie/Development/GitHub/miku-bot
+ExecStart=/home/temmie/Development/GitHub/miku-bot/venv/bin/python -u /home/temmie/Development/GitHub/miku-bot/main.py
 NoNewPrivileges=true
 
 Nice=19

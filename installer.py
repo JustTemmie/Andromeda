@@ -1,6 +1,8 @@
+import threading
 import subprocess
 import shutil
 import os
+
 
 if os.getenv('SUDO_USER'):
     print("--------------------------------------")
@@ -45,11 +47,14 @@ shutil.copy("config_example.json", "config.json")
 shutil.copy("misc/hatsune-miku.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
 
 print("starting download of hatsune miku songs in the background")
-try:
-    subprocess.run(["screen", "-dmS", "MikuDownloader", "bash", "-c", f"{LOCAL_PATH}/venv/bin/python misc/downloader.py"])
-    print("Screen session 'MikuDownloader' created successfully.")
-except Exception as e:
-    print(f"Error creating screen session: {e}")
+def run_yt_dlp():    
+    subprocess.run(["./venv/bin/python", "misc/music_downloader.py", "https://www.youtube.com/playlist?list=PLYVt6sUD_amTtozqHuhl0uPs2oy34HQLm", "assets/music"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+# start the yt-dlp script on a different thread
+yt_dlp_thread = threading.Thread(target=run_yt_dlp)
+yt_dlp_thread.start()
 
-print("Please fill in config.json, then run `systemctl --user enable --now hatsune-miku.service`")
+print("--------------------")
+print("DO NOT CLOSE THIS TERMINAL YET, we're still downloading stuff in the background")
+print("Please open a new tab or window, and fill in config.json, then run `systemctl --user enable --now hatsune-miku.service`")
+print("--------------------")
