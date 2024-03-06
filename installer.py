@@ -17,7 +17,7 @@ except:
     exit()
 
 HOME = os.path.expanduser('~')
-LOCAL_PATH = os.path.dirname(os.path.realpath(__file__))
+LOCAL_PATH = os.path.dirname(os.path.realpath(__name__))
 
 print("patching up service file for this system")
 with open("misc/hatsune-miku.service", "r") as f:
@@ -45,7 +45,11 @@ shutil.copy("config_example.json", "config.json")
 shutil.copy("misc/hatsune-miku.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
 
 print("starting download of hatsune miku songs in the background")
-subprocess.run(["screen", "-dmS", "Miku Downloader", "bash", "-c", f"'{LOCAL_PATH}/venv/bin/python misc/downloader.py'"   ])
+try:
+    subprocess.run(["screen", "-dmS", "MikuDownloader", "bash", "-c", f"{LOCAL_PATH}/venv/bin/python misc/downloader.py"])
+    print("Screen session 'MikuDownloader' created successfully.")
+except Exception as e:
+    print(f"Error creating screen session: {e}")
 
 
 print("Please fill in config.json, then run `systemctl --user enable --now hatsune-miku.service`")
