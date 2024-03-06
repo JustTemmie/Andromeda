@@ -53,7 +53,7 @@ class Sing(commands.Cog):
         voice_channel = ctx.author.voice.channel
         
         if voice_channel is not None:
-            async def playSong(err):
+            async def playSong():
                 try:
                     # make sure there's actually usable data in the data dictionary
                     if ctx.guild.id not in self.data:
@@ -62,8 +62,14 @@ class Sing(commands.Cog):
                     song = helpers.getRandomSong()
                     self.data[ctx.guild.id]["song_path"] = song
                     
+                    vc.play(
+                        discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(song), 0.3),
+                        after=lambda e: asyncio.run_coroutine_threadsafe(
+                            playSong(), self.miku.loop
+                        )
+                    )
+                    
                     await self.sendNowPlayingEmbed(ctx)
-                    vc.play(discord.FFmpegPCMAudio(song), after=lambda e: asyncio.run_coroutine_threadsafe(playSong(None), self.miku.loop))
                 
                 except Exception as err:
                     # delete the data assocaited with this server
@@ -72,9 +78,8 @@ class Sing(commands.Cog):
             
             vc = await voice_channel.connect(self_deaf=True)
             self.data[ctx.guild.id] = {}
-            self.data[ctx.guild.id]["vc"] = vc
             
-            await playSong(None)
+            await playSong()
             
         else:
             await ctx.send("it doesn't seem like you're in a voice channel")
@@ -83,27 +88,30 @@ class Sing(commands.Cog):
     async def nowplayingCommand(self, ctx):
         await self.sendNowPlayingEmbed(ctx)
 
-    # @commands.command(name="psps")
-    # async def pspsCommand(self, ctx):
-    #     voice_channel = ctx.author.voice.channel
+    @commands.command(name="psps")
+    async def pspsCommand(self, ctx):
+        voice_channel = ctx.author.voice.channel
         
-    #     if voice_channel is not None:
-    #         await self.data[ctx.guild.id]["vc"].move_to(voice_channel)
-    #         self.data[ctx.guild.id]["vc"].stop()
-    #     else:
-    #         await ctx.send("it doesn't seem like you're in a voice channel")
+        if voice_channel is not None:
+            voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
+            voice.pause()
+            await voice.move_to(voice_channel)
+            await asyncio.sleep(5)
+            voice.resume()
+        else:
+            await ctx.send("it doesn't seem like you're in a voice channel")
     
     @commands.command(name="skip")
     async def skipCommand(self, ctx):
         # this stops the song, making the next song automatically start
-        self.data[ctx.guild.id]["vc"].stop()
+        discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
     
     @commands.command(name="disconnect", aliases=["leave"])
     async def disconnectCommand(self, ctx):
-        if ctx.guild.id in self.data:
-            data = self.data[ctx.guild.id].copy()
+        voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
+        if voice:
             del self.data[ctx.guild.id]
-            await data["vc"].disconnect()
+            await voice.disconnect()
         else:
             await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
 
