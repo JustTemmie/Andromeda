@@ -109,8 +109,8 @@ class Sing(commands.Cog):
     @commands.command(name="disconnect", aliases=["leave"])
     async def disconnectCommand(self, ctx):
         voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
+        del self.data[ctx.guild.id]
         if voice:
-            del self.data[ctx.guild.id]
             await voice.disconnect()
         else:
             await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
