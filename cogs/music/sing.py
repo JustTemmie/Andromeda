@@ -5,6 +5,7 @@ from mutagen.mp3 import MP3
 import asyncio
 
 import hatsune_miku.helpers as helpers
+import hatsune_miku.decorators as decorators
 
 
 class Sing(commands.Cog):
@@ -44,14 +45,20 @@ class Sing(commands.Cog):
 
         await ctx.send(embed=embed)
         
+    # @decorators.command
     @commands.command(name="sing", aliases=["play"])
     async def singCommand(self, ctx):
         if discord.utils.get(self.miku.voice_clients, guild=ctx.guild):
             await ctx.send("sorry, i'm already busy playing another banger in this server")
             return
 
-        voice_channel = ctx.author.voice.channel
+        try:
+            voice_channel = ctx.author.voice.channel
         
+        except:
+            await ctx.send("it doesn't seem like you're in a voice channel")
+            return
+            
         if voice_channel is not None:
             async def playSong():
                 try:
@@ -80,9 +87,7 @@ class Sing(commands.Cog):
             self.data[ctx.guild.id] = {}
             
             await playSong()
-            
-        else:
-            await ctx.send("it doesn't seem like you're in a voice channel")
+
     
     @commands.command(name="nowplaying", aliases=["now-playing", "np"])
     async def nowplayingCommand(self, ctx):

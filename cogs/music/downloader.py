@@ -13,6 +13,10 @@ class Downloader(commands.Cog):
         
     @tasks.loop(hours=27)
     async def downloadSpotifyLists(self):
+        if not self.miku.custom_data["DOWNLOAD_ASSETS"]:
+            print("miku is set to not download assets, stopping download")
+            return
+        
         # download assets from spotify
         logging.info("downloading music from Spotify")
         path = os.path.dirname(os.path.realpath(__name__))

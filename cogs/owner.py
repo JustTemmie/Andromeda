@@ -57,7 +57,7 @@ class Owner(commands.Cog):
         await self.miku.close()
         print("Terminated using `restart` command.")
 
-    @commands.is_owner()
+    @decorators.is_host_owner()
     @commands.command(name="bash", aliases=["sh"])
     async def bashCommand(self, ctx, *, command):
         shell_output = subprocess.getoutput(command)
