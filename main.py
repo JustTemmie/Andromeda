@@ -31,35 +31,33 @@ if __name__ == "__main__":
 
     class Miku(commands.AutoShardedBot):
         def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
+            super().__init__(
+                shards=config["SHARDS"],
+                command_prefix=(get_prefix),
+                strip_after_prefix=True,
+                case_insensitive=True,
+                owner_ids=config["OWNER_IDS"],
+                intents=discord.Intents.all(),
+            *args, **kwargs)
 
             self.start_time = datetime.now()
+            self.custom_data = {
+                "HOST_OWNERS": config["HOST_OWNERS"],
+                "FFMPEG_PATH": "/usr/bin/ffmpeg",
+                "SPOTIFY_PLAYLISTS": [
+                    "https://open.spotify.com/playlist/37i9dQZF1DWZipvLjDtZYe",
+                    "https://open.spotify.com/playlist/5lmxGE4yfbWGpXOtKL9eOB"
+                    "https://open.spotify.com/album/0h6FjVSgPLOVJ37AduWrNZ?si=trT7KaH_Q3iFJ5qZyd893w",
+                    "https://open.spotify.com/track/7aux5UvnlBDYlrlwoczifW?si=ce097ea45e604e04",
+                ],
+                "DOWNLOAD_ASSETS": config["DOWNLOAD_ASSETS"]
+            }
 
         async def on_ready(self):
-            
             print(f"Succesfully logged in as {self.user}")
+        
+    miku = Miku()
 
-
-    miku = Miku(
-        shards=config["SHARDS"],
-        command_prefix=(get_prefix),
-        strip_after_prefix=True,
-        case_insensitive=True,
-        owner_ids=config["OWNER_IDS"],
-        intents=discord.Intents.all(),
-    )
-
-    miku.custom_data = {
-        "HOST_OWNERS": config["HOST_OWNERS"],
-        "FFMPEG_PATH": "/usr/bin/ffmpeg",
-        "SPOTIFY_PLAYLISTS": [
-            "https://open.spotify.com/playlist/37i9dQZF1DWZipvLjDtZYe",
-            "https://open.spotify.com/playlist/5lmxGE4yfbWGpXOtKL9eOB"
-            "https://open.spotify.com/album/0h6FjVSgPLOVJ37AduWrNZ?si=trT7KaH_Q3iFJ5qZyd893w",
-            "https://open.spotify.com/track/7aux5UvnlBDYlrlwoczifW?si=ce097ea45e604e04",
-        ],
-        "DOWNLOAD_ASSETS": config["DOWNLOAD_ASSETS"]
-    }
 
     # miku.tree = discord.app_commands.CommandTree(miku)
     # miku.remove_command("help")
@@ -71,8 +69,8 @@ if __name__ == "__main__":
     )
     async def first_command(interaction):
         await interaction.response.send_message("Hello!")
-
-
+    
+    
     async def main():
         async with miku:
             for filename in glob.iglob("./cogs/**", recursive=True):
@@ -85,3 +83,5 @@ if __name__ == "__main__":
             await miku.start(config["TOKEN"])
 
     asyncio.run(main())
+
+

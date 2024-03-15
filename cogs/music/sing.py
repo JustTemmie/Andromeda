@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 
 from mutagen.mp3 import MP3
 import asyncio
@@ -45,8 +46,7 @@ class Sing(commands.Cog):
 
         await ctx.send(embed=embed)
         
-    # @decorators.command
-    @commands.command(name="sing", aliases=["play"])
+    @commands.hybrid_command(name="sing", aliases=["play"])
     async def singCommand(self, ctx):
         if discord.utils.get(self.miku.voice_clients, guild=ctx.guild):
             await ctx.send("sorry, i'm already busy playing another banger in this server")
