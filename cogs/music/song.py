@@ -7,7 +7,9 @@ class Song(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
 
-    @commands.command(name="song")
+    @commands.hybrid_command(
+        name="song",
+        description="I'll send one of my most popular songs")
     async def songCommand(self, ctx):
         song = helpers.getRandomSong()
         await ctx.send(song, file=discord.File(song))

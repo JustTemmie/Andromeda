@@ -50,22 +50,32 @@ if __name__ == "__main__":
                     "https://open.spotify.com/album/0h6FjVSgPLOVJ37AduWrNZ?si=trT7KaH_Q3iFJ5qZyd893w",
                     "https://open.spotify.com/track/7aux5UvnlBDYlrlwoczifW?si=ce097ea45e604e04",
                 ],
+                "DEVELOPMENT": config["DEVELOPMENT"],
                 "DOWNLOAD_ASSETS": config["DOWNLOAD_ASSETS"]
             }
 
-        async def on_ready(self):
+        async def on_ready(self) -> None:
             print(f"Succesfully logged in as {self.user}")
         
+        async def setup_hook(self) -> None:
+            print(f"Syncing command tree...")
+            if self.custom_data["DEVELOPMENT"]:
+                guild = discord.Object(id=885113462378876948)
+                self.tree.copy_global_to(guild=guild)
+                await self.tree.sync()
+            else:
+                await self.tree.sync()
+            print(f"Command tree synced!")
+        
+
     miku = Miku()
-
-
     # miku.tree = discord.app_commands.CommandTree(miku)
     # miku.remove_command("help")
 
     @miku.tree.command(
         name="commandname",
         description="My first application Command",
-        guild=discord.Object(id=903236631958548501)
+        guild=discord.Object(id=885113462378876948)
     )
     async def first_command(interaction):
         await interaction.response.send_message("Hello!")

@@ -46,7 +46,9 @@ class Sing(commands.Cog):
 
         await ctx.send(embed=embed)
         
-    @commands.hybrid_command(name="sing", aliases=["play"])
+    @commands.hybrid_command(
+        name="sing", aliases=["play"],
+        description="Make me join your VC and sing")
     async def singCommand(self, ctx):
         if discord.utils.get(self.miku.voice_clients, guild=ctx.guild):
             await ctx.send("sorry, i'm already busy playing another banger in this server")
@@ -89,7 +91,9 @@ class Sing(commands.Cog):
             await playSong()
 
     
-    @commands.command(name="nowplaying", aliases=["now-playing", "np"])
+    @commands.hybrid_command(
+        name="nowplaying", aliases=["now-playing", "np"],
+        description="In case you're wondering what song i'm playing")
     async def nowplayingCommand(self, ctx):
         await self.sendNowPlayingEmbed(ctx)
 
@@ -100,6 +104,7 @@ class Sing(commands.Cog):
         if voice_channel is not None:
             voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
             voice.pause()
+            await ctx.send(f"oke, moving to {voice_channel.name}")
             await voice.move_to(voice_channel)
             await asyncio.sleep(5)
             voice.resume()
@@ -111,12 +116,15 @@ class Sing(commands.Cog):
         # this stops the song, making the next song automatically start
         discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
     
-    @commands.command(name="disconnect", aliases=["leave"])
-    async def disconnectCommand(self, ctx):
+    @commands.hybrid_command(
+        name="stop", aliases=["leave", "disconnect"],
+        description="Make me leave the current VC, in case you've been miku-pilled enough for today")
+    async def stopCommand(self, ctx):
         voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
         del self.data[ctx.guild.id]
         if voice:
             await voice.disconnect()
+            await ctx.send("okay, i'll stop")
         else:
             await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
 
