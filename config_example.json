@@ -1,9 +1,14 @@
 {
-    "TOKEN": "TOKEN",
+    "API_KEYS": {
+        "DISCORD": "TOKEN",
+        "TENOR":  "TOKEN"
+    },
+    
     "SHARDS": 1,
     "OWNER_IDS": [725539745572323409],
     "HOST_OWNERS": [725539745572323409, 616228691155877898, 769632057575342081],
     "PREFIXES": ["mikumiku", "miku miku", "miku"],
+
     "DEVELOPMENT": false,
     "DOWNLOAD_ASSETS": true
 }
