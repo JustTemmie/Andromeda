@@ -1,14 +1,21 @@
-{
-    "API_KEYS": {
+{    "API_KEYS": {
+        "_DISCORD_COMMENT": "gotten from https://discord.com/developers/applications",
         "DISCORD": "TOKEN",
-        "TENOR":  "TOKEN"
+        "_TENOR_COMMENT": "the TENOR api key is optional, some commands will break without it though. get it from https://developers.google.com/tenor/guides/quickstart",
+        "TENOR":  "KEY"
     },
     
+    "_SHARDS_COMMENT": "leave this at 1 if you don't know what it does",
     "SHARDS": 1,
+    "_OWNER_IDS_COMMENT": "set this to your discord user ID, it grants access to some permissions most people shouldn't have access to",
     "OWNER_IDS": [725539745572323409],
+    "_HOST_OWNERS_COMMENT": "set this to your discord user ID, it grants access to some permissions regarding access to the server, such as a bash shell",
     "HOST_OWNERS": [725539745572323409, 616228691155877898, 769632057575342081],
+    "_PREFIXES_COMMENT": "the prefixes the bot should respond to",
     "PREFIXES": ["mikumiku", "miku miku", "miku"],
 
+    "_DEVELOPMENT_COMMENT": "but miku into development mode, she'll act a bit differently, meant for development (obviously)",
     "DEVELOPMENT": false,
+    "_DOWNLOAD_ASSETS_COMMENT": "make miku download assets, such as songs, images, and the like from the internet, mostly made for development purposes",
     "DOWNLOAD_ASSETS": true
 }
