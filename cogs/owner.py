@@ -47,15 +47,8 @@ class Owner(commands.Cog):
     async def restartCommand(self, ctx):
         print(dir(ctx))
         await ctx.send("Turning off the miku...")
-        await self.miku.change_presence(
-            status=discord.Status.idle,
-            activity=discord.Activity(
-                type=discord.ActivityType.watching,
-                name="restarting - won't respond",
-            ),
-        )
-        await self.miku.close()
         print("Terminated using `restart` command.")
+        await self.miku.close()
 
     @decorators.is_host_owner()
     @commands.command(name="bash", aliases=["sh"])
@@ -82,13 +75,6 @@ class Owner(commands.Cog):
         if var.decode("utf-8") != "Already up to date.\n":
             if restart.lower() == "true":
                 await ctx.send("Restarting...")
-                await self.bot.change_presence(
-                    status=discord.Status.idle,
-                    activity=discord.Activity(
-                        type=discord.ActivityType.watching,
-                        name="restarting - won't respond",
-                    ),
-                )
                 await self.miku.close()
 
 
