@@ -15,7 +15,6 @@ def is_host_owner():
 
 def command():
     async def predicate(ctx):
-        print('hi')
         # Define your cog class
         class MyCog(commands.Cog):
             def __init__(self, bot):

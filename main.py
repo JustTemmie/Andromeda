@@ -23,21 +23,17 @@ if __name__ == "__main__":
     logging.error("error")
     logging.critical("critical")
 
-    config = configLib.getConfig()
-
-
-    def get_prefix(bot, message):
-        return commands.when_mentioned_or(*config["PREFIXES"])(bot, message)
-
 
     class Miku(commands.AutoShardedBot):
         def __init__(self, *args, **kwargs):
+            self.config = configLib.getConfig()
+            
             super().__init__(
-                shards=config["SHARDS"],
-                command_prefix=(get_prefix),
+                shards=self.config["SHARDS"],
+                command_prefix=(self.get_prefix),
                 strip_after_prefix=True,
                 case_insensitive=True,
-                owner_ids=config["OWNER_IDS"],
+                owner_ids=self.config["OWNER_IDS"],
                 intents=discord.Intents.all(),
             *args, **kwargs)
 
@@ -50,15 +46,18 @@ if __name__ == "__main__":
                     "https://open.spotify.com/album/0h6FjVSgPLOVJ37AduWrNZ?si=trT7KaH_Q3iFJ5qZyd893w",
                     "https://open.spotify.com/track/7aux5UvnlBDYlrlwoczifW?si=ce097ea45e604e04",
                 ],
-                "API_KEYS": config["API_KEYS"],
-                "HOST_OWNERS": config["HOST_OWNERS"],
-                "DEVELOPMENT": config["DEVELOPMENT"],
-                "DOWNLOAD_ASSETS": config["DOWNLOAD_ASSETS"]
+                "API_KEYS": self.config["API_KEYS"],
+                "HOST_OWNERS": self.config["HOST_OWNERS"],
+                "DEVELOPMENT": self.config["DEVELOPMENT"],
+                "DOWNLOAD_ASSETS": self.config["DOWNLOAD_ASSETS"]
             }
+
+        def get_prefix(self, bot, message):
+            return commands.when_mentioned_or(*self.config["PREFIXES"])(bot, message)
 
         async def on_ready(self) -> None:
             print(f"Succesfully logged in as {self.user}")
-        
+
         async def setup_hook(self) -> None:
             print(f"Syncing command tree...")
             if self.custom_data["DEVELOPMENT"]:
@@ -97,3 +96,4 @@ if __name__ == "__main__":
     asyncio.run(main())
 
 
+ 

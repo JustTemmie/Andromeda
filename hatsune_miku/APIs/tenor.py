@@ -5,7 +5,6 @@ import json
 if __name__ == "__main__":
     import config as configLib
 else:
-    print("importing thing")
     import hatsune_miku.APIs.config as configLib
 
 
