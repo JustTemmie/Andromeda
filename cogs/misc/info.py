@@ -6,7 +6,6 @@ import psutil
 import subprocess
 import time
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
 import hatsune_miku.helpers as helpers
 
@@ -29,8 +28,8 @@ class Info(commands.Cog):
                 "System": f"{uname.system} {uname.release}",
                 "Processor": f"{platform.machine()} CPU with {psutil.cpu_count()} threads, clocked at {max_cpu_frequency} GHz",
                 "Memory": f"using {round(psutil.virtual_memory().used / 1024**2)}/{round(psutil.virtual_memory().total / 1024**2)} MB",
-                "System Uptime": self.get_uptime(round(time.time() - psutil.boot_time())),
-                "Bot Uptime": self.get_uptime(round(time.time() - self.start_time)),
+                "System Uptime": helpers.format_time(round(time.time() - psutil.boot_time())),
+                "Bot Uptime": helpers.format_time(round(time.time() - self.start_time)),
                 "Ping": f"{round(self.miku.latency * 1000)}ms",
                 "Python": f"version {platform.python_version()}",
                 "Discord.py": f"version {discord.__version__}"
@@ -42,9 +41,9 @@ class Info(commands.Cog):
     @commands.command(name="info")
     async def info_command(self, ctx):
         
-        embed = helpers.createEmbed(ctx.author)
-        embed.title = "Info"
-        embed.description = "beavers?!"
+        embed = helpers.create_embed(ctx.author)
+        embed.title = "Server info"
+        embed.description = f"some information regarding {self.miku.user.name}'s physical server"
         
         page_data = await self.get_info()
         for i in page_data:
@@ -56,14 +55,6 @@ class Info(commands.Cog):
         
         await ctx.send(embed=embed)
 
-    
-    def get_uptime(self, uptime):
-        if uptime > 86400:
-            fmt = '{0.days} days {0.hours} hours {0.minutes} minutes {0.seconds} seconds'
-        else:
-            fmt = '{0.hours} hours {0.minutes} minutes {0.seconds} seconds'
-        
-        return fmt.format(relativedelta(seconds=uptime))
 
 async def setup(miku):
     await miku.add_cog(Info(miku))
