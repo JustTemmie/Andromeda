@@ -1,3 +1,5 @@
+import discord
+
 import os
 import random
 
@@ -12,3 +14,11 @@ def getProgressBar(current, max, width = 20):
     bar = "█" * percent + "░" * (width - percent)
 
     return bar
+
+# user still needs to set the title, description, and fields
+def createEmbed(user):
+    embed = discord.Embed()
+    embed.colour = user.colour
+    embed.set_footer(text=f"invoked by {user.display_name}", icon_url=user.display_avatar.url)
+    
+    return embed

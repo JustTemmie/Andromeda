@@ -1,6 +1,10 @@
 discord.py # main discord library
-pyttsx3
+
 PyNaCl      # used for voice
+
 yt-dlp      # used to download audio
 spotdl      # used to download audio ( from spotify )
+
 mutagen     # used to read metadata from audio files
+
+psutil      # gets system info, used for info command and such

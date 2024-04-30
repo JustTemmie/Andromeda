@@ -16,6 +16,7 @@
 
     "_DEVELOPMENT_COMMENT": "but miku into development mode, she'll act a bit differently, meant for development (obviously)",
     "DEVELOPMENT": false,
+    "SYNC_TREE": true,
     "_DOWNLOAD_ASSETS_COMMENT": "make miku download assets, such as songs, images, and the like from the internet, mostly made for development purposes",
     "DOWNLOAD_ASSETS": true
 }

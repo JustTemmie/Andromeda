@@ -6,7 +6,7 @@ import hatsune_miku.helpers as helpers
 import hatsune_miku.APIs.tenor as tenorLib
 
 
-class Misc(commands.Cog):
+class Silly(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
 
@@ -16,4 +16,4 @@ class Misc(commands.Cog):
 
 
 async def setup(miku):
-    await miku.add_cog(Misc(miku))
+    await miku.add_cog(Silly(miku))
