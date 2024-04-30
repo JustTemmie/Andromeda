@@ -13,20 +13,20 @@ class Info(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
         self.start_time = time.time()
-
-    async def get_info(self, page=1):
-        uname = platform.uname()
+        self.uname = platform.uname()
+        
         cpu_frequency = psutil.cpu_freq()
-        
         if cpu_frequency != None:
-            max_cpu_frequency = round(cpu_frequency.max / 1000, 2)
+            self.max_cpu_frequency = round(cpu_frequency.max / 1000, 2)
         else:
-            max_cpu_frequency = "?"
-        
+            self.max_cpu_frequency = "?"
+            
+
+    async def get_info(self, page=1):        
         if page == 1:
             return {
-                "System": f"{uname.system} {uname.release}",
-                "Processor": f"{platform.machine()} CPU with {psutil.cpu_count()} threads, clocked at {max_cpu_frequency} GHz",
+                "System": f"{self.uname.system} {self.uname.release}",
+                "Processor": f"{platform.machine()} CPU with {psutil.cpu_count()} threads, clocked at {self.max_cpu_frequency} GHz",
                 "Memory": f"using {round(psutil.virtual_memory().used / 1024**2)}/{round(psutil.virtual_memory().total / 1024**2)} MB",
                 "System Uptime": helpers.format_time(round(time.time() - psutil.boot_time())),
                 "Bot Uptime": helpers.format_time(round(time.time() - self.start_time)),
@@ -40,8 +40,7 @@ class Info(commands.Cog):
             
     @commands.command(name="info")
     async def info_command(self, ctx):
-        
-        embed = helpers.create_embed(ctx.author)
+        embed = helpers.create_embed(ctx)
         embed.title = "Server info"
         embed.description = f"some information regarding {self.miku.user.name}'s physical server"
         
