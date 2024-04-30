@@ -69,7 +69,7 @@ if __name__ == "__main__":
                 print(f"Command tree synced!")
                 
             if self.custom_data["SYNC_TREE"]:
-                sync_tree(self)
+                await sync_tree(self)
             else:
                 print("miku is set to not sync tree, continuing")
         
