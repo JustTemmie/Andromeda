@@ -18,21 +18,20 @@ class Info(commands.Cog):
     async def get_info(self, page=1):
         uname = platform.uname()
         
-        match page:
-            case 1:
-                return {
-                    "System": f"{uname.system} {uname.release}",
-                    "Processor": f"{platform.machine()} CPU with {psutil.cpu_count()} threads, clocked at {round(psutil.cpu_freq().max / 1000, 2)} GHz",
-                    "Memory": f"using {round(psutil.virtual_memory().used / 1024**2)}/{round(psutil.virtual_memory().total / 1024**2)} MB",
-                    "System Uptime": self.get_uptime(round(time.time() - psutil.boot_time())),
-                    "Bot Uptime": self.get_uptime(round(time.time() - self.start_time)),
-                    "Ping": f"{round(self.miku.latency * 1000)}ms",
-                    "Python": f"version {platform.python_version()}",
-                    "Discord.py": f"version {discord.__version__}"
-                }
+        if page == 1:
+            return {
+                "System": f"{uname.system} {uname.release}",
+                "Processor": f"{platform.machine()} CPU with {psutil.cpu_count()} threads, clocked at {round(psutil.cpu_freq().max / 1000, 2)} GHz",
+                "Memory": f"using {round(psutil.virtual_memory().used / 1024**2)}/{round(psutil.virtual_memory().total / 1024**2)} MB",
+                "System Uptime": self.get_uptime(round(time.time() - psutil.boot_time())),
+                "Bot Uptime": self.get_uptime(round(time.time() - self.start_time)),
+                "Ping": f"{round(self.miku.latency * 1000)}ms",
+                "Python": f"version {platform.python_version()}",
+                "Discord.py": f"version {discord.__version__}"
+            }
             
-            case _:
-                return {}
+        else:
+            return {}
             
     @commands.command(name="info")
     async def info_command(self, ctx):
