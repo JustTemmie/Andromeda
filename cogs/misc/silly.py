@@ -11,7 +11,7 @@ class Silly(commands.Cog):
         self.miku = miku
 
     @commands.command(name="explode", aliases=["detonate", "dnace"])
-    async def explodeCommand(self, ctx):
+    async def explode_command(self, ctx):
         await ctx.send("https://tenor.com/view/miku-hatsune-hatsune-miku-miku-explosion-explosion-gif-gif-26996455")
 
 

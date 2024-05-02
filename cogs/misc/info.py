@@ -22,7 +22,7 @@ class Info(commands.Cog):
             self.max_cpu_frequency = "?"
             
 
-    async def get_info(self, page=1):        
+    async def get_info(self, page):        
         if page == 1:
             return {
                 "System": f"{self.uname.system} {self.uname.release}",
@@ -34,17 +34,22 @@ class Info(commands.Cog):
                 "Python": f"version {platform.python_version()}",
                 "Discord.py": f"version {discord.__version__}"
             }
+        
+        elif page == 2:
+            return {
+                "processor": psutil.cpu_freq(),
+            }
             
         else:
             return {}
             
     @commands.command(name="info")
-    async def info_command(self, ctx):
+    async def info_command(self, ctx, page = 1):
         embed = helpers.create_embed(ctx)
         embed.title = "Server info"
         embed.description = f"some information regarding {self.miku.user.name}'s physical server"
         
-        page_data = await self.get_info()
+        page_data = await self.get_info(page)
         for i in page_data:
             embed.add_field(
                 name=i,

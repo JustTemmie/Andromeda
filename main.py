@@ -22,7 +22,7 @@ if __name__ == "__main__":
     logging.warning("warning")
     logging.error("error")
     logging.critical("critical")
-
+    
 
     class Miku(commands.AutoShardedBot):
         def __init__(self, *args, **kwargs):
