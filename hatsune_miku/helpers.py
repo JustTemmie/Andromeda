@@ -2,6 +2,7 @@ import discord
 
 import os
 import random
+import math
 
 def getRandomSong():
     folder = "assets/music"
@@ -27,9 +28,9 @@ def create_embed(ctx, user = None):
 
 def format_time(seconds):
     time_table = {
-        "year": seconds // 31557600 % 31557600,
-        "day": seconds // 86400 % 86400,
-        "hour": seconds // 3600 % 3600,
+        "year": seconds // 31557600,
+        "day": seconds // 86400 % 365.25,
+        "hour": seconds // 3600 % 24,
         "minute": seconds // 60 % 60,
         "second": seconds % 60,
     }
@@ -37,6 +38,7 @@ def format_time(seconds):
     return_string = ""
     
     for unit, value in time_table.items():
+        value = math.floor(value)
         if value > 1:
             return_string += f"{value} {unit}s "
         elif value == 1:

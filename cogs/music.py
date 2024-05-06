@@ -75,7 +75,7 @@ class YtDlpSource(discord.PCMVolumeTransformer):
 
 class MusicPlayer(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.miku = bot
         self.data = {}
     
     async def download_song(self, url):
@@ -113,7 +113,7 @@ class MusicPlayer(commands.Cog):
             ctx.voice_client.play(
                 player,
                 after=lambda e: asyncio.run_coroutine_threadsafe(
-                    self.play_song(ctx), self.bot.loop
+                    self.play_song(ctx), self.miku.loop
                 )
             )
             
@@ -264,7 +264,7 @@ class MusicPlayer(commands.Cog):
             await ctx.send(f"an exception was thrown:\n{e}")
             return
 
-        voice_client = discord.utils.get(self.bot.voice_clients, guild=ctx.guild) # This allows for more functionality with voice channels
+        voice_client = discord.utils.get(self.miku.voice_clients, guild=ctx.guild) # This allows for more functionality with voice channels
         guild_id = ctx.guild.id
         
         await self.ensure_valid_data(self, guild_id)
@@ -390,7 +390,7 @@ class MusicPlayer(commands.Cog):
         voice_channel = ctx.author.voice.channel
         
         if voice_channel is not None:
-            voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+            voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
             voice.pause()
             await ctx.send(f"oke, moving to {voice_channel.name}")
             await voice.move_to(voice_channel)
@@ -404,13 +404,13 @@ class MusicPlayer(commands.Cog):
         description="pikmin!")
     async def skip_command(self, ctx):
         # this stops the song, making the next song automatically start
-        discord.utils.get(self.bot.voice_clients, guild=ctx.guild).stop()
+        discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
     
     @commands.hybrid_command(
         name="stop", aliases=["leave", "disconnect"],
         description="Pikmin :(")
     async def stop_command(self, ctx):
-        voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
+        voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
         
         if ctx.guild.id in self.data:
             self.data[ctx.guild.id]["queue"] = []
@@ -421,6 +421,18 @@ class MusicPlayer(commands.Cog):
         else:
             await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
         del self.data[ctx.guild.id]
+    
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        if before.channel is not None:
+            channel = before.channel
+            if len(channel.members) == 1:
+                if channel.guild.id in self.data:
+                    voice = discord.utils.get(self.miku.voice_clients, guild=channel.guild)
+        
+                    self.data[channel.guild.id]["queue"] = []
+                    
+                    await voice.disconnect()
 
 async def setup(bot):
     await bot.add_cog(MusicPlayer(bot))
