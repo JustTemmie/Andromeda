@@ -47,7 +47,7 @@ class Sing(commands.Cog):
         await ctx.send(embed=embed)
         
     @commands.hybrid_command(
-        name="sing", aliases=["play"],
+        name="sing",
         description="Make me join your VC and sing")
     async def singCommand(self, ctx):
         if discord.utils.get(self.miku.voice_clients, guild=ctx.guild):
@@ -92,32 +92,13 @@ class Sing(commands.Cog):
 
     
     @commands.hybrid_command(
-        name="nowplaying", aliases=["now-playing", "np"],
+        name="nowsinging", aliases=["now-singing"],
         description="In case you're wondering what song i'm playing")
     async def nowplayingCommand(self, ctx):
         await self.sendNowPlayingEmbed(ctx)
-
-    @commands.command(name="psps")
-    async def pspsCommand(self, ctx):
-        voice_channel = ctx.author.voice.channel
-        
-        if voice_channel is not None:
-            voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
-            voice.pause()
-            await ctx.send(f"oke, moving to {voice_channel.name}")
-            await voice.move_to(voice_channel)
-            await asyncio.sleep(5)
-            voice.resume()
-        else:
-            await ctx.send("it doesn't seem like you're in a voice channel")
-    
-    @commands.command(name="skip")
-    async def skipCommand(self, ctx):
-        # this stops the song, making the next song automatically start
-        discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
     
     @commands.hybrid_command(
-        name="stop", aliases=["leave", "disconnect"],
+        name="stopsinging",
         description="Make me leave the current VC, in case you've been miku-pilled enough for today")
     async def stopCommand(self, ctx):
         voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)

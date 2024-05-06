@@ -6,12 +6,23 @@ import json
 import logging
 import asyncio
 import glob
+import os
 
 import hatsune_miku.APIs.config as configLib 
 
 miku = None
 
 if __name__ == "__main__":
+    config = configLib.getConfig()
+    
+    directories = ["temp", "logs"]
+    for dir in directories:
+        if not os.path.exists(dir):
+            os.mkdir(dir)
+        if config["DEVELOPMENT"]:
+            for file in os.listdir(dir):
+                os.remove(f"{dir}/{file}")
+    
     logging.basicConfig(
         level=logging.INFO,
         filename=f"logs/{datetime.now().strftime('%Y-%m-%d-%H:%M:%S')}.log",
@@ -26,7 +37,7 @@ if __name__ == "__main__":
 
     class Miku(commands.AutoShardedBot):
         def __init__(self, *args, **kwargs):
-            self.config = configLib.getConfig()
+            self.config = config
             
             super().__init__(
                 shards=self.config["SHARDS"],
@@ -50,6 +61,8 @@ if __name__ == "__main__":
             
             for i in self.config:
                 self.custom_data[i] = self.config[i]
+            
+            self.start_time = datetime.now()
 
         async def get_prefix(self, message):
             return commands.when_mentioned_or(*self.config["PREFIXES"])(self, message)
@@ -61,7 +74,7 @@ if __name__ == "__main__":
             async def sync_tree(self):
                 print(f"Syncing command tree...")
                 if self.custom_data["DEVELOPMENT"]:
-                    guild = discord.Object(id=885113462378876948)
+                    guild = discord.Object(id=config["DEVELOPMENT_GUILD"])
                     self.tree.copy_global_to(guild=guild)
                     await self.tree.sync()
                 else:
