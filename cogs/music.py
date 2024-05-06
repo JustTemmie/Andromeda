@@ -432,7 +432,8 @@ class MusicPlayer(commands.Cog):
         
                     self.data[channel.guild.id]["queue"] = []
                     
-                    await voice.disconnect()
+                    if voice:
+                        await voice.disconnect()
 
 async def setup(bot):
     await bot.add_cog(MusicPlayer(bot))
