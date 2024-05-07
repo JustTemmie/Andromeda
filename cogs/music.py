@@ -34,7 +34,7 @@ ytdlp_format_options = {
 }
 
 ffmpeg_options = {
-    "options": "-vn -af loudnorm -alf volume=0.2",
+    "options": "-vn -af loudnorm -af volume=0.2",
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
 
