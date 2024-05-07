@@ -32,7 +32,7 @@ ytdlp_format_options = {
         "preferredquality": "192",
     }],
     "ffmpeg_extract_audio_kwargs": {
-        "options": "-af loudnorm"
+        "options": "-af loudnorm -af volume=0.2"
     }
 }
 
@@ -68,7 +68,7 @@ class TrackedFFmpegPCMAudio(discord.FFmpegPCMAudio):
         return ret
     
 class YtDlpSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume=0.2):
+    def __init__(self, source, *, data, volume=1):
         super().__init__(source, volume)
 
         self.data = data
