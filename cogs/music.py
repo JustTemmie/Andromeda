@@ -25,16 +25,11 @@ ytdlp_format_options = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0", # bind to ipv4 since ipv6 addresses cause issues sometimes
-    "retries": "infinite",
-    "postprocessors": [{
-        "key": "FFmpegExtractAudio",
-        "preferredcodec": "mp3",
-        "preferredquality": "192",
-    }]
+    "retries": "infinite"
 }
 
 ffmpeg_options = {
-    "options": "-vn -af loudnorm -af volume=0.2",
+    "options": "-vn -af 'loudnorm, volume=0.5'",
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
 
