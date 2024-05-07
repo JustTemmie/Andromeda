@@ -4,6 +4,7 @@ from discord.ext import commands
 import ast
 import sys
 import os
+import re
 import subprocess
 
 import hatsune_miku.decorators as decorators
@@ -46,9 +47,10 @@ class Owner(commands.Cog):
     @commands.command(name="restart")
     async def restartCommand(self, ctx):
         print(dir(ctx))
-        await ctx.send("Turning off the miku...")
+        await ctx.send("Restarting the miku...")
         print("Terminated using `restart` command.")
-        await self.miku.close()
+        os.execv(self.miku.config["RESTART_COMMAND"])
+        
 
     @decorators.is_host_owner()
     @commands.command(name="bash", aliases=["sh"])
@@ -58,24 +60,56 @@ class Owner(commands.Cog):
         await send_long_message(ctx, shell_output, f"`{command}` returned output:\n")
 
     @commands.is_owner()
-    @commands.command(name="update")
-    async def updateCommand(self, ctx, restart="False"):
+    @commands.command(name="update", brief="Updates the bot by pulling from github")
+    async def update_git_pull(self, ctx, restart="False"):
         try:
             subprocess.call(["git", "fetch"])
-            # subprocess.check_output(["git", "log", "--name-status", "master..origin"]).decode("utf-8")
-            git_commit = ""
+            git_commit = subprocess.check_output(["git", "log", "--name-status", "HEAD..origin"]).decode("utf-8")
             var = subprocess.check_output(["git", "pull"])
-            shell_output = f"{git_commit}\n\n{var.decode('utf-8')}"
+            output = var.decode("utf-8")
         except Exception as error:
             await ctx.send(f"```py\n{error}```")
             return
+        
+        pattern = r'(https?://\S+)'
 
-        await send_long_message(ctx, shell_output)
+        git_commit = re.sub(pattern, r'<\1>', git_commit)
+        if git_commit == "":
+            await ctx.send("up to date :3")
+            return
+        
+        if len(git_commit) < 1975:
+            await ctx.send(git_commit)
+        
+        else:
+            git_commits = git_commit.split("commit ")
+            for i in git_commits:
+                await ctx.send(f"commit {i}")
+
+        if len(output) < 1975:
+            await ctx.send(f"```{output}```")
+
+        else:
+            n = 1994
+            split_strings = []
+
+            for index in range(0, len(output), n):
+                split_strings.append(output[index : index + n])
+
+            for message in split_strings:
+                await ctx.send(f"```{message}```")
 
         if var.decode("utf-8") != "Already up to date.\n":
             if restart.lower() == "true":
                 await ctx.send("Restarting...")
-                await self.miku.close()
+                await self.bot.change_presence(
+                    status=discord.Status.idle,
+                    activity=discord.Activity(
+                        type=discord.ActivityType.watching,
+                        name="restarting - won't respond",
+                    ),
+                )
+                os.execv(self.miku.config["RESTART_COMMAND"])
 
 
 async def setup(miku):
