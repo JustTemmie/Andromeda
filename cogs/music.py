@@ -32,7 +32,7 @@ ytdlp_format_options = {
         "preferredquality": "192",
     }],
     "ffmpeg_extract_audio_kwargs": {
-        "options": "-af loudnorm -af volume=0.2"
+        "options": "-af loudnorm -af volume=0.05"
     }
 }
 
