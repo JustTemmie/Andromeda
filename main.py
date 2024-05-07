@@ -111,6 +111,8 @@ if __name__ == "__main__":
 
             await miku.start(miku.custom_data["API_KEYS"]["DISCORD"])
 
+    miku.loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(miku.loop)
     asyncio.run(main())
 
 

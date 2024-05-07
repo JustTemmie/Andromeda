@@ -3,32 +3,48 @@ from discord.ext import commands
 
 import asyncio
 import aiohttp
-import math
 import yt_dlp
 
+import re
+import time
+import math
+
 import hatsune_miku.helpers as helpers
+import hatsune_miku.user_input as user_input
 
 ytdlp_format_options = {
-    'format': 'bestaudio/best',
-    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-    'restrictfilenames': True,
-    'noplaylist': True,
-    'nocheckcertificate': True,
-    'ignoreerrors': True,
-    'logtostderr': False,
-    'quiet': True,
-    'no_warnings': True,
-    'default_search': 'auto',
-    'source_address': '0.0.0.0', # bind to ipv4 since ipv6 addresses cause issues sometimes
-    'retries': "infinite"
+    "format": "bestaudio/best",
+    "outtmpl": "%(extractor)s-%(id)s-%(title)s.%(ext)s",
+    "restrictfilenames": True,
+    "noplaylist": False,
+    "playlist_items": "1:50",
+    "nocheckcertificate": True,
+    "ignoreerrors": True,
+    "logtostderr": False,
+    "quiet": True,
+    "no_warnings": True,
+    "default_search": "auto",
+    "source_address": "0.0.0.0", # bind to ipv4 since ipv6 addresses cause issues sometimes
+    "retries": "infinite"
 }
 
 ffmpeg_options = {
-    'options': '-vn',
-    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+    "options": "-vn",
+    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
 
-ytdlp = yt_dlp.YoutubeDL(ytdlp_format_options)
+# insane regex https://stackoverflow.com/a/14693789
+remove_colour = re.compile(r'''
+    \x1B  # ESC
+    (?:   # 7-bit C1 Fe (except CSI)
+        [@-Z\\-_]
+    |     # or [ for CSI, followed by a control sequence
+        \[
+        [0-?]*  # Parameter bytes
+        [ -/]*  # Intermediate bytes
+        [@-~]   # Final byte
+    )
+''', re.VERBOSE)
 
 class TrackedFFmpegPCMAudio(discord.FFmpegPCMAudio):
     def __init__(self, player, guild_id, *args, **kwargs):
@@ -49,23 +65,17 @@ class YtDlpSource(discord.PCMVolumeTransformer):
 
         self.data = data
 
-        self.title = data.get('title')
-        self.url = data.get('url')
+        self.title = data.get("title")
+        self.url = data.get("url")
 
 
     @classmethod
     async def next_song(cls, player, guild_id):
         song = player.data[guild_id]["queue"].pop(0)
         
-        if song["data"] == None:
-            data = await player.download_song(song["url"])
-        # elif song["data"] == "pending":
-        #     await song["data"] != "pending":
-        #         data = song["data"]
-        else:
-            data = song["data"]
+        data = song["data"]
         
-        filename = data['url']
+        filename = data["url"]
         
         player.data[guild_id]["meta_data"] = await player.get_meta_data(data)
         player.data[guild_id]["meta_data"]["ctx"] = song["ctx"]
@@ -77,26 +87,51 @@ class MusicPlayer(commands.Cog):
     def __init__(self, bot):
         self.miku = bot
         self.data = {}
+        
+            
     
-    async def download_song(self, url):
-        data = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdlp.extract_info(url, download=False))
-        if 'entries' in data:
-            # take first item from a playlist
-            data = data['entries'][0]
+
+    async def download_song(self, url, ctx):
+        
+        options = ytdlp_format_options.copy()
+        sent_status = False
+        
+        # oh my GOD this is scuffed
+        class YTDLPProgressUpdater:
+            def debug(log):
+                if not log.startswith("[download] "):
+                    return
+                if "Downloading item " not in log:
+                    return
+                
+                log = remove_colour.sub('', log)
+                items = log.split("Downloading item ")[1]
+                progress = items.split(" ")[0]
+                total = items.split(" ")[-1]
+
+                if int(total) > 2:
+                    if sent_status == False:
+                        msg = asyncio.run_coroutine_threadsafe(ctx.send(f"downloading {total} songs, this might take a while..."), self.miku.loop)
+                        msg.result()
+                        sent_status = True
+                    
+            def info(msg):
+                print("info", msg)
+
+            def warning(msg):
+                pass
+            
+            def error(msg):
+                print("error", msg)
+        
+        options["logger"] = YTDLPProgressUpdater
+        
+        with yt_dlp.YoutubeDL(options) as ytdlp:            
+            def task2():
+                print("Hi")
+            data = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdlp.extract_info(url, download=False))
         
         return data
-    
-    async def cache_song(self, guild_id, index = 0):
-        if len(self.data[guild_id]["queue"]) == 0:
-            return
-        
-        self.data[guild_id]["next_up"] = "pending"
-        
-        url = self.data[guild_id]["queue"][index]["url"]
-        data = await self.download_song(url)
-        
-        self.data[guild_id]["queue"][index]["data"] = data
-        # print(f"finished downloading cache for {url}")
     
     async def play_song(self, ctx):
         try:
@@ -185,9 +220,15 @@ class MusicPlayer(commands.Cog):
             
             # UPLOADER
             if meta_data["uploader"] != "unknown":
-                embed.add_field(
-                    name="Uploader",
-                    value=f"[{meta_data['uploader']}]({meta_data['uploader_url']})")
+                if meta_data["uploader_url"] in ["unknown", "None", None]:
+                    embed.add_field(
+                        name="Uploader",
+                        value=meta_data['uploader'])
+                else:
+                    embed.add_field(
+                        name="Uploader",
+                        value=f"[{meta_data['uploader']}]({meta_data['uploader_url']})")
+                    
             
             # LIKE DISLIKE RATIO
             if meta_data["dislikes"] != "unknown":
@@ -249,10 +290,10 @@ class MusicPlayer(commands.Cog):
         return meta_data
     
     
-    @commands.command(
+    @commands.hybrid_command(
         name="play",
         description="plays a song")
-    async def play_command(self, ctx, *, song):
+    async def play_command(self, ctx, *, search_query):
         try:
             voice_channel = ctx.author.voice.channel
         
@@ -267,42 +308,79 @@ class MusicPlayer(commands.Cog):
         voice_client = discord.utils.get(self.miku.voice_clients, guild=ctx.guild) # This allows for more functionality with voice channels
         guild_id = ctx.guild.id
         
+        if voice_client != None:
+            if voice_client.channel != voice_channel:
+                await ctx.send("sorry, i'm already busy playing bangers somewhere else in this guild")
+                return
+        
         await self.ensure_valid_data(self, guild_id)
-        self.data[guild_id]["queue"].append(
-            {"url": song, "data": None, "ctx": ctx}
-        )
-
         await ctx.message.add_reaction("✅")
+        
+        song_data = await self.download_song(search_query, ctx)
+                        
+        # with open ("example_data.json", "w") as f:
+        #     import json
+        #     json.dump(song_data, f)
+        
+        async def add_playlist(ctx, song_data):
+            for entry in song_data["entries"]:
+                self.data[guild_id]["queue"].append(
+                    {"data": entry,
+                    "ctx": ctx}
+                )
+            
+                            
+            embed = helpers.create_embed(ctx)
+            embed.title = f"Added {len(song_data['entries'])} songs to queue"
+            
+            await ctx.send(embed = embed)
+
+        
+        async def add_song(ctx, song_data):
+            if "entries" in song_data:
+                song_data = song_data["entries"][0]
+    
+            self.data[guild_id]["queue"].append(
+                {"data": song_data,
+                "ctx": ctx}
+            )
+            
+            if self.data[guild_id]["playing"]:
+                embed = helpers.create_embed(ctx)
+                embed.title = "Added song to queue"
+                embed.description = song_data["title"]
+
+                embed = await self.add_embed_fields(embed, song_data)
+                
+                await ctx.send(embed = embed)
+        
+        
+        if "entries" in song_data and len(song_data["entries"]) > 1:
+            await ctx.reply(f"hey, would you like to play the entire playlist instead of just the first track?\n\nautomatically adding first track: <t:{round(time.time()) + 15}:R>")
+            playlist = await user_input.get_consent(self.miku, ctx, 17, ", adding the first track only")
+            
+            if playlist:
+                await add_playlist(ctx, song_data)
+                
+            # take first item from a playlist
+            else:
+                await add_song(ctx, song_data)
+        
+        else:
+            await add_song(ctx, song_data)
+
         
         if voice_client == None:
             await voice_channel.connect(self_deaf=True)
             await self.play_song(ctx)
         
-        else:
-            if voice_client.channel != voice_channel:
-                await ctx.send("sorry, i'm already busy playing another banger in this guild")
-                return
-            
-            queue = self.data[guild_id]["queue"]
-            index = len(queue) - 1
-            
-            if self.data[guild_id]["playing"] == False:
-                await self.play_song(ctx)
-            else:
-                await self.cache_song(guild_id, index)
-                data = await self.get_meta_data(queue[index]["data"])
-                
-                embed = helpers.create_embed(ctx)
-                embed.title = "Added song to queue"
-                embed.description = data["title"]
+        if self.data[guild_id]["playing"] == False:
+            await self.play_song(ctx)
 
-                embed = await self.add_embed_fields(embed, data)
-                
-                await ctx.send(embed = embed)
 
     
-    @commands.command(
-        name="nowplaying", aliases=["now-playing", "np"],
+    @commands.hybrid_command(
+        name="now-playing", aliases=["nowplaying", "np"],
         description="In case you're wondering what song i'm playing")
     async def nowplaying_command(self, ctx):
         guild_id = ctx.guild.id
@@ -331,7 +409,7 @@ class MusicPlayer(commands.Cog):
         
         await ctx.send(embed = embed)
 
-    @commands.command(name="queue", aliases=["q"])
+    @commands.hybrid_command(name="queue", aliases=["q"])
     async def queue_command(self, ctx, page = 1):
         if type(page) != int:
             return await ctx.send(f"{page} is not a valid page number")
@@ -399,7 +477,7 @@ class MusicPlayer(commands.Cog):
         else:
             await ctx.send("it doesn't seem like you're in a voice channel")
     
-    @commands.command(
+    @commands.hybrid_command(
         name="skip",
         description="pikmin!")
     async def skip_command(self, ctx):
@@ -408,7 +486,7 @@ class MusicPlayer(commands.Cog):
     
     @commands.hybrid_command(
         name="stop", aliases=["leave", "disconnect"],
-        description="Pikmin :(")
+        description="Leave the VC and stop playing music")
     async def stop_command(self, ctx):
         voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
         

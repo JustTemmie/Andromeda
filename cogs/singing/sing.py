@@ -46,7 +46,7 @@ class Sing(commands.Cog):
 
         await ctx.send(embed=embed)
         
-    @commands.hybrid_command(
+    @commands.command(
         name="sing",
         description="Make me join your VC and sing")
     async def singCommand(self, ctx):
@@ -91,23 +91,11 @@ class Sing(commands.Cog):
             await playSong()
 
     
-    @commands.hybrid_command(
-        name="nowsinging", aliases=["now-singing"],
+    @commands.command(
+        name="nowsinging", aliases=["now-singing", "ns"],
         description="In case you're wondering what song i'm playing")
     async def nowplayingCommand(self, ctx):
         await self.sendNowPlayingEmbed(ctx)
-    
-    @commands.hybrid_command(
-        name="stopsinging",
-        description="Make me leave the current VC, in case you've been miku-pilled enough for today")
-    async def stopCommand(self, ctx):
-        voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
-        del self.data[ctx.guild.id]
-        if voice:
-            await voice.disconnect()
-            await ctx.send("okay, i'll stop")
-        else:
-            await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
 
 async def setup(miku):
     await miku.add_cog(Sing(miku))
