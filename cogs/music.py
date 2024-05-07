@@ -30,14 +30,11 @@ ytdlp_format_options = {
         "key": "FFmpegExtractAudio",
         "preferredcodec": "mp3",
         "preferredquality": "192",
-    }],
-    "ffmpeg_extract_audio_kwargs": {
-        "options": "-af loudnorm -af volume=1"
-    }
+    }]
 }
 
 ffmpeg_options = {
-    "options": "-vn",
+    "options": "-vn -af loudnorm -alf volume=0.2",
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
 
