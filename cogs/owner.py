@@ -49,8 +49,7 @@ class Owner(commands.Cog):
         print(dir(ctx))
         await ctx.send("Restarting the miku...")
         print("Terminated using `restart` command.")
-        os.execv(self.miku.config["RESTART_COMMAND"])
-        
+        await self.miku.close()
 
     @decorators.is_host_owner()
     @commands.command(name="bash", aliases=["sh"])
@@ -109,8 +108,8 @@ class Owner(commands.Cog):
                         name="restarting - won't respond",
                     ),
                 )
-                os.execv(self.miku.config["RESTART_COMMAND"])
-
+                await self.miku.close()
+                
 
 async def setup(miku):
     await miku.add_cog(Owner(miku))
