@@ -25,7 +25,12 @@ ytdlp_format_options = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0", # bind to ipv4 since ipv6 addresses cause issues sometimes
-    "retries": "infinite"
+    "retries": "infinite",
+    "postprocessors": [{
+        "key": "FFmpegExtractAudio",
+        "preferredcodec": "mp3",
+        "preferredquality": "192",
+    }],
 }
 
 ffmpeg_options = {
@@ -60,7 +65,7 @@ class TrackedFFmpegPCMAudio(discord.FFmpegPCMAudio):
         return ret
     
 class YtDlpSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume=0.5):
+    def __init__(self, source, *, data, volume=0.2):
         super().__init__(source, volume)
 
         self.data = data
@@ -87,10 +92,8 @@ class MusicPlayer(commands.Cog):
     def __init__(self, bot):
         self.miku = bot
         self.data = {}
-        
-            
     
-
+    
     async def download_song(self, url, ctx):
         
         options = ytdlp_format_options.copy()

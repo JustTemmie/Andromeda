@@ -28,7 +28,8 @@ def create_embed(ctx, user = None):
 
 def format_time(seconds):
     time_table = {
-        "year": seconds // 31557600,
+        "decade": seconds // 315576000,
+        "year": seconds // 31557600 % 10,
         "day": seconds // 86400 % 365.25,
         "hour": seconds // 3600 % 24,
         "minute": seconds // 60 % 60,
