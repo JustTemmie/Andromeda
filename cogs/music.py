@@ -29,7 +29,7 @@ ytdlp_format_options = {
     "retries": "infinite"
 }
 
-ffmpeg_options = {
+default_ffmpeg_options = {
     "options": "-vn -af 'loudnorm, volume=0.5'",
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
@@ -80,7 +80,7 @@ class YtDlpSource(discord.PCMVolumeTransformer):
         player.data[guild_id]["meta_data"]["ctx"] = song["ctx"]
         player.data[guild_id]["progress"] = 0
 
-        return cls(TrackedFFmpegPCMAudio(player, guild_id, filename, **ffmpeg_options), data=data)
+        return cls(TrackedFFmpegPCMAudio(player, guild_id, filename, **player.data["ffmpeg_options"][guild_id]), data=data)
 
 class MusicPlayer(commands.Cog):
     def __init__(self, miku):
@@ -135,10 +135,11 @@ class MusicPlayer(commands.Cog):
     async def change_ffmpeg_filter(self, ctx, filter):
         guild_id = ctx.guild.id
         
-        ctx.voice_client.pause()
         progress = self.data[guild_id]["progress"]
-        ffmpeg_options["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
-        self.data[guild_id]["player"] = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
+        self.data["ffmpeg_options"][guild_id]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
+        new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
+        ctx.voice_client.pause()
+        self.data[guild_id]["player"] = new_player
         
         ctx.voice_client.play(
             self.data[guild_id]["player"],
@@ -207,7 +208,7 @@ class MusicPlayer(commands.Cog):
             self.data[guild_id]["meta_data"] = {}
             self.data[guild_id]["queue"] = []
             self.data[guild_id]["progress"] = 0
-            self.data[guild_id]["ffmpeg_options"] = ""
+            self.data[guild_id]["ffmpeg_options"] = default_ffmpeg_options.copy()
             self.data[guild_id]["player"] = None
             self.data[guild_id]["song"] = None
 
@@ -399,7 +400,7 @@ class MusicPlayer(commands.Cog):
 
 
     @commands.command(name="filter")
-    async def iaerns(self, ctx, filter = ""):
+    async def filter_command(self, ctx, filter = ""):
         voice_channel = ctx.author.voice.channel
 
         if voice_channel is not None:

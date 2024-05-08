@@ -16,24 +16,25 @@ class StatusChanger(commands.Cog):
         self.song_end_at = 0
     
         
-    @tasks.loop(seconds=5)
+    @tasks.loop(seconds=50)
     async def changeStatusTask(self):
-        def getRandomSongData():
-            song = helpers.getRandomSong()
-            audio_data = MP3(song)
-            if audio_data.info.length > 5:
-                self.song_end_at = round(time.time() + audio_data.info.length)
-                self.song_name = audio_data["TIT2"].text[0]
-            else:
-                getRandomSongData()
+        # def getRandomSongData():
+        #     song = helpers.getRandomSong()
+        #     audio_data = MP3(song)
+        #     if audio_data.info.length > 5:
+        #         self.song_end_at = round(time.time() + audio_data.info.length)
+        #         self.song_name = audio_data["TIT2"].text[0]
+        #     else:
+        #         getRandomSongData()
         
-        if self.song_end_at < time.time():
-            getRandomSongData()
+        # if self.song_end_at < time.time():
+            # getRandomSongData()
             await self.miku.change_presence(
                 status=discord.Status.online,
                 activity=discord.Activity(
                     type=discord.ActivityType.listening,
-                    name=self.song_name),
+                    # name=self.song_name),
+                    name="hello :3"),
             )
 
 async def setup(miku):
