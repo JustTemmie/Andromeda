@@ -311,6 +311,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="play",
+        brief=["sing"],
         description="plays a song")
     async def play_command(self, ctx, *, search_query):
         try:
@@ -399,7 +400,18 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(name="filter")
     async def iaerns(self, ctx, filter = ""):
-        await self.change_ffmpeg_filter(ctx, filter)
+        voice_channel = ctx.author.voice.channel
+
+        if voice_channel is not None:
+            voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
+            if voice is not None:
+                await self.change_ffmpeg_filter(ctx, filter)
+            else:
+                await ctx.send("uhhh, some error happen :( - sozzy")
+        else: 
+            await ctx.send("it doesn't seem like you're in a voice channel")
+
+
     
     @commands.hybrid_command(
         name="now-playing", aliases=["nowplaying", "np"],
