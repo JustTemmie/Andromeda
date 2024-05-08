@@ -194,7 +194,7 @@ class MusicPlayer(commands.Cog):
     async def play_song(self, ctx):
         try:
             guild_id = ctx.guild.id
-            if guild_id in self.data or self.data[guild_id]["seeking"]:
+            if guild_id not in self.data or self.data[guild_id]["seeking"]:
                 return
 
             if len(self.data[guild_id]["queue"]) == 0:
