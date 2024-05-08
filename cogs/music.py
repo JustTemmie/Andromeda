@@ -136,9 +136,9 @@ class MusicPlayer(commands.Cog):
         guild_id = ctx.guild.id
         
         progress = self.data[guild_id]["progress"]
+        ctx.voice_client.pause()
         self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
         new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
-        ctx.voice_client.pause()
         self.data[guild_id]["player"] = new_player
         
         ctx.voice_client.play(
