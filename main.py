@@ -49,11 +49,6 @@ if __name__ == "__main__":
             *args, **kwargs)
 
             self.start_time = datetime.now()
-            
-            for i in self.config:
-                self.custom_data[i] = self.config[i]
-            
-            self.start_time = datetime.now()
 
         async def get_prefix(self, message):
             return commands.when_mentioned_or(*self.config["PREFIXES"])(self, message)
@@ -64,7 +59,7 @@ if __name__ == "__main__":
         async def setup_hook(self) -> None:
             async def sync_tree(self):
                 print(f"Syncing command tree...")
-                if self.custom_data["DEVELOPMENT"]:
+                if self.config["DEVELOPMENT"]:
                     guild = discord.Object(id=config["DEVELOPMENT_GUILD"])
                     self.tree.copy_global_to(guild=guild)
                     await self.tree.sync()
@@ -72,7 +67,7 @@ if __name__ == "__main__":
                     await self.tree.sync()
                 print(f"Command tree synced!")
                 
-            if self.custom_data["SYNC_TREE"]:
+            if self.config["SYNC_TREE"]:
                 await sync_tree(self)
             else:
                 print("miku is set to not sync tree, continuing")
@@ -100,7 +95,7 @@ if __name__ == "__main__":
                     # removes the ".py" from the end of the filename, to make it into cogs.economy
                     await miku.load_extension(filename)
 
-            await miku.start(miku.custom_data["API_KEYS"]["DISCORD"])
+            await miku.start(miku.config["API_KEYS"]["DISCORD"])
 
     miku.loop = asyncio.new_event_loop()
     asyncio.set_event_loop(miku.loop)
