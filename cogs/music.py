@@ -30,7 +30,7 @@ ytdlp_format_options = {
 }
 
 default_ffmpeg_options = {
-    "options": "-vn -af 'loudnorm, volume=0.45'",
+    "options": "-vn -af 'loudnorm, volume=0.4'",
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
 
@@ -156,7 +156,7 @@ class MusicPlayer(commands.Cog):
         old_options = self.data[guild_id]["ffmpeg_options"]["options"]
         start_time = time.time()
         
-        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.45 {filter}'"
+        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.4 {filter}'"
         
         async def play_song_clear_seeking(self, ctx):
             # if the song played for a second, it probably had good ffmpeg arguments lol
@@ -274,7 +274,6 @@ class MusicPlayer(commands.Cog):
             existing_field_count = len(embed.fields)
             
             try:
-
                 # LIVE STATUS
                 if meta_data["live_status"] == "is_live":
                     embed.add_field(
@@ -372,6 +371,13 @@ class MusicPlayer(commands.Cog):
         brief=["sing"],
         description="plays a song")
     async def play_command(self, ctx, *, search_query = None):
+        if search_query == None:
+            if len(ctx.message.attachments) == 0:
+                await ctx.send("sorry, that's not a valid search query")
+                return
+
+            search_query = ctx.message.attachments[0].url
+            
         try:
             voice_channel = ctx.author.voice.channel
 
@@ -391,15 +397,9 @@ class MusicPlayer(commands.Cog):
                 await ctx.send("sorry, i'm already busy playing bangers somewhere else in this guild")
                 return
 
+
         await self.ensure_valid_data(guild_id)
         await ctx.message.add_reaction("✅")
-
-        if search_query == None:
-            if len(ctx.message.attachments) == 0:
-                await ctx.send("sorry, that's not a valid search query")
-                return
-
-            search_query = ctx.message.attachments[0].url
         
         song_data = await self.download_song(search_query, ctx)
 
@@ -431,11 +431,12 @@ class MusicPlayer(commands.Cog):
             )
 
             if self.data[guild_id]["playing"]:
+                meta_data = await self.get_meta_data(song_data)
                 embed = helpers.create_embed(ctx)
                 embed.title = "Added song to queue"
-                embed.description = song_data["title"]
+                embed.description = meta_data["title"]
 
-                embed = await self.add_embed_fields(embed, song_data)
+                embed = await self.add_embed_fields(embed, meta_data)
 
                 await ctx.send(embed = embed)
 
