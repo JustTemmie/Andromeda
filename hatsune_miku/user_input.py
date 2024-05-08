@@ -13,7 +13,7 @@ async def get_consent(miku, ctx, time, bonus=""):
     if response == None:
         return False
     
-    if response.content.lower() in ["yes", "yes.", "ye", "ye.", "y", "y."]:
+    if response.content.lower()[0] == "y":
         return True
     else:
         return False

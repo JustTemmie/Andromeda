@@ -18,7 +18,7 @@ ytdlp_format_options = {
     "outtmpl": "%(extractor)s-%(id)s-%(title)s.%(ext)s",
     "restrictfilenames": True,
     "noplaylist": False,
-    "playlist_items": "1:50",
+    "playlist_items": "1:20",
     "nocheckcertificate": True,
     "ignoreerrors": True,
     "logtostderr": False,
