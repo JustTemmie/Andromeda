@@ -155,12 +155,10 @@ class MusicPlayer(commands.Cog):
             
             await self.play_player(ctx, guild_id)
         except:
+            self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5'"
             self.data[guild_id]["player"] = old_player
             await self.play_player(ctx, guild_id)
-            
-
-            
-            
+        
         self.data[guild_id]["seeking"] = False
     
     async def play_song(self, ctx):
