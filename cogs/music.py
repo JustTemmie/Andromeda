@@ -409,7 +409,7 @@ class MusicPlayer(commands.Cog):
         #     json.dump(song_data, f)
 
         async def add_playlist(ctx, song_data):
-            if len(song_data["entries"]):
+            if len(song_data["entries"]) == 0:
                 return
             
             for entry in song_data["entries"]:
