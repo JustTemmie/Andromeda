@@ -581,7 +581,7 @@ class MusicPlayer(commands.Cog):
 
         if voice:
             await voice.disconnect()
-            await ctx.send("okay, i'll stop")
+            await ctx.message.add_reaction("✅")
         else:
             await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
     
@@ -601,6 +601,7 @@ class MusicPlayer(commands.Cog):
     async def stop_command(self, ctx):
         if ctx.guild.id in self.data:
             del self.data[ctx.guild.id]
+            await ctx.message.add_reaction("✅")
         else:
             await ctx.send("sorry, i don't seem to be playing anything right now")
     
