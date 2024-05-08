@@ -272,58 +272,66 @@ class MusicPlayer(commands.Cog):
 
     async def add_embed_fields(self, embed, meta_data):
             existing_field_count = len(embed.fields)
+            
+            try:
 
-            # LIVE STATUS
-            if meta_data["live_status"] == "is_live":
-                embed.add_field(
-                    name = "Type",
-                    value = "Livestream")
-
-            # DURATION
-            if meta_data["readable_duration"] != "unknown":
-                embed.add_field(
-                    name = "Duration",
-                    value = meta_data["readable_duration"])
-
-            # UPLOADER
-            if meta_data["uploader"] != "unknown":
-                if meta_data["uploader_url"] in ["unknown", "None", None]:
+                # LIVE STATUS
+                if meta_data["live_status"] == "is_live":
                     embed.add_field(
-                        name="Uploader",
-                        value=meta_data['uploader'])
-                else:
+                        name = "Type",
+                        value = "Livestream")
+
+                # DURATION
+                if "readable_duration" in meta_data and meta_data["readable_duration"] != "unknown":
                     embed.add_field(
-                        name="Uploader",
-                        value=f"[{meta_data['uploader']}]({meta_data['uploader_url']})")
+                        name = "Duration",
+                        value = meta_data["readable_duration"])
+
+                # UPLOADER
+                if meta_data["uploader"] != "unknown":
+                    if meta_data["uploader_url"] in ["unknown", "None", None]:
+                        embed.add_field(
+                            name="Uploader",
+                            value=meta_data['uploader'])
+                    else:
+                        embed.add_field(
+                            name="Uploader",
+                            value=f"[{meta_data['uploader']}]({meta_data['uploader_url']})")
 
 
-            # LIKE DISLIKE RATIO
-            if meta_data["dislikes"] != "unknown":
+                # LIKE DISLIKE RATIO
+                if meta_data["dislikes"] != "unknown":
+                    embed.add_field(
+                        name="Likes / Dislikes",
+                        value=f"{meta_data['likes']} / {meta_data['dislikes']}",
+                    )
+
+
+                # VIEW COUNT
+                if meta_data["views"] != "unknown":
+                    embed.add_field(
+                        name="views",
+                        value=meta_data["views"])
+                    
+
+                # THUMBNAIL
+                if meta_data["thumbnail"] != "unknown":
+                    embed.set_thumbnail(url = meta_data["thumbnail"])
+
+                new_field_count = len(embed.fields)
+
+                for i in range(new_field_count - 2, max(0, existing_field_count - 1), -2):
+                    embed.insert_field_at(
+                        i,
+                        name="\t",
+                        value="\t",
+                        inline=False
+                    )
+            
+            except Exception as e:
                 embed.add_field(
-                    name="Likes / Dislikes",
-                    value=f"{meta_data['likes']} / {meta_data['dislikes']}",
-                )
-
-
-            # VIEW COUNT
-            if meta_data["views"] != "unknown":
-                embed.add_field(
-                    name="views",
-                    value=meta_data["views"])
-                
-
-            # THUMBNAIL
-            if meta_data["thumbnail"] != "unknown":
-                embed.set_thumbnail(url = meta_data["thumbnail"])
-
-            new_field_count = len(embed.fields)
-
-            for i in range(new_field_count - 2, max(0, existing_field_count - 1), -2):
-                embed.insert_field_at(
-                    i,
-                    name="\t",
-                    value="\t",
-                    inline=False
+                    name="an error occured - a field is missing :(",
+                    value=e
                 )
 
 
@@ -353,7 +361,6 @@ class MusicPlayer(commands.Cog):
 
         try:
             meta_data["readable_duration"] = helpers.format_time(data["duration"])
-            meta_data["readable_duration"]
         except:
             meta_data["readable_duration"] = "unknown"
 
