@@ -18,7 +18,7 @@ ytdlp_format_options = {
     "outtmpl": "%(extractor)s-%(id)s-%(title)s.%(ext)s",
     "restrictfilenames": True,
     "noplaylist": False,
-    "playlist_items": "1:20",
+    "playlist_items": "1:50",
     "nocheckcertificate": True,
     "ignoreerrors": True,
     "logtostderr": False,
@@ -88,7 +88,7 @@ class MusicPlayer(commands.Cog):
         self.data = {}
 
 
-    async def download_song(self, url, ctx):
+    async def download_song(self, url, ctx, playlist_items = "1:2"):
 
         options = ytdlp_format_options.copy()
         global sent_message
@@ -106,7 +106,7 @@ class MusicPlayer(commands.Cog):
                 progress = int(items.split(" ")[0])
                 total = int(items.split(" ")[-1])
 
-                if total > 2:
+                if total > 1:
                     global sent_message
                     if sent_message == None:
                         job = asyncio.run_coroutine_threadsafe(ctx.send(f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
@@ -129,6 +129,7 @@ class MusicPlayer(commands.Cog):
 
         if sent_message == True: print('woa')
         options["logger"] = YTDLPProgressUpdater
+        options["playlist_items"] = playlist_items
 
         with yt_dlp.YoutubeDL(options) as ytdlp:
             data = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdlp.extract_info(url, download=False))
@@ -408,6 +409,9 @@ class MusicPlayer(commands.Cog):
         #     json.dump(song_data, f)
 
         async def add_playlist(ctx, song_data):
+            if len(song_data["entries"]):
+                return
+            
             for entry in song_data["entries"]:
                 self.data[guild_id]["queue"].append(
                     {"data": entry,
@@ -441,11 +445,12 @@ class MusicPlayer(commands.Cog):
                 await ctx.send(embed = embed)
 
 
+        add_full_playlist = False
         if "entries" in song_data and len(song_data["entries"]) > 1:
             await ctx.reply(f"hey, would you like to play the entire playlist instead of just the first track?\n\nautomatically adding first track: <t:{round(time.time()) + 15}:R>")
-            playlist = await user_input.get_consent(self.miku, ctx, 17, ", adding the first track only")
+            add_full_playlist = await user_input.get_consent(self.miku, ctx, 17, ", adding the first track only")
 
-            if playlist:
+            if add_full_playlist:
                 await add_playlist(ctx, song_data)
 
             # take first item from a playlist
@@ -462,7 +467,10 @@ class MusicPlayer(commands.Cog):
 
         if self.data[guild_id]["playing"] == False:
             await self.play_song(ctx)
-
+        
+        if add_full_playlist:
+            song_data = await self.download_song(search_query, ctx, "3:50")
+            await add_playlist(ctx, song_data)
 
     @commands.cooldown(1, 4, commands.BucketType.guild)
     @commands.command(name="filter")
