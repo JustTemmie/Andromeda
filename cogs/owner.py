@@ -99,7 +99,7 @@ class Owner(commands.Cog):
                 await ctx.send(f"```{message}```")
 
         if var.decode("utf-8") != "Already up to date.\n":
-            if restart.lower() == "true":
+            if restart.lower() in ["true", "1"]:
                 await ctx.send("Restarting...")
                 await self.bot.change_presence(
                     status=discord.Status.idle,

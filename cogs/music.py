@@ -131,24 +131,36 @@ class MusicPlayer(commands.Cog):
             data = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdlp.extract_info(url, download=False))
 
         return data
-    
-    async def change_ffmpeg_filter(self, ctx, filter):
-        guild_id = ctx.guild.id
-        
-        self.data[guild_id]["seeking"] = True
-        progress = self.data[guild_id]["progress"]
-        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
-        ctx.voice_client.pause()
-        new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
-        self.data[guild_id]["player"] = new_player
-        
+
+    async def play_player(self, ctx, guild_id):
         ctx.voice_client.play(
             self.data[guild_id]["player"],
             after=lambda e: asyncio.run_coroutine_threadsafe(
                 self.play_song(ctx), self.miku.loop
             )
         )
+    
+    async def change_ffmpeg_filter(self, ctx, filter):
+        guild_id = ctx.guild.id
         
+        self.data[guild_id]["seeking"] = True
+        progress = self.data[guild_id]["progress"]
+        old_player = self.data[guild_id]["player"]
+        
+        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
+        ctx.voice_client.pause()
+        try:
+            new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
+            self.data[guild_id]["player"] = new_player
+            
+            await self.play_player(ctx, guild_id)
+        except:
+            self.data[guild_id]["player"] = old_player
+            await self.play_player(ctx, guild_id)
+            
+
+            
+            
         self.data[guild_id]["seeking"] = False
     
     async def play_song(self, ctx):
@@ -168,12 +180,7 @@ class MusicPlayer(commands.Cog):
             
             self.data[guild_id]["player"] = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
             
-            ctx.voice_client.play(
-                self.data[guild_id]["player"],
-                after=lambda e: asyncio.run_coroutine_threadsafe(
-                    self.play_song(ctx), self.miku.loop
-                )
-            )
+            await self.play_player(ctx, guild_id)
 
             await self.send_now_playing_embed(ctx)
 
