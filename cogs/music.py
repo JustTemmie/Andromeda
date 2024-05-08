@@ -106,7 +106,7 @@ class MusicPlayer(commands.Cog):
                 progress = int(items.split(" ")[0])
                 total = int(items.split(" ")[-1])
 
-                if total > 1:
+                if total > 2:
                     global sent_message
                     if sent_message == None:
                         job = asyncio.run_coroutine_threadsafe(ctx.send(f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
@@ -418,11 +418,11 @@ class MusicPlayer(commands.Cog):
                     "ctx": ctx}
                 )
 
+            if len(song_data["entries"]) > 2:
+                embed = helpers.create_embed(ctx)
+                embed.title = f"Added {len(song_data['entries']) + 2} songs to queue"
 
-            embed = helpers.create_embed(ctx)
-            embed.title = f"Added {len(song_data['entries'])} songs to queue"
-
-            await ctx.send(embed = embed)
+                await ctx.send(embed = embed)
 
 
         async def add_song(ctx, song_data):
