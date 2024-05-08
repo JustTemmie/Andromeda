@@ -135,9 +135,10 @@ class MusicPlayer(commands.Cog):
     async def change_ffmpeg_filter(self, ctx, filter):
         guild_id = ctx.guild.id
         
+        self.data[guild_id]["seeking"] = True
         progress = self.data[guild_id]["progress"]
-        ctx.voice_client.pause()
         self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
+        ctx.voice_client.pause()
         new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
         self.data[guild_id]["player"] = new_player
         
@@ -147,10 +148,15 @@ class MusicPlayer(commands.Cog):
                 self.play_song(ctx), self.miku.loop
             )
         )
+        
+        self.data[guild_id]["seeking"] = False
     
     async def play_song(self, ctx):
         try:
             guild_id = ctx.guild.id
+            if self.data[guild_id]["seeking"]:
+                return
+
             if len(self.data[guild_id]["queue"]) == 0:
                 await self.send_queue_finished_embed(ctx)
                 self.data[guild_id]["playing"] = False
@@ -210,6 +216,7 @@ class MusicPlayer(commands.Cog):
             self.data[guild_id]["progress"] = 0
             self.data[guild_id]["ffmpeg_options"] = default_ffmpeg_options.copy()
             self.data[guild_id]["player"] = None
+            self.data[guild_id]["seeking"] = False
             self.data[guild_id]["song"] = None
 
     async def send_now_playing_embed(self, ctx):
