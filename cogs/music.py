@@ -194,7 +194,7 @@ class MusicPlayer(commands.Cog):
     async def play_song(self, ctx):
         try:
             guild_id = ctx.guild.id
-            if self.data[guild_id]["seeking"]:
+            if guild_id in self.data or self.data[guild_id]["seeking"]:
                 return
 
             if len(self.data[guild_id]["queue"]) == 0:
@@ -589,8 +589,11 @@ class MusicPlayer(commands.Cog):
         name="skip",
         description="skipero!")
     async def skip_command(self, ctx):
-        # this stops the song, making the next song automatically start
-        discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
+        try:
+            # this stops the song, making the next song automatically start
+            discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
+        except:
+            await ctx.send("an error has occured")
 
     @commands.hybrid_command(
         name="stop",
@@ -598,6 +601,8 @@ class MusicPlayer(commands.Cog):
     async def stop_command(self, ctx):
         if ctx.guild.id in self.data:
             del self.data[ctx.guild.id]
+        else:
+            await ctx.send("sorry, i don't seem to be playing anything right now")
     
     @commands.command(
         name="join",
