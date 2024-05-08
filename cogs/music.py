@@ -371,7 +371,7 @@ class MusicPlayer(commands.Cog):
         name="play",
         brief=["sing"],
         description="plays a song")
-    async def play_command(self, ctx, *, search_query):
+    async def play_command(self, ctx, *, search_query = None):
         try:
             voice_channel = ctx.author.voice.channel
 
@@ -391,9 +391,16 @@ class MusicPlayer(commands.Cog):
                 await ctx.send("sorry, i'm already busy playing bangers somewhere else in this guild")
                 return
 
-        await self.ensure_valid_data(  guild_id)
+        await self.ensure_valid_data(guild_id)
         await ctx.message.add_reaction("✅")
 
+        if search_query == None:
+            if len(ctx.attachments) == 0:
+                await ctx.send("sorry, that's not a valid search query")
+                return
+
+            search_query = ctx.attachments[0].url
+        
         song_data = await self.download_song(search_query, ctx)
 
         # with open ("example_data.json", "w") as f:
