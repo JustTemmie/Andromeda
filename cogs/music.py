@@ -395,11 +395,11 @@ class MusicPlayer(commands.Cog):
         await ctx.message.add_reaction("✅")
 
         if search_query == None:
-            if len(ctx.attachments) == 0:
+            if len(ctx.message.attachments) == 0:
                 await ctx.send("sorry, that's not a valid search query")
                 return
 
-            search_query = ctx.attachments[0].url
+            search_query = ctx.message.attachments[0].url
         
         song_data = await self.download_song(search_query, ctx)
 
