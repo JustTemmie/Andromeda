@@ -30,7 +30,7 @@ ytdlp_format_options = {
 }
 
 default_ffmpeg_options = {
-    "options": "-vn -af 'loudnorm, volume=0.5'",
+    "options": "-vn -af 'loudnorm, volume=0.45'",
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
 
@@ -115,14 +115,19 @@ class MusicPlayer(commands.Cog):
                         job = asyncio.run_coroutine_threadsafe(sent_message.edit(content=f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
                         job.result()
 
-            def info(msg):
-                print("info", msg)
-
-            def warning(msg):
+            def info(log):
                 pass
 
-            def error(msg):
-                print("error", msg)
+            def warning(log):
+                log = remove_colour.sub('', log)
+                job = asyncio.run_coroutine_threadsafe(ctx.send(f"```{log}```"), self.miku.loop)
+                job.result()
+
+            def error(log):
+                log = remove_colour.sub('', log)
+                job = asyncio.run_coroutine_threadsafe(ctx.send(f"```{log}```"), self.miku.loop)
+                job.result()
+
 
         if sent_message == True: print('woa')
         options["logger"] = YTDLPProgressUpdater
@@ -131,38 +136,63 @@ class MusicPlayer(commands.Cog):
             data = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdlp.extract_info(url, download=False))
 
         return data
-
-    async def play_player(self, ctx, guild_id):
-        ctx.voice_client.play(
-            self.data[guild_id]["player"],
-            after=lambda e: asyncio.run_coroutine_threadsafe(
-                self.play_song(ctx), self.miku.loop
-            )
-        )
     
     async def change_ffmpeg_filter(self, ctx, filter):
         guild_id = ctx.guild.id
         
         self.data[guild_id]["seeking"] = True
         progress = self.data[guild_id]["progress"]
+        try:
+            duration = self.data[guild_id]["meta_data"]["duration"]
+        except:
+            duration = "unknown"
+        
+        # make sure that the progress is at the latest 1 second before the end of the song
+        if type(duration) == int:
+            progress = min(progress, duration * 1000 - 1000)
+        else:
+            progress -= 1000
+        
+        
         old_player = self.data[guild_id]["player"]
         old_options = self.data[guild_id]["ffmpeg_options"]["options"]
+        start_time = time.time()
         
-        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
+        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.45 {filter}'"
+        
+        async def play_song_clear_seeking(self, ctx):
+            # if the song played for a second, it probably had good ffmpeg arguments lol
+            if time.time() - start_time > 1:
+                self.data[ctx.guild.id]["seeking"] = False
+                await self.play_song(ctx)
+            else:
+                await ctx.send(f"an error occured whilst changing filters, reseting them back")
+                self.data[guild_id]["ffmpeg_options"]["options"] = old_options
+                self.data[guild_id]["player"] = old_player
+                ctx.voice_client.play(
+                    self.data[guild_id]["player"],
+                    after=lambda e: asyncio.run_coroutine_threadsafe(
+                        self.play_song(ctx), self.miku.loop
+                    )
+                )
+                
+                self.data[guild_id]["progress"] = progress
+                
+        
+        new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
         ctx.voice_client.pause()
-        try:
-            new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
-            self.data[guild_id]["player"] = new_player
-            
-            await self.play_player(ctx, guild_id)
-        except Exception as e:
-            await ctx.send("error encountered whilst applying filter:\n```{e}```")
-            self.data[guild_id]["ffmpeg_options"]["options"] = old_options
-            self.data[guild_id]["player"] = old_player
-            await self.play_player(ctx, guild_id)
+        self.data[guild_id]["player"] = new_player
         
-        self.data[guild_id]["seeking"] = False
-    
+        ctx.voice_client.play(
+            self.data[guild_id]["player"],
+            after=lambda e: asyncio.run_coroutine_threadsafe(
+                play_song_clear_seeking(self, ctx), self.miku.loop
+            )
+        )
+        
+        self.data[guild_id]["progress"] = progress
+        
+
     async def play_song(self, ctx):
         try:
             guild_id = ctx.guild.id
@@ -180,7 +210,12 @@ class MusicPlayer(commands.Cog):
             
             self.data[guild_id]["player"] = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
             
-            await self.play_player(ctx, guild_id)
+            ctx.voice_client.play(
+                self.data[guild_id]["player"],
+                after=lambda e: asyncio.run_coroutine_threadsafe(
+                    self.play_song(ctx), self.miku.loop
+                )
+            )
 
             await self.send_now_playing_embed(ctx)
 
@@ -271,11 +306,13 @@ class MusicPlayer(commands.Cog):
                     value=f"{meta_data['likes']} / {meta_data['dislikes']}",
                 )
 
+
             # VIEW COUNT
             if meta_data["views"] != "unknown":
                 embed.add_field(
                     name="views",
                     value=meta_data["views"])
+                
 
             # THUMBNAIL
             if meta_data["thumbnail"] != "unknown":
@@ -316,15 +353,16 @@ class MusicPlayer(commands.Cog):
             else:
                 meta_data[entry] = "unknown"
 
-        if "duration" in data:
+        try:
             meta_data["readable_duration"] = helpers.format_time(data["duration"])
-        else:
+            meta_data["readable_duration"]
+        except:
             meta_data["readable_duration"] = "unknown"
 
         return meta_data
 
 
-    @commands.hybrid_command(
+    @commands.command(
         name="play",
         brief=["sing"],
         description="plays a song")
@@ -413,6 +451,7 @@ class MusicPlayer(commands.Cog):
             await self.play_song(ctx)
 
 
+    @commands.cooldown(1, 4, commands.BucketType.guild)
     @commands.command(name="filter")
     async def filter_command(self, ctx, filter = ""):
         voice_channel = ctx.author.voice.channel
@@ -487,7 +526,7 @@ class MusicPlayer(commands.Cog):
 
         embed = helpers.create_embed(ctx)
         embed.title = "Queue"
-        embed.set_footer(text=f"page {page}/{total_pages}", icon_url=ctx.author.display_avatar.url)
+        embed.set_footer(text=f"{embed.footer.text} - page {page}/{total_pages}", icon_url=ctx.author.display_avatar.url)
         thumbnail_url = self.data[guild_id]["meta_data"]["thumbnail"]
         if "https://" in thumbnail_url:
             embed.set_thumbnail(url=thumbnail_url)
@@ -526,29 +565,50 @@ class MusicPlayer(commands.Cog):
         else:
             await ctx.send("it doesn't seem like you're in a voice channel")
 
-    @commands.hybrid_command(
-        name="skip",
-        description="pikmin!")
-    async def skip_command(self, ctx):
-        # this stops the song, making the next song automatically start
-        discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
-
-    @commands.hybrid_command(
-        name="stop", aliases=["leave", "disconnect"],
+    @commands.command(
+        name="leave", aliases=["disconnect"],
         description="Leave the VC and stop playing music")
-    async def stop_command(self, ctx):
+    async def leave_command(self, ctx):
         voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
 
         if ctx.guild.id in self.data:
-            self.data[ctx.guild.id]["queue"] = []
+            del self.data[ctx.guild.id]
 
         if voice:
             await voice.disconnect()
             await ctx.send("okay, i'll stop")
         else:
             await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
-        del self.data[ctx.guild.id]
+    
+    @commands.hybrid_command(
+        name="skip",
+        description="skipero!")
+    async def skip_command(self, ctx):
+        # this stops the song, making the next song automatically start
+        discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
 
+    @commands.hybrid_command(
+        name="stop",
+        description="Stop playing music")
+    async def stop_command(self, ctx):
+        if ctx.guild.id in self.data:
+            del self.data[ctx.guild.id]
+    
+    @commands.command(
+        name="join",
+        description="make me psps myself over to you")
+    async def join_command(self, ctx):
+        try:
+            voice_channel = ctx.author.voice.channel
+            await voice_channel.connect(self_deaf=True)
+
+        except AttributeError as e:
+            await ctx.send("couldn't find the voice channel you're in, perhaps you're not in a voice channel?")
+
+        except Exception as e:
+            await ctx.send(f"an exception was thrown:\n{e}")
+        
+        
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if before.channel is not None:
