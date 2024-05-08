@@ -119,9 +119,7 @@ class MusicPlayer(commands.Cog):
                 pass
 
             def warning(log):
-                log = remove_colour.sub('', log)
-                job = asyncio.run_coroutine_threadsafe(ctx.send(f"```{log}```"), self.miku.loop)
-                job.result()
+                pass
 
             def error(log):
                 log = remove_colour.sub('', log)
