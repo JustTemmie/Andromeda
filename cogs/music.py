@@ -80,7 +80,7 @@ class YtDlpSource(discord.PCMVolumeTransformer):
         player.data[guild_id]["meta_data"]["ctx"] = song["ctx"]
         player.data[guild_id]["progress"] = 0
 
-        return cls(TrackedFFmpegPCMAudio(player, guild_id, filename, **player.data["ffmpeg_options"][guild_id]), data=data)
+        return cls(TrackedFFmpegPCMAudio(player, guild_id, filename, **player.data[guild_id]["ffmpeg_options"]), data=data)
 
 class MusicPlayer(commands.Cog):
     def __init__(self, miku):
@@ -136,7 +136,7 @@ class MusicPlayer(commands.Cog):
         guild_id = ctx.guild.id
         
         progress = self.data[guild_id]["progress"]
-        self.data["ffmpeg_options"][guild_id]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
+        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
         new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
         ctx.voice_client.pause()
         self.data[guild_id]["player"] = new_player
