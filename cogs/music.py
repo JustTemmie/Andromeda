@@ -146,6 +146,7 @@ class MusicPlayer(commands.Cog):
         self.data[guild_id]["seeking"] = True
         progress = self.data[guild_id]["progress"]
         old_player = self.data[guild_id]["player"]
+        old_options = self.data[guild_id]["ffmpeg_options"]["options"]
         
         self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5 {filter}'"
         ctx.voice_client.pause()
@@ -154,8 +155,9 @@ class MusicPlayer(commands.Cog):
             self.data[guild_id]["player"] = new_player
             
             await self.play_player(ctx, guild_id)
-        except:
-            self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.5'"
+        except Exception as e:
+            await ctx.send("error encountered whilst applying filter:\n```{e}```")
+            self.data[guild_id]["ffmpeg_options"]["options"] = old_options
             self.data[guild_id]["player"] = old_player
             await self.play_player(ctx, guild_id)
         
