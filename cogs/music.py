@@ -470,8 +470,17 @@ class MusicPlayer(commands.Cog):
             await self.play_song(ctx)
         
         if add_full_playlist:
-            # if ctx.author.id in self.config["TRUSTED_IDS"]
-            song_data = await self.download_song(search_query, ctx, "3:50")
+            video_download_count = 50
+            if ctx.author.id in self.config["TRUSTED_IDS"]:
+                await ctx.reply(f"how many songs would you like to add?")
+                response = await user_input.get_input(self.miku, ctx, 10, f", deafaulting to {video_download_count}")
+                try:
+                    response = int(response)
+                    video_download_count = response
+                except:
+                    await ctx.send(f"sorry, that doesn't seem like a valid integer, defaulting to {video_download_count}")
+                
+            song_data = await self.download_song(search_query, ctx, f"3:{video_download_count}")
             await add_playlist(ctx, song_data)
 
     @commands.cooldown(1, 4, commands.BucketType.guild)
