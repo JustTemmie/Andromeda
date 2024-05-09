@@ -470,6 +470,7 @@ class MusicPlayer(commands.Cog):
             await self.play_song(ctx)
         
         if add_full_playlist:
+            # if ctx.author.id in self.config["TRUSTED_IDS"]
             song_data = await self.download_song(search_query, ctx, "3:50")
             await add_playlist(ctx, song_data)
 
@@ -505,7 +506,7 @@ class MusicPlayer(commands.Cog):
         embed = helpers.create_embed(ctx)
         embed.title = "Currently Playing"
         if meta_data["original_url"] != "unknown":
-            embed.description = f"{meta_data['title'](meta_data["original_url"])}"
+            embed.description = f"{meta_data['title'](meta_data['original_url'])}"
         else:
             embed.description = meta_data["title"]
             
