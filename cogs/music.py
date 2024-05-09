@@ -108,7 +108,6 @@ class MusicPlayer(commands.Cog):
                 total = int(items.split(" ")[-1])
 
                 if total > 2:
-                    global sent_message
                     if sent_messages[ctx.message.id] == None:
                         job = asyncio.run_coroutine_threadsafe(ctx.send(f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
                         sent_messages[ctx.message.id] = job.result()
