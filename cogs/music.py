@@ -130,7 +130,6 @@ class MusicPlayer(commands.Cog):
                 job.result()
 
 
-        if sent_message == True: print('woa')
         options["logger"] = YTDLPProgressUpdater
         options["playlist_items"] = playlist_items
 
