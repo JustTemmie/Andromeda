@@ -405,9 +405,9 @@ class MusicPlayer(commands.Cog):
         
         song_data = await self.download_song(search_query, ctx)
 
-        with open ("example_data.json", "w") as f:
-            import json
-            json.dump(song_data, f)
+        # with open ("example_data.json", "w") as f:
+        #     import json
+        #     json.dump(song_data, f)
 
         async def add_playlist(ctx, song_data):
             if len(song_data["entries"]) == 0:
