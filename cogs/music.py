@@ -451,12 +451,22 @@ class MusicPlayer(commands.Cog):
 
 
         add_full_playlist = False
+        playlist_download_count = 50
         if "entries" in song_data and len(song_data["entries"]) > 1:
             await ctx.reply(f"hey, would you like to play the entire playlist instead of just the first track?\n\nautomatically adding first track: <t:{round(time.time()) + 15}:R>")
             add_full_playlist = await user_input.get_consent(self.miku, ctx, 17, ", adding the first track only")
 
             if add_full_playlist:
                 await add_playlist(ctx, song_data)
+                
+                if ctx.author.id in self.miku.config["TRUSTED_IDS"]:
+                    await ctx.reply(f"how many songs would you like to add?")
+                    response = await user_input.get_input(self.miku, ctx, 10, f", deafaulting to {playlist_download_count}")
+                    try:
+                        response = int(response.content)
+                        playlist_download_count = response
+                    except:
+                        await ctx.send(f"sorry, that doesn't seem like a valid integer, defaulting to {playlist_download_count}")
 
             # take first item from a playlist
             else:
@@ -474,17 +484,7 @@ class MusicPlayer(commands.Cog):
             await self.play_song(ctx)
         
         if add_full_playlist:
-            video_download_count = 50
-            if ctx.author.id in self.miku.config["TRUSTED_IDS"]:
-                await ctx.reply(f"how many songs would you like to add?")
-                response = await user_input.get_input(self.miku, ctx, 10, f", deafaulting to {video_download_count}")
-                try:
-                    response = int(response.content)
-                    video_download_count = response
-                except:
-                    await ctx.send(f"sorry, that doesn't seem like a valid integer, defaulting to {video_download_count}")
-                
-            song_data = await self.download_song(search_query, ctx, f"3:{video_download_count}")
+            song_data = await self.download_song(search_query, ctx, f"3:{playlist_download_count}")
             await add_playlist(ctx, song_data)
 
     @commands.cooldown(1, 4, commands.BucketType.guild)
