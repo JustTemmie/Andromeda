@@ -475,7 +475,7 @@ class MusicPlayer(commands.Cog):
                 await ctx.reply(f"how many songs would you like to add?")
                 response = await user_input.get_input(self.miku, ctx, 10, f", deafaulting to {video_download_count}")
                 try:
-                    response = int(response)
+                    response = int(response.content)
                     video_download_count = response
                 except:
                     await ctx.send(f"sorry, that doesn't seem like a valid integer, defaulting to {video_download_count}")
