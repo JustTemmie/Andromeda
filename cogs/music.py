@@ -34,6 +34,8 @@ default_ffmpeg_options = {
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
 }
 
+sent_messages = {}
+
 # insane regex https://stackoverflow.com/a/14693789
 remove_colour = re.compile(r'''
     \x1B  # ESC
@@ -91,8 +93,7 @@ class MusicPlayer(commands.Cog):
     async def download_song(self, url, ctx, playlist_items = "1:2"):
 
         options = ytdlp_format_options.copy()
-        global sent_message
-        sent_message=None
+        sent_messages[ctx.message.id] = None
         
         class YTDLPProgressUpdater:
             def debug(log):
@@ -108,12 +109,15 @@ class MusicPlayer(commands.Cog):
 
                 if total > 2:
                     global sent_message
-                    if sent_message == None:
+                    if sent_messages[ctx.message.id] == None:
                         job = asyncio.run_coroutine_threadsafe(ctx.send(f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
-                        sent_message = job.result()
+                        sent_messages[ctx.message.id] = job.result()
                     elif progress % 4 == 0:
-                        job = asyncio.run_coroutine_threadsafe(sent_message.edit(content=f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
+                        job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(content=f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
                         job.result()
+                
+                if progress == total:
+                    del sent_messages[ctx.message.id] 
 
             def info(log):
                 pass
