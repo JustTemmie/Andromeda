@@ -338,7 +338,8 @@ class MusicPlayer(commands.Cog):
             return embed
 
     async def send_queue_finished_embed(self, ctx):
-        embed = helpers.create_embed:))))
+        embed = helpers.create_embed(ctx)
+
         embed.title = "Queue Finished"
         await ctx.send(embed = embed)
 
