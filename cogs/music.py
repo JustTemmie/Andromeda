@@ -471,7 +471,7 @@ class MusicPlayer(commands.Cog):
         
         if add_full_playlist:
             video_download_count = 50
-            if ctx.author.id in self.config["TRUSTED_IDS"]:
+            if ctx.author.id in self.miku.config["TRUSTED_IDS"]:
                 await ctx.reply(f"how many songs would you like to add?")
                 response = await user_input.get_input(self.miku, ctx, 10, f", deafaulting to {video_download_count}")
                 try:
