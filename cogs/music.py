@@ -351,7 +351,8 @@ class MusicPlayer(commands.Cog):
         else:
             meta_data = {}
 
-        data_points = ["title", "duration", "live_status", "upload_date", "uploader", "uploader_url", "thumbnail"]
+        data_points = ["title", "duration", "live_status", "upload_date",
+                    "uploader", "uploader_url", "thumbnail", "original_url"]
 
         for entry in data_points:
             if entry in data:
@@ -404,9 +405,9 @@ class MusicPlayer(commands.Cog):
         
         song_data = await self.download_song(search_query, ctx)
 
-        # with open ("example_data.json", "w") as f:
-        #     import json
-        #     json.dump(song_data, f)
+        with open ("example_data.json", "w") as f:
+            import json
+            json.dump(song_data, f)
 
         async def add_playlist(ctx, song_data):
             if len(song_data["entries"]) == 0:
@@ -487,7 +488,6 @@ class MusicPlayer(commands.Cog):
             await ctx.send("it doesn't seem like you're in a voice channel")
 
 
-    
     @commands.hybrid_command(
         name="now-playing", aliases=["nowplaying", "np"],
         description="In case you're wondering what song i'm playing")
@@ -504,7 +504,11 @@ class MusicPlayer(commands.Cog):
 
         embed = helpers.create_embed(ctx)
         embed.title = "Currently Playing"
-        embed.description = meta_data["title"]
+        if meta_data["original_url"] != "unknown":
+            embed.description = f"{meta_data['title'](meta_data["original_url"])}
+        else:
+            embed.description = meta_data["title"]
+            
 
         progress = self.data[guild_id]["progress"] / 1000
         progress_bar = helpers.getProgressBar(progress, meta_data["duration"], 23)
@@ -517,6 +521,7 @@ class MusicPlayer(commands.Cog):
         embed = await self.add_embed_fields(embed, meta_data)
 
         await ctx.send(embed = embed)
+
 
     @commands.hybrid_command(name="queue", aliases=["q"])
     async def queue_command(self, ctx, page = 1):
@@ -572,6 +577,7 @@ class MusicPlayer(commands.Cog):
 
         await ctx.send(embed=embed)
 
+
     @commands.command(name="move", aliases=["psps"])
     async def move_command(self, ctx):
         voice_channel = ctx.author.voice.channel
@@ -585,6 +591,7 @@ class MusicPlayer(commands.Cog):
             voice.resume()
         else:
             await ctx.send("it doesn't seem like you're in a voice channel")
+
 
     @commands.command(
         name="leave", aliases=["disconnect"],
@@ -600,7 +607,8 @@ class MusicPlayer(commands.Cog):
             await ctx.message.add_reaction("✅")
         else:
             await ctx.send("sorry, i don't seem to be in any voice channels at the moment")
-    
+
+
     @commands.hybrid_command(
         name="skip",
         description="skipero!")
@@ -611,6 +619,7 @@ class MusicPlayer(commands.Cog):
         except:
             await ctx.send("an error has occured")
 
+
     @commands.hybrid_command(
         name="stop",
         description="Stop playing music")
@@ -620,7 +629,8 @@ class MusicPlayer(commands.Cog):
             await ctx.message.add_reaction("✅")
         else:
             await ctx.send("sorry, i don't seem to be playing anything right now")
-    
+
+
     @commands.command(
         name="join",
         description="make me psps myself over to you")
@@ -634,8 +644,8 @@ class MusicPlayer(commands.Cog):
 
         except Exception as e:
             await ctx.send(f"an exception was thrown:\n{e}")
-        
-        
+
+
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if before.channel is not None:
