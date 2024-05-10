@@ -9,12 +9,12 @@ else:
 
 
 tenor_key = configLib.getConfig()["API_KEYS"]["TENOR"]
-ckey = "Hatsune-Miku-Discord-Bot"
+tenor_ckey = configLib.getConfig()["IDENTIFIERS"]["TENOR"]
 
 
 def getGifs(query, limit):
     r = requests.get(
-        f"https://tenor.googleapis.com/v2/search?q={query}&key={tenor_key}&client_key={ckey}&limit={limit}"
+        f"https://tenor.googleapis.com/v2/search?q={query}&key={tenor_key}&client_key={tenor_ckey}&limit={limit}"
     )
 
     if r.status_code == 200:

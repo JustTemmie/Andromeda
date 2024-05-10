@@ -2,17 +2,20 @@
         "DISCORD": "TOKEN",
         "TENOR":  "KEY"
     },
+
+    "IDENTIFIERS": {
+        "TENOR": "default-identity-key"
+    },
     
-    "SHARDS": 1,
+    "PREFIXES": ["mikumiku", "miku miku", "miku"],
     "OWNER_IDS": [725539745572323409],
     "HOST_OWNERS": [725539745572323409, 616228691155877898, 769632057575342081],
     "TRUSTED_IDS": [725539745572323409, 616228691155877898],
-    "PREFIXES": ["mikumiku", "miku miku", "miku"],
     
     "FFMPEG_PATH": "/usr/bin/ffmpeg",
     
-    "DEVELOPMENT": false,
+    "SHARDS": 1,
     "SYNC_TREE": true,
-    "DEVELOPMENT_GUILD": 1016777760305320036,
-    "DOWNLOAD_ASSETS": true
+    "DEVELOPMENT": false,
+    "DEVELOPMENT_GUILD": 1016777760305320036
 }

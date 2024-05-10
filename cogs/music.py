@@ -108,17 +108,14 @@ class MusicPlayer(commands.Cog):
                 total = int(items.split(" ")[-1])
 
                 if total > 2:
+                    message_content = f"downloading data for song {progress}/{total}, this might take a while..."
+                    
                     if sent_messages[ctx.message.id] == None:
-                        job = asyncio.run_coroutine_threadsafe(ctx.reply(
-                            mention_author=False,
-                            content=f"downloading song {progress}/{total}, this might take a while..."),
-                            self.miku.loop)
-
+                        job = asyncio.run_coroutine_threadsafe(ctx.reply(mention_author=False, content=message_content), self.miku.loop)
                         sent_messages[ctx.message.id] = job.result()
+                    
                     elif progress % 4 == 0:
-                        job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(
-                            content=f"downloading song {progress}/{total}, this might take a while..."),
-                            self.miku.loop)
+                        job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(content=message_content), self.miku.loop)
                         job.result()
                 
                 if progress == total:
@@ -532,14 +529,15 @@ class MusicPlayer(commands.Cog):
             
 
         progress = self.data[guild_id]["progress"] / 1000
+        embed_value = f"{progress}/?"
         try:
             progress_bar = helpers.getProgressBar(progress, meta_data["duration"], 23)
             embed_value = f"{round((progress / meta_data['duration']) * 100)}% - {progress_bar}"
         except:
-            embed_value = f"{progress}/?"
+            pass
         
         embed.add_field(
-            value="Progress",
+            name="Progress",
             value=embed_value,
             inline=False
         )

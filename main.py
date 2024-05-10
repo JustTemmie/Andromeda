@@ -1,9 +1,13 @@
 import discord
 from discord.ext import commands
 
-from datetime import datetime
-import json
 import logging
+import logging.handlers
+
+from datetime import datetime
+import time
+
+import json
 import asyncio
 import glob
 import os
@@ -14,30 +18,41 @@ miku = None
 
 if __name__ == "__main__":
     config = configLib.getConfig()
+    settings = configLib.getSettings()
     
-    directories = ["temp", "logs"]
-    for dir in directories:
+    directories_to_make = ["local_only"]
+    directories_to_empty = ["temp", "logs"]
+    
+    for dir in directories_to_make + directories_to_empty:
         if not os.path.exists(dir):
             os.mkdir(dir)
-        if config["DEVELOPMENT"]:
+            
+    if config["DEVELOPMENT"]:
+        for dir in directories_to_empty:
             for file in os.listdir(dir):
                 os.remove(f"{dir}/{file}")
     
-    logging.basicConfig(
-        level=logging.INFO,
-        filename=f"logs/{datetime.now().strftime('%Y-%m-%d-%H:%M:%S')}.log",
-        filemode="w",
-        format="%(asctime)s:%(levelname)s:%(name)s:%(message)s",
+    logger = logging.getLogger("discord")
+    logger.setLevel(logging.INFO)
+    logging.getLogger("discord.http").setLevel(logging.INFO)
+
+    handler = logging.handlers.RotatingFileHandler(
+        filename=f"logs/discord-{round(time.time())}.log",
+        encoding="utf-8",
+        maxBytes=128 * 1024 * 1024,  # 128 MiB
+        backupCount=2,
     )
-
-    logging.warning("warning")
-    logging.error("error")
-    logging.critical("critical")
+    dt_fmt = "%Y-%m-%d %H:%M:%S"
+    formatter = logging.Formatter("[{asctime}] [{levelname:<8}] {name}: {message}", dt_fmt, style="{")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
     
-
     class Miku(commands.AutoShardedBot):
         def __init__(self, *args, **kwargs):
             self.config = config
+            self.settings = settings
+            
+            self.ready = False
             
             super().__init__(
                 shards=self.config["SHARDS"],
@@ -55,6 +70,7 @@ if __name__ == "__main__":
 
         async def on_ready(self) -> None:
             print(f"Succesfully logged in as {self.user}")
+            self.ready = True
 
         async def setup_hook(self) -> None:
             async def sync_tree(self):
@@ -94,8 +110,9 @@ if __name__ == "__main__":
                     filename = filename[2:].replace("/", ".")[:-3]
                     # removes the ".py" from the end of the filename, to make it into cogs.economy
                     await miku.load_extension(filename)
-
+            
             await miku.start(miku.config["API_KEYS"]["DISCORD"])
+
 
     miku.loop = asyncio.new_event_loop()
     asyncio.set_event_loop(miku.loop)

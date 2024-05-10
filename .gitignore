@@ -1,8 +1,10 @@
-config.json
-config2.json
 venv/
+
+config.json
+
+local_only/
 testing/
 logs/
-assets/
+
 *.pyc
 *.env
