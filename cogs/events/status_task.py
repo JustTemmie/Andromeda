@@ -48,7 +48,7 @@ class StatusChanger(commands.Cog):
         return (status, activity_mode)
     
     
-    @tasks.loop(seconds=15)
+    @tasks.loop(hours=random.randrange(6, 18))
     async def change_status_task(self):
         await self.miku.wait_until_ready()
         status = random.choice(self.miku.settings["STATUSES"])
