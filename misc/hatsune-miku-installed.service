@@ -1,0 +1,17 @@
+[Unit]
+Description=Hatsune Miku!
+
+[Service]
+Type=simple
+
+ReadWritePaths=/home/temmie/Development/GitHub/miku-bot
+WorkingDirectory=/home/temmie/Development/GitHub/miku-bot
+ExecStart=/home/temmie/Development/GitHub/miku-bot/venv/bin/python -u /home/temmie/Development/GitHub/miku-bot/main.py
+NoNewPrivileges=true
+
+Nice=19
+SuccessExitStatus=130
+ProtectSystem=strict
+
+[Install]
+WantedBy=default.target

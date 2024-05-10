@@ -21,7 +21,7 @@ except:  # noqa: E722
 try:
     subprocess.run(["ffmpeg", "-version"])
 except:  # noqa: E722
-    print("`ffmpeg` isn't installed, please to install it using your distro's package manager")
+    print("`ffmpeg` isn't installed in the systems PATH, please to install it using your distro's package manager")
     exit()
 
 def log(output):
@@ -36,7 +36,7 @@ with open("misc/hatsune-miku.service", "r") as f:
     # replace META_INSTALL_PATH with the file this file is installed
     content = content.replace("META_INSTALL_PATH", LOCAL_PATH)
 
-with open("misc/hatsune-miku.service", "w") as f:
+with open("misc/hatsune-miku-installed.service", "w") as f:
     f.write(content)
 
 log("creating virtual environment")
@@ -55,6 +55,8 @@ log("copying files")
 if not os.path.exists("config.json"):
     shutil.copy("config_example.json", "config.json")
 if not os.path.exists(f"{HOME}/.config/systemd/user/hatsune-miku.service"):
-    shutil.copy("misc/hatsune-miku.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
+    shutil.move("misc/hatsune-miku-installed.service", f"{HOME}/.config/systemd/user/hatsune-miku.service")
+else:
+    print(f"hatsune-miku.service is already present at {HOME}/.config/systemd/user/hatsune-miku.service, i won't overwrite it")
 
 log("please fill in config.json, then run `systemctl --user enable --now hatsune-miku.service` to start the bot :3")
