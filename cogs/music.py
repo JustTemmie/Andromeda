@@ -108,13 +108,13 @@ class MusicPlayer(commands.Cog):
                 total = int(items.split(" ")[-1])
 
                 if total > 2:
-                    message_content = f"downloading data for song {progress}/{total}, this might take a while..."
+                    message_content = f"downloading data for song {progress+2}/{total+2}, this might take a while..."
                     
                     if sent_messages[ctx.message.id] == None:
                         job = asyncio.run_coroutine_threadsafe(ctx.reply(mention_author=False, content=message_content), self.miku.loop)
                         sent_messages[ctx.message.id] = job.result()
                     
-                    elif progress % 4 == 0:
+                    elif progress % 5 == 0:
                         job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(content=message_content), self.miku.loop)
                         job.result()
                 
