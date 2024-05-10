@@ -44,11 +44,11 @@ class Owner(commands.Cog):
         self.miku = miku
 
     @commands.is_owner()
-    @commands.command(name="restart")
-    async def restartCommand(self, ctx):
+    @commands.command(name="shutdown")
+    async def shutdown_command(self, ctx):
         print(dir(ctx))
-        await ctx.send("Restarting the miku...")
-        print("Terminated using `restart` command.")
+        await ctx.send("shuting down...")
+        print("Terminated using `shutdown` command.")
         await self.miku.close()
 
     @decorators.is_host_owner()
