@@ -378,8 +378,9 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(
         name="play",
-        brief=["sing"],
-        description="plays a song")
+        aliases=["sing"],
+        bfier="play a song",
+        description="accepts any URL, direct attatchments, and keywords to search for")
     async def play_command(self, ctx, *, search_query = None):
         if search_query == None:
             if len(ctx.message.attachments) == 0:
@@ -492,7 +493,11 @@ class MusicPlayer(commands.Cog):
             await add_playlist(ctx, song_data)
 
     @commands.cooldown(1, 4, commands.BucketType.guild)
-    @commands.command(name="filter")
+    @commands.command(
+        name="filter",
+        brief="apply an ffmpeg filter",
+        description="quite a complicated command, for technical reasons it's given to ffmpeg as `-af 'loudnorm, volume=0.4 {filter}'`, so your filter will need to start with a leading comma"
+        )
     async def filter_command(self, ctx, filter = ""):
         voice_channel = ctx.author.voice.channel
 
@@ -523,7 +528,7 @@ class MusicPlayer(commands.Cog):
         embed = helpers.create_embed(ctx)
         embed.title = "Currently Playing"
         if meta_data["original_url"] != "unknown":
-            embed.description = f"{meta_data['title'](meta_data['original_url'])}"
+            embed.description = f"[{meta_data['title']}]({meta_data['original_url']})"
         else:
             embed.description = meta_data["title"]
             
