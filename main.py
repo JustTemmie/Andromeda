@@ -104,12 +104,16 @@ if __name__ == "__main__":
     
     async def main():
         async with miku:
-            for filename in glob.iglob("./cogs/**", recursive=True):
-                if filename.endswith(".py"):
-                    # goes from "./cogs/economy.py" to "cogs.economy.py"
-                    filename = filename[2:].replace("/", ".")[:-3]
-                    # removes the ".py" from the end of the filename, to make it into cogs.economy
-                    await miku.load_extension(filename)
+            if len(miku.config["COG_LIST_OVERWRITE"]) >= 1:
+                for cog in miku.config["COG_LIST_OVERWRITE"]:
+                    await miku.load_extension(f"cogs.{cog}")
+            
+            else:
+                for filename in glob.iglob("./cogs/**", recursive=True):
+                    if filename.endswith(".py"):
+                        # goes from "./cogs/economy.py" to "cogs.economy"
+                        filename = filename[2:].replace("/", ".")[:-3]
+                        await miku.load_extension(filename)
             
             await miku.start(miku.config["API_KEYS"]["DISCORD"])
 
