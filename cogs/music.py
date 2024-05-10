@@ -109,10 +109,16 @@ class MusicPlayer(commands.Cog):
 
                 if total > 2:
                     if sent_messages[ctx.message.id] == None:
-                        job = asyncio.run_coroutine_threadsafe(ctx.send(f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
+                        job = asyncio.run_coroutine_threadsafe(ctx.reply(
+                            mention_author=False,
+                            content=f"downloading song {progress}/{total}, this might take a while..."),
+                            self.miku.loop)
+
                         sent_messages[ctx.message.id] = job.result()
                     elif progress % 4 == 0:
-                        job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(content=f"downloading song {progress}/{total}, this might take a while..."), self.miku.loop)
+                        job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(
+                            content=f"downloading song {progress}/{total}, this might take a while..."),
+                            self.miku.loop)
                         job.result()
                 
                 if progress == total:
@@ -126,7 +132,10 @@ class MusicPlayer(commands.Cog):
 
             def error(log):
                 log = remove_colour.sub('', log)
-                job = asyncio.run_coroutine_threadsafe(ctx.send(f"```{log}```"), self.miku.loop)
+                job = asyncio.run_coroutine_threadsafe(ctx.reply(
+                    mention_author=False,
+                    content=f"```{log}```"),
+                    self.miku.loop)
                 job.result()
 
 
@@ -523,10 +532,15 @@ class MusicPlayer(commands.Cog):
             
 
         progress = self.data[guild_id]["progress"] / 1000
-        progress_bar = helpers.getProgressBar(progress, meta_data["duration"], 23)
+        try:
+            progress_bar = helpers.getProgressBar(progress, meta_data["duration"], 23)
+            embed_value = f"{round((progress / meta_data['duration']) * 100)}% - {progress_bar}"
+        except:
+            embed_value = f"{progress}/?"
+        
         embed.add_field(
-            name="Progress",
-            value=f"{round((progress / meta_data['duration']) * 100)}% - {progress_bar}",
+            value="Progress",
+            value=embed_value,
             inline=False
         )
 
