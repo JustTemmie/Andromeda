@@ -114,7 +114,7 @@ class MusicPlayer(commands.Cog):
                         job = asyncio.run_coroutine_threadsafe(ctx.reply(mention_author=False, content=message_content), self.miku.loop)
                         sent_messages[ctx.message.id] = job.result()
                     
-                    elif progress % 5 == 0:
+                    elif progress % 5 == 0 or progress == total:
                         job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(content=message_content), self.miku.loop)
                         job.result()
                 
@@ -620,6 +620,17 @@ class MusicPlayer(commands.Cog):
             voice.resume()
         else:
             await ctx.send("it doesn't seem like you're in a voice channel")
+
+
+    @commands.command(
+        name="shuffle",
+        brief="shuffle the playlist",
+        description="shuffle the currently playing music playlist")
+    async def shuffle_command(self, ctx):
+        if ctx.guild.id in self.data:
+            random.shuffle(self.data[ctx.guild.id]["queue"])
+        else:
+            await ctx.send("there's currently no queue in this server")
 
 
     @commands.command(
