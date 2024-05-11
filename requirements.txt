@@ -9,3 +9,8 @@ spotdl      # used to download audio ( from spotify )
 #mutagen     # used to read metadata from audio files
 
 psutil      # gets system info, used for info command and such
+
+
+midiutil
+sound_to_midi
+librosa
