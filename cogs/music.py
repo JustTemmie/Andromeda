@@ -382,13 +382,6 @@ class MusicPlayer(commands.Cog):
         bfier="play a song",
         description="accepts any URL, direct attatchments, and keywords to search for")
     async def play_command(self, ctx, *, search_query = None):
-        if search_query == None:
-            if len(ctx.message.attachments) == 0:
-                await ctx.send("sorry, that's not a valid search query")
-                return
-
-            search_query = ctx.message.attachments[0].url
-            
         try:
             voice_channel = ctx.author.voice.channel
 
@@ -412,7 +405,18 @@ class MusicPlayer(commands.Cog):
         await self.ensure_valid_data(guild_id)
         await ctx.message.add_reaction("✅")
         
-        song_data = await self.download_song(search_query, ctx)
+        if search_query == None:
+            if len(ctx.message.attachments) == 0:
+                await ctx.send("sorry, that's not a valid search query")
+                return
+            
+            for attatchment in ctx.message.attachments:
+                add_playlist(ctx, await self.download_song(attatchment.url, ctx))
+            
+            song_data = None
+            
+        else:
+            song_data = await self.download_song(search_query, ctx)
 
         # with open ("example_data.json", "w") as f:
         #     import json
@@ -477,7 +481,7 @@ class MusicPlayer(commands.Cog):
             else:
                 await add_song(ctx, song_data)
 
-        else:
+        elif song_data != None:
             await add_song(ctx, song_data)
 
 

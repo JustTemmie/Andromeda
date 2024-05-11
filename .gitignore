@@ -6,5 +6,7 @@ local_only/
 testing/
 logs/
 
+hatsune-miku-installed.service
+
 *.pyc
 *.env
