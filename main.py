@@ -33,7 +33,7 @@ if __name__ == "__main__":
                 os.remove(f"{dir}/{file}")
     
     logger = logging.getLogger("discord")
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     logging.getLogger("discord.http").setLevel(logging.INFO)
 
     handler = logging.handlers.RotatingFileHandler(
