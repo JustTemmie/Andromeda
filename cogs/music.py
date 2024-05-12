@@ -443,19 +443,11 @@ class MusicPlayer(commands.Cog):
             if "entries" in song_data:
                 song_data = song_data["entries"][0]
             
-            if "add first" in ctx.content and ctx.author.id in self.miku.config["TRUSTED_IDS"]:
-                self.data[guild_id]["queue"].insert(
-                    0,
-                    {"data": song_data,
-                    "ctx": ctx}
-                )
+            self.data[guild_id]["queue"].append(
+                {"data": song_data,
+                "ctx": ctx}
+            )
             
-            else:
-                self.data[guild_id]["queue"].append(
-                    {"data": song_data,
-                    "ctx": ctx}
-                )
-
             if self.data[guild_id]["playing"]:
                 meta_data = await self.get_meta_data(song_data)
                 embed = helpers.create_embed(ctx)
