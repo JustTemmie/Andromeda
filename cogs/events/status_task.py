@@ -9,7 +9,7 @@ import hatsune_miku.helpers as helpers
 class StatusChanger(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
-        self.change_status_task.start()
+        # self.change_status_task.start()
     
     
     @commands.Cog.listener()
