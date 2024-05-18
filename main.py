@@ -32,17 +32,22 @@ if __name__ == "__main__":
             for file in os.listdir(dir):
                 os.remove(f"{dir}/{file}")
     
-    logging.basicConfig(
-        filename=f"logs/discord-{round(time.time())}.log",
-        level=logging.INFO,
-        filemode="w",
-        format="%(asctime)s:%(levelname)s:%(name)s:%(message)s",
-    )
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.INFO)
+    logging.getLogger('discord.http').setLevel(logging.INFO)
 
-    logging.warning("warning")
-    logging.error("error")
-    logging.critical("critical")
-    
+    handler = logging.handlers.RotatingFileHandler(
+        filename='logs/discord.log',
+        encoding='utf-8',
+        maxBytes=32 * 1024 * 1024,  # 32 MiB
+        backupCount=5,  # Rotate through 5 files
+    )
+    dt_fmt = '%Y-%m-%d %H:%M:%S'
+    formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+
     class Miku(commands.AutoShardedBot):
         def __init__(self, *args, **kwargs):
             self.config = config
