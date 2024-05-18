@@ -87,10 +87,11 @@ class Miku(commands.AutoShardedBot):
             print("miku is set to not sync tree, continuing")
     
 
+miku = Miku()
 # miku.tree = discord.app_commands.CommandTree(miku)
 # miku.remove_command("help")
 
-async def main(miku):
+async def main():
     async with miku:
         if len(miku.config["COG_LIST_OVERWRITE"]) >= 1:
             for cog in miku.config["COG_LIST_OVERWRITE"]:
@@ -105,7 +106,6 @@ async def main(miku):
         
         await miku.start(miku.config["API_KEYS"]["DISCORD"])
 
-miku = Miku()
 
 miku.loop = asyncio.new_event_loop()
 asyncio.set_event_loop(miku.loop)
