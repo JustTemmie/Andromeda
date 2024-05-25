@@ -405,23 +405,6 @@ class MusicPlayer(commands.Cog):
         await self.ensure_valid_data(guild_id)
         await ctx.message.add_reaction("✅")
         
-        if search_query == None:
-            if len(ctx.message.attachments) == 0:
-                await ctx.send("sorry, that's not a valid search query")
-                return
-            
-            for attatchment in ctx.message.attachments:
-                await add_playlist(ctx, await self.download_song(attatchment.url, ctx))
-            
-            song_data = None
-            
-        else:
-            song_data = await self.download_song(search_query, ctx)
-
-        # with open ("example_data.json", "w") as f:
-        #     import json
-        #     json.dump(song_data, f)
-
         async def add_playlist(ctx, song_data):
             if len(song_data["entries"]) == 0:
                 return
@@ -457,6 +440,24 @@ class MusicPlayer(commands.Cog):
                 embed = await self.add_embed_fields(embed, meta_data)
 
                 await ctx.send(embed = embed)
+
+        
+        if search_query == None:
+            if len(ctx.message.attachments) == 0:
+                await ctx.send("sorry, that's not a valid search query")
+                return
+            
+            for attatchment in ctx.message.attachments:
+                await add_playlist(ctx, await self.download_song(attatchment.url, ctx))
+            
+            song_data = None
+            
+        else:
+            song_data = await self.download_song(search_query, ctx)
+
+        # with open ("example_data.json", "w") as f:
+        #     import json
+        #     json.dump(song_data, f)
 
 
         add_full_playlist = False
