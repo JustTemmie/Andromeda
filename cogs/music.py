@@ -447,10 +447,8 @@ class MusicPlayer(commands.Cog):
                 await ctx.send("sorry, that's not a valid search query")
                 return
             
-            for attatchment in ctx.message.attachments:
-                await add_playlist(ctx, await self.download_song(attatchment.url, ctx))
+            song_data = await self.download_song(ctx.message.attachments[0].url, ctx)
             
-            song_data = None
             
         else:
             song_data = await self.download_song(search_query, ctx)
