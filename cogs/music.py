@@ -411,7 +411,7 @@ class MusicPlayer(commands.Cog):
                 return
             
             for attatchment in ctx.message.attachments:
-                add_playlist(ctx, await self.download_song(attatchment.url, ctx))
+                await add_playlist(ctx, await self.download_song(attatchment.url, ctx))
             
             song_data = None
             
