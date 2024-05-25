@@ -91,6 +91,18 @@ miku = Miku()
 # miku.tree = discord.app_commands.CommandTree(miku)
 # miku.remove_command("help")
 
+@miku.tree.command(
+    name="nickname",
+    description="heh, hi :3",
+    guild=discord.Object(id=885113462378876948)
+)
+async def nickname_command(interaction, victim: discord.Member, new_name: str):
+    original_name = victim.display_name
+    await victim.edit(nick=new_name)
+    await interaction.response.send_message(f"renamed {original_name} to {new_name}", ephemeral=True)
+    
+
+
 async def main():
     async with miku:
         if len(miku.config["COG_LIST_OVERWRITE"]) >= 1:
