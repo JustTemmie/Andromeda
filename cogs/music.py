@@ -167,24 +167,6 @@ class MusicPlayer(commands.Cog):
         
         self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -ss {progress/1000} -af 'loudnorm, volume=0.4 {filter}'"
         
-        async def play_song_clear_seeking(self, ctx):
-            # if the song played for a second, it probably had good ffmpeg arguments lol
-            if time.time() - start_time > 1:
-                self.data[ctx.guild.id]["seeking"] = False
-                await self.play_song(ctx)
-            else:
-                await ctx.send(f"an error occured whilst changing filters, reseting them back")
-                self.data[guild_id]["ffmpeg_options"]["options"] = old_options
-                self.data[guild_id]["player"] = old_player
-                ctx.voice_client.play(
-                    self.data[guild_id]["player"],
-                    after=lambda e: asyncio.run_coroutine_threadsafe(
-                        self.play_song(ctx), self.miku.loop
-                    )
-                )
-                
-                self.data[guild_id]["progress"] = progress
-                
         
         new_player = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
         ctx.voice_client.pause()
@@ -193,11 +175,12 @@ class MusicPlayer(commands.Cog):
         ctx.voice_client.play(
             self.data[guild_id]["player"],
             after=lambda e: asyncio.run_coroutine_threadsafe(
-                play_song_clear_seeking(self, ctx), self.miku.loop
+                self.play_song(ctx), self.miku.loop
             )
         )
         
         self.data[guild_id]["progress"] = progress
+        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -af 'loudnorm, volume=0.4 {filter}'"
         
 
     async def play_song(self, ctx):
