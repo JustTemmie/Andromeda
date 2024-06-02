@@ -57,19 +57,19 @@ class PrideCog(commands.Cog):
             flags.append(app_commands.Choice(name="Keep typing to find more...", value="Pride.png"))
         return flags
     
-    @app_commands.command(name="flag")
+    @app_commands.command(name="flag", brief="check what a flag looks like")
     @app_commands.autocomplete(flag=flag_autocomplete)
     async def flag_command(self, interaction: discord.Interaction, flag: str) -> None:
         await interaction.response.send_message(file=discord.File(f"{FLAG_DIR}/{flag}"))
     
-    @app_commands.command(name="pride")
+    @app_commands.command(name="pride", brief="get a pride-ified profile picture!")
     @app_commands.autocomplete(flag=flag_autocomplete, flag_2=flag_autocomplete, seperator=seperator_autocomplete)
     async def pride_command(self,
             interaction: discord.Interaction,
-            user: typing.Optional[discord.Member],
             flag: str,
             flag_2: typing.Optional[str],
             seperator: typing.Optional[str],
+            user: typing.Optional[discord.Member],
             pfp_margin: int = 50,
             background_blur: int = 0,
             flag_overwrite: typing.Optional[discord.Attachment] = None,
