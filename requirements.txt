@@ -10,6 +10,7 @@ spotdl      # used to download audio ( from spotify )
 
 psutil      # gets system info, used for info command and such
 
+pillow      # for image manipulation
 
 midiutil
 sound_to_midi
