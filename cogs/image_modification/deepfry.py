@@ -11,7 +11,6 @@ class DeepFryCog(commands.Cog):
         self.bot = bot
         
         @bot.tree.context_menu(name="Deep Fry")
-        @commands.is_owner()
         async def deep_fry_context_command(interaction: discord.Interaction, message: discord.Message) -> None:
             if len(message.attachments) == 0:
                 await interaction.response.send_message("that message doesn't seem to have any attachments", ephemeral=True)
