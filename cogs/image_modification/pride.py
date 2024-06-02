@@ -20,7 +20,8 @@ SEPARATORS = {
 
 FLAGS = []
 FLAG_DISPLAY_NAMES = []
-for file in os.listdir(FLAG_DIR):
+files = os.listdir(FLAG_DIR)
+for file in sorted(files, key = lambda x: x):
     FLAGS.append(file)
     FLAG_DISPLAY_NAMES.append(os.path.splitext(os.path.basename(file))[0])
 
@@ -157,7 +158,6 @@ async def setup(bot):
     await bot.add_cog(PrideCog(bot))
 
 if __name__ == "__main__":
-    import requests
     import asyncio
     
     async def test():
@@ -165,8 +165,8 @@ if __name__ == "__main__":
         
         pfp_margin = 40
         
-        background = cog.init_image("assets/images/flags/image.png", (PFP_SIZE, PFP_SIZE))
-        pfp = cog.init_image("assets/images/flags/trans.png", (PFP_SIZE, PFP_SIZE))
+        background = cog.init_image("assets/images/flags/Transfemme.png", (PFP_SIZE, PFP_SIZE))
+        pfp = cog.init_image("assets/images/flags/Transgender.png", (PFP_SIZE, PFP_SIZE))
         
         image = cog.merge_images(background, pfp, (PFP_SIZE, PFP_SIZE), "diagonal /")
         
