@@ -102,7 +102,7 @@ class PrideCog(commands.Cog):
         if background_blur:
             background = background.filter(ImageFilter.GaussianBlur(background_blur))
         
-        pfp = self.init_image(BytesIO(await interaction.user.display_avatar.read()), (PFP_SIZE - pfp_margin, PFP_SIZE - pfp_margin))
+        pfp = self.init_image(BytesIO(await user.display_avatar.read()), (PFP_SIZE - pfp_margin, PFP_SIZE - pfp_margin))
         
         image = self.render_circle_on_background(image=pfp, background=background, border_blur=border_blur)
         
@@ -111,7 +111,6 @@ class PrideCog(commands.Cog):
         output.seek(0)
         
         await interaction.response.send_message(file=discord.File(output, filename="pride.png"))
-        return
 
     def merge_images(self, image_1: Image, image_2: Image, size: tuple, seperator: str) -> Image:
         mask_img = Image.new("L", size, color=0)
