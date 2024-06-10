@@ -369,7 +369,7 @@ class MusicPlayer(commands.Cog):
     @commands.command(
         name="playnext",
         brief="the play command, but added to the start of the queue rather than the end",
-        brief="accepts any URL, direct attatchments, and keywords to search for")
+        description="accepts any URL, direct attatchments, and keywords to search for")
     async def playnext_command(self, ctx, *, search_query = None):
         await self.play_command(ctx, search_query, mode = list.insert)
         
