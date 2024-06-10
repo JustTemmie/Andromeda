@@ -374,7 +374,6 @@ class MusicPlayer(commands.Cog):
     async def playnext_command(self, ctx, *, search_query = None):
         await self.play_command(ctx, search_query, mode = list.insert)
         
-
     @commands.command(
         name="play",
         aliases=["sing"],
@@ -409,19 +408,15 @@ class MusicPlayer(commands.Cog):
         
         def add_entry(entry):
             if mode == list.insert:
-                self.data[guild_id]["queue"].insert(
-                    0,
-                    {
-                        "data": entry,
-                        "ctx": ctx
-                    }
+                self.data[guild_id]["queue"].insert(0,
+                    {"data": entry,
+                    "ctx": ctx}
                 )
+                
             else:
                 self.data[guild_id]["queue"].append(
-                    {
-                        "data": entry,
-                        "ctx": ctx
-                    }
+                    {"data": entry,
+                    "ctx": ctx}
                 )
         
         async def add_playlist(ctx, song_data):
