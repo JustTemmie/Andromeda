@@ -172,15 +172,19 @@ class MusicPlayer(commands.Cog):
         ctx.voice_client.pause()
         self.data[guild_id]["player"] = new_player
         
-        ctx.voice_client.play(
-            self.data[guild_id]["player"],
-            after=lambda e: asyncio.run_coroutine_threadsafe(
-                self.play_song(ctx), self.miku.loop
+        if ctx.voice_client:
+            ctx.voice_client.play(
+                self.data[guild_id]["player"],
+                after=lambda e: asyncio.run_coroutine_threadsafe(
+                    self.play_song(ctx), self.miku.loop
+                )
             )
-        )
         
-        self.data[guild_id]["progress"] = progress
-        self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -af 'loudnorm, volume=0.4 {filter}'"
+            self.data[guild_id]["progress"] = progress
+            self.data[guild_id]["ffmpeg_options"]["options"] = f"-vn -af 'loudnorm, volume=0.4 {filter}'"
+        
+        else:
+            self.play_song(ctx)
         
 
     async def play_song(self, ctx):
@@ -200,15 +204,19 @@ class MusicPlayer(commands.Cog):
             
             self.data[guild_id]["player"] = await YtDlpSource.get_player(self, guild_id, self.data[guild_id]["song"])
             
-            ctx.voice_client.play(
-                self.data[guild_id]["player"],
-                after=lambda e: asyncio.run_coroutine_threadsafe(
-                    self.play_song(ctx), self.miku.loop
+            if ctx.voice_client:
+                ctx.voice_client.play(
+                    self.data[guild_id]["player"],
+                    after=lambda e: asyncio.run_coroutine_threadsafe(
+                        self.play_song(ctx), self.miku.loop
+                    )
                 )
-            )
 
-            await self.send_now_playing_embed(ctx)
+                await self.send_now_playing_embed(ctx)
 
+            else:
+                await ctx.send(f"error occured when trying to play {self.data[guild_id]['song']} - skipping")
+                self.play_song(ctx)
 
         except Exception as err:
             error = f"whoopsie, it looks like i encountered an error whilst trying to play your song\n{type(err)}:\n```{err}```"
