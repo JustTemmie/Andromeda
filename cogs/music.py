@@ -366,13 +366,23 @@ class MusicPlayer(commands.Cog):
 
         return meta_data
 
+    @commands.command(
+        name="playnext",
+        brief="the play command, but added to the start of the queue rather than the end",
+        brief="accepts any URL, direct attatchments, and keywords to search for")
+    async def playnext_command(self, ctx, *, search_query = None):
+        await self.play_command(ctx, search_query, mode = list.insert)
+        
 
     @commands.command(
         name="play",
         aliases=["sing"],
-        bfier="play a song",
+        brief="play a song",
         description="accepts any URL, direct attatchments, and keywords to search for")
-    async def play_command(self, ctx, *, search_query = None):
+    async def play_command_register(self, ctx, *, search_query = None):
+        await self.play_command(ctx, search_query, mode = list.append)
+    
+    async def play_command(self, ctx, search_query, mode):
         try:
             voice_channel = ctx.author.voice.channel
 
@@ -396,15 +406,29 @@ class MusicPlayer(commands.Cog):
         await self.ensure_valid_data(guild_id)
         await ctx.message.add_reaction("✅")
         
+        def add_entry(entry):
+            if isinstance(mode, list.insert):
+                self.data[guild_id]["queue"].insert(
+                    0,
+                    {
+                        "data": entry,
+                        "ctx": ctx
+                    }
+                )
+            else:
+                self.data[guild_id]["queue"].append(
+                    {
+                        "data": entry,
+                        "ctx": ctx
+                    }
+                )
+        
         async def add_playlist(ctx, song_data):
             if len(song_data["entries"]) == 0:
                 return
             
             for entry in song_data["entries"]:
-                self.data[guild_id]["queue"].append(
-                    {"data": entry,
-                    "ctx": ctx}
-                )
+                add_entry(entry)
 
             if len(song_data["entries"]) > 2:
                 embed = helpers.create_embed(ctx)
@@ -417,10 +441,7 @@ class MusicPlayer(commands.Cog):
             if "entries" in song_data:
                 song_data = song_data["entries"][0]
             
-            self.data[guild_id]["queue"].append(
-                {"data": song_data,
-                "ctx": ctx}
-            )
+            add_entry(song_data)
             
             if self.data[guild_id]["playing"]:
                 meta_data = await self.get_meta_data(song_data)
