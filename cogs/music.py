@@ -407,7 +407,7 @@ class MusicPlayer(commands.Cog):
         await ctx.message.add_reaction("✅")
         
         def add_entry(entry):
-            if isinstance(mode, list.insert):
+            if mode == list.insert:
                 self.data[guild_id]["queue"].insert(
                     0,
                     {
