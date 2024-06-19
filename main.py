@@ -21,9 +21,21 @@ settings = configLib.getSettings()
 directories_to_make = ["local_only"]
 directories_to_empty = ["temp", "logs"]
 
-for dir in directories_to_make + directories_to_empty:
-    if not os.path.exists(dir):
-        os.mkdir(dir)
+files_to_make = {
+    "local_only/reminders.json": "{}"
+}
+
+for path in directories_to_make + directories_to_empty:
+    if not os.path.exists(path):
+        print(f'creating folders at: "{path}"')
+        os.mkdir(path)
+
+for path, content in files_to_make.items():
+    if not os.path.exists(path):
+        print(f'creating file at: "{path}" with content: "{content}"')
+        with open(path, "w") as f:
+            f.write(content)
+    
         
 if config["DEVELOPMENT"]:
     for dir in directories_to_empty:
