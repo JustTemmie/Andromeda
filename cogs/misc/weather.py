@@ -22,7 +22,6 @@ class WeatherCog(commands.Cog):
         
         @bot.tree.command(name="weather")
         @app_commands.allowed_installs(guilds=True, users=True)
-        @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
         async def weather_command(interaction: discord.Interaction, location: str = bot.config["COMMAND_DEFAULTS"]["WEATHER_LOCATION"], ephemreal: bool = False) -> None:
             location = location.casefold()
             
