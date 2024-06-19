@@ -7,6 +7,10 @@
         "TENOR": "default-identity-key"
     },
 
+    "COMMAND_DEFAULTS": {
+        "WEATHER_LOCATION": "New York"
+    },
+
     "PREFIXES": ["mikumiku", "miku miku", "miku"],
     "OWNER_IDS": [725539745572323409],
     "HOST_OWNERS": [725539745572323409, 616228691155877898, 769632057575342081],
