@@ -1,4 +1,6 @@
-discord.py # main discord library
+#discord.py # main discord library
+git+https://github.com/Rapptz/discord.py
+
 
 PyNaCl      # used for voice
 

@@ -60,6 +60,7 @@ class reminder(commands.Cog):
         name="remind",
         description="set a reminder!",
     )
+    @app_commands.allowed_installs(guilds=True, users=True)
     async def reminder_slash_command(
                 self, intercation: discord.Interaction, reminder: str,
                 days: float = 0.0, hours: float = 0.0,
