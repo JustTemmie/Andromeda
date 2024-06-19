@@ -13,7 +13,9 @@ spotdl      # used to download audio ( from spotify )
 psutil      # gets system info, used for info command and such
 
 pillow      # for image manipulation
+pdf2image
 
 midiutil
 sound_to_midi
 librosa
+
