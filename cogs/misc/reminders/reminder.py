@@ -3,10 +3,11 @@ from discord.ext import commands
 from discord import app_commands
 
 import json
-
 import time
 
 import re
+
+import hatsune_miku.database as DbLib
 
 # crazy ass regex that accepts strings such as "2 d", "5 days", "8day", "2.8hrs" and so on
 time_patterns = {
@@ -48,8 +49,8 @@ class reminder(commands.Cog):
         if seconds > 94694400:
             return await ctx.send(f"please set a time less than 3 years")
 
-        send_time = round(time.time() + seconds, 3)
-        if not self.save_reminder(reminder, send_time, ctx.author):
+        send_time = round(time.time() + seconds)
+        if not self.save_reminder(ctx.message.id, send_time, ctx.author, reminder):
             return await ctx.send("an error has occured, exiting...")
         embed = self.create_embed(reminder, send_time, ctx.author)
 
@@ -79,25 +80,21 @@ class reminder(commands.Cog):
         if seconds > 94694400:
             return await intercation.response.send_message(f"please set a time less than 3 years")
 
-        send_time = round(time.time() + seconds, 3)
-        if not self.save_reminder(reminder, send_time, intercation.user):
+        send_time = round(time.time() + seconds)
+        if not self.save_reminder(intercation.id, send_time, intercation.user, reminder):
             return await intercation.response.send_message("an error has occured, exiting...")
         embed = self.create_embed(reminder, send_time, intercation.user)
 
         await intercation.response.send_message(embed=embed)
 
 
-    def save_reminder(self, reminder, send_time, author) -> bool:
-        with open("local_only/reminders.json", "r") as f:
-            data = json.load(f)
-
-        if not str(author.id) in data:
-            data[str(author.id)] = {}
-
-        data[str(author.id)][send_time] = reminder
-
-        with open("local_only/reminders.json", "w") as f:
-            json.dump(data, f)
+    def save_reminder(self, entry_ID, send_time, author, reminder_content) -> bool:
+        DbLib.reminder_database.write(
+            entry_ID,
+            send_time,
+            author.id,
+            reminder_content
+        )
         
         return True
 

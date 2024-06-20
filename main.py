@@ -22,7 +22,7 @@ directories_to_make = ["local_only"]
 directories_to_empty = ["temp", "logs"]
 
 files_to_make = {
-    "local_only/reminders.json": "{}"
+    # "local_only/reminders.json": "{}"
 }
 
 for path in directories_to_make + directories_to_empty:

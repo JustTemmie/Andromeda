@@ -1,7 +1,8 @@
 from discord.ext import commands, tasks
-import json
 
 import time
+
+import hatsune_miku.database as DbLib
 
 
 class reminderTask(commands.Cog):
@@ -12,21 +13,14 @@ class reminderTask(commands.Cog):
 
     @tasks.loop(seconds=5)
     async def reminder_task(self):
-        with open("local_only/reminders.json", "r") as f:
-            data = json.load(f)
-
-        for user in data:
-            for remindertime, reminderstr in zip(data[user], data[user].values()):
-                if round(time.time()) >= float(remindertime):
-                    
-                    userobj = await self.miku.fetch_user(user)
-                    await userobj.send(f"**Reminder:** {reminderstr}")
-                    data[user].pop(remindertime)
-                    with open("local_only/reminders.json", "w") as f:
-                        json.dump(data, f)
-
-                    await self.reminder_task()
-                    return
+        data = DbLib.reminder_database.read()
+        
+        for reminder in data:
+            if time.time() >= float(reminder[1]):
+                userobj = await self.miku.fetch_user(reminder[2])
+                await userobj.send(f"**Reminder:** {reminder[3]}")
+                
+                DbLib.reminder_database.delete(reminder[0])
 
 
 async def setup(bot):
