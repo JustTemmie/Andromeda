@@ -714,9 +714,9 @@ class MusicPlayer(commands.Cog):
         if before.channel is not None:
             channel = before.channel
             if len(channel.members) == 1:
+                voice = discord.utils.get(self.miku.voice_clients, guild=channel.guild)
+                
                 if channel.guild.id in self.data:
-                    voice = discord.utils.get(self.miku.voice_clients, guild=channel.guild)
-
                     self.data[channel.guild.id]["queue"] = []
 
                 if voice:
