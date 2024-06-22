@@ -36,6 +36,7 @@ default_ffmpeg_options = {
 
 sent_messages = {}
 
+
 # insane regex https://stackoverflow.com/a/14693789
 remove_colour = re.compile(r'''
     \x1B  # ESC
@@ -88,6 +89,11 @@ class MusicPlayer(commands.Cog):
     def __init__(self, miku):
         self.miku = miku
         self.data = {}
+        
+        self.users_to_spy_on = [
+            952427191226998854,
+            miku.user.id
+        ]
 
 
     async def download_song(self, url, ctx, playlist_items = "1:2"):
@@ -709,6 +715,18 @@ class MusicPlayer(commands.Cog):
 
                     if voice:
                         await voice.disconnect()
+            
+            # code to "spy on" certain users
+            elif len(channel.members) == 2:
+                if (
+                        channel.members[0].id in self.users_to_spy_on
+                        and channel.members[1].id in self.users_to_spy_on
+                ):
+                    await channel.guild.change_voice_state(channel=channel, self_mute=False, self_deaf=False)
+            
+            else:
+                if not before.self_deaf:
+                    await channel.guild.change_voice_state(channel=channel, self_mute=False, self_deaf=True)
 
 async def setup(bot):
     await bot.add_cog(MusicPlayer(bot))
