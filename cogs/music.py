@@ -719,8 +719,8 @@ class MusicPlayer(commands.Cog):
 
                     self.data[channel.guild.id]["queue"] = []
 
-                    if voice:
-                        await voice.disconnect()
+                if voice:
+                    await voice.disconnect()
             
             # code to "spy on" certain users
             elif len(channel.members) == 2:
