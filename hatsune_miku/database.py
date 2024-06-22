@@ -33,6 +33,7 @@ class ReminderDatabase(BaseDatabase):
         cursor.execute(query, (id, timestamp, author_id, message_content))
         database.commit()
 
+
 database = sqlite3.connect("local_only/database.db")
 cursor = database.cursor()
 # database.execute("CREATE TABLE IF NOT EXISTS messages(id INT, message_content STRING)")
