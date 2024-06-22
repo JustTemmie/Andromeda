@@ -90,10 +90,16 @@ class MusicPlayer(commands.Cog):
         self.miku = miku
         self.data = {}
         
-        self.users_to_spy_on = [
-            952427191226998854,
-            miku.user.id
-        ]
+        self.users_to_spy_on = []
+        
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        if self.miku.user:
+            self.users_to_spy_on = [
+                952427191226998854,
+                self.miku.user.id
+            ]
 
 
     async def download_song(self, url, ctx, playlist_items = "1:2"):
