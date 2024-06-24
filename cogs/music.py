@@ -713,9 +713,12 @@ class MusicPlayer(commands.Cog):
     async def on_voice_state_update(self, member, before, after):
         if before.channel is not None:
             channel = before.channel
+            voice = discord.utils.get(self.miku.voice_clients, guild=channel.guild)
+            
+            if not voice:
+                return
+            
             if len(channel.members) == 1:
-                voice = discord.utils.get(self.miku.voice_clients, guild=channel.guild)
-                
                 if channel.guild.id in self.data:
                     self.data[channel.guild.id]["queue"] = []
 
