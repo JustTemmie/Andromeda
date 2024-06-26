@@ -726,16 +726,16 @@ class MusicPlayer(commands.Cog):
                     await voice.disconnect()
             
             # code to "spy on" certain users
-            elif len(channel.members) == 2:
-                if (
-                        channel.members[0].id in self.users_to_spy_on
-                        and channel.members[1].id in self.users_to_spy_on
-                ):
-                    await channel.guild.change_voice_state(channel=channel, self_mute=False, self_deaf=False)
+            # elif len(channel.members) == 2:
+            #     if (
+            #             channel.members[0].id in self.users_to_spy_on
+            #             and channel.members[1].id in self.users_to_spy_on
+            #     ):
+            #         await channel.guild.change_voice_state(channel=channel, self_mute=False, self_deaf=False)
             
-            else:
-                if not before.self_deaf:
-                    await channel.guild.change_voice_state(channel=channel, self_mute=False, self_deaf=True)
+            # else:
+            #     if not before.self_deaf:
+            #         await channel.guild.change_voice_state(channel=channel, self_mute=False, self_deaf=True)
 
 async def setup(bot):
     await bot.add_cog(MusicPlayer(bot))
