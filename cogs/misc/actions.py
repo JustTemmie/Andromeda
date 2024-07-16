@@ -20,7 +20,7 @@ class Actions(commands.Cog):
             embed.title = f"{ctx.author.display_name} just bit {target.display_name}"
             embed.description = "rawr >:3"
         
-        embed.set_image(url = tenorLib.getRandomGifLink("anime bite", 25))
+        embed.set_image(url = tenorLib.getRandomGifLink("anime bite", 10))
         await ctx.send(embed = embed)
     
     @commands.command(
