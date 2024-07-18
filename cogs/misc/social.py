@@ -58,6 +58,57 @@ class Social(commands.Cog):
         
         embed.set_image(url = tenorLib.getRandomGifLink("anime bonk", 30))
         await ctx.send(embed = embed)
+    
+    @commands.command(
+        name="tickle",
+        description="god i feel bad for them already",
+        extras={"page": "main", "category":"social"}
+    )
+    async def tickle_command(self, ctx, target: discord.Member):
+        embed = helpers.create_embed(ctx)
+        if ctx.author == target:
+            embed.title = f"{ctx.author.display_name} just started tickling themselves"
+            embed.description = "wait i thought that was impossible?"
+        else:
+            embed.title = f"{ctx.author.display_name} started tickling {target.display_name} out of nowhere"
+            embed.description = "teeheehehee"
+        
+        embed.set_image(url = tenorLib.getRandomGifLink("anime tickle", 30))
+        await ctx.send(embed = embed)
+    
+    @commands.command(
+        name="cuddle", aliases=["hug²"],
+        description="it's like hugs, but even more wholesome",
+        extras={"page": "main", "category":"social"}
+    )
+    async def cuddle_command(self, ctx, target: discord.Member):
+        embed = helpers.create_embed(ctx)
+        if ctx.author == target:
+            embed.title = f"{ctx.author.display_name} is showing themselves some love"
+            embed.description = ":3"
+        else:
+            embed.title = f"{ctx.author.display_name} took {target.display_name} and started cuddling them"
+            embed.description = "awwweee"
+        
+        embed.set_image(url = tenorLib.getRandomGifLink("anime cuddle", 25))
+        await ctx.send(embed = embed)
+        
+    @commands.command(
+        name="hug",
+        description="hugs!",
+        extras={"page": "main", "category":"social"}
+    )
+    async def hug_command(self, ctx, target: discord.Member):
+        embed = helpers.create_embed(ctx)
+        if ctx.author == target:
+            embed.title = f"{ctx.author.display_name} is showing themselves some love"
+            embed.description = ":3"
+        else:
+            embed.title = f"{ctx.author.display_name} is hugging {target.display_name}"
+            embed.description = "hugs! :)"
+        
+        embed.set_image(url = tenorLib.getRandomGifLink("anime hug", 25))
+        await ctx.send(embed = embed)
 
 
 async def setup(bot):
