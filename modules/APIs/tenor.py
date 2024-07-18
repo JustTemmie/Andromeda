@@ -7,12 +7,13 @@ if __name__ == "__main__":
     sys.path.append(".")
 
 import modules.APIs.config as configLib
+import modules.decorators as decorators
 
 
 tenor_key = configLib.getConfig()["API_KEYS"]["TENOR"]
 tenor_ckey = configLib.getConfig()["IDENTIFIERS"]["TENOR"]
 
-
+@decorators.time_cache(60*60*6)
 def getGifs(query, limit):
     r = requests.get(
         f"https://tenor.googleapis.com/v2/search?q={query}&key={tenor_key}&client_key={tenor_ckey}&limit={limit}"
