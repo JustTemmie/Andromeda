@@ -28,8 +28,7 @@ class Help(commands.Cog):
         commands_by_page_and_category: dict[dict[list[dict]]] = {}
         
         for command in command_list:
-            if command.hidden or \
-            not await command.can_run(ctx):
+            if not await helpers.can_run(ctx, command):
                 hidden_commands += 1
             
             else:

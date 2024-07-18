@@ -41,3 +41,14 @@ def format_time(seconds):
             return_string += f"{value} {unit} "
     
     return return_string
+
+async def can_run(ctx: commands.context, command: commands.command) -> bool:
+    try:
+        await command.can_run(ctx)
+    except commands.CommandError:
+        return False
+
+    if command.hidden:
+        return False
+    
+    return True
