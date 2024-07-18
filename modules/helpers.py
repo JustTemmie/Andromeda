@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 
 import os
 import random
@@ -11,7 +12,7 @@ def getProgressBar(current, max, width = 20):
     return bar
 
 # user still needs to set the title, description, and fields
-def create_embed(ctx, user = None):
+def create_embed(ctx: commands.Context, user: discord.User | discord.Member = None):
     if user == None:
         user = ctx.author
     

@@ -4,17 +4,17 @@ from discord.ext import commands, tasks
 import random
 import time
 
-import hatsune_miku.helpers as helpers
+import modules.helpers as helpers
 
 class StatusChanger(commands.Cog):
-    def __init__(self, miku):
-        self.miku = miku
+    def __init__(self, bot):
+        self.bot = bot
         self.change_status_task.start()
     
     
     @commands.Cog.listener()
     async def on_ready(self):
-        for i in self.miku.settings["STATUSES"]:
+        for i in self.bot.settings["STATUSES"]:
             await self.parse_status(i)
     
     
@@ -50,12 +50,12 @@ class StatusChanger(commands.Cog):
     
     @tasks.loop(minutes=30)
     async def change_status_task(self):
-        await self.miku.wait_until_ready()
-        status = random.choice(self.miku.settings["STATUSES"])
+        await self.bot.wait_until_ready()
+        status = random.choice(self.bot.settings["STATUSES"])
         
         status, activity_mode = await self.parse_status(status)
         
-        await self.miku.change_presence(
+        await self.bot.change_presence(
             status=discord.Status.online,
             activity=discord.Activity(
                 type=discord.ActivityType(activity_mode),
@@ -63,5 +63,5 @@ class StatusChanger(commands.Cog):
             ),
         )
 
-async def setup(miku):
-    await miku.add_cog(StatusChanger(miku))
+async def setup(bot):
+    await bot.add_cog(StatusChanger(bot))

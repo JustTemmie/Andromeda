@@ -8,12 +8,12 @@ from ffmpeg import FFmpeg
 import librosa
 import sound_to_midi
 
-import hatsune_miku.ffmpeg_handler as ffmpeg_handler
+import modules.ffmpeg_handler as ffmpeg_handler
 
 
 class MidiPlayer(commands.Cog):
-    def __init__(self, miku):
-        self.miku = miku
+    def __init__(self, bot):
+        self.bot = bot
 
 
     async def midifiy_audio(self, input_filename, identifier):
@@ -37,7 +37,9 @@ class MidiPlayer(commands.Cog):
 
     @commands.command(
         name="midify",
-        brief="hatsune miku-ify your audio files!")
+        brief="hatsune miku-ify your audio files!",
+        extras={"page": "beta", "category":"audio"}
+    )
     async def midify_command(self, ctx):
         file_in = "bwaa.mp3"
         file_out = "bwaa.mid"
@@ -64,5 +66,5 @@ class MidiPlayer(commands.Cog):
 
 
 
-async def setup(miku):
-    await miku.add_cog(MidiPlayer(miku))
+async def setup(bot):
+    await bot.add_cog(MidiPlayer(bot))

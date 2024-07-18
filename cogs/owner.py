@@ -7,7 +7,7 @@ import os
 import re
 import subprocess
 
-import hatsune_miku.decorators as decorators
+import modules.decorators as decorators
 
 
 def insert_returns(body):
@@ -40,8 +40,8 @@ async def send_long_message(ctx, msg, preset_output=""):
 
 
 class Owner(commands.Cog):
-    def __init__(self, miku):
-        self.miku = miku
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.is_owner()
     @commands.command(name="shutdown")
@@ -49,7 +49,7 @@ class Owner(commands.Cog):
         print(dir(ctx))
         await ctx.send("shuting down...")
         print("Terminated using `shutdown` command.")
-        await self.miku.close()
+        await self.bot.close()
 
     @decorators.is_host_owner()
     @commands.command(name="bash", aliases=["sh"])
@@ -108,8 +108,8 @@ class Owner(commands.Cog):
                         name="restarting - won't respond",
                     ),
                 )
-                await self.miku.close()
+                await self.bot.close()
                 
 
-async def setup(miku):
-    await miku.add_cog(Owner(miku))
+async def setup(bot):
+    await bot.add_cog(Owner(bot))

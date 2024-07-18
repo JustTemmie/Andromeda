@@ -3,9 +3,10 @@ import requests
 import json
 
 if __name__ == "__main__":
-    import config as configLib
-else:
-    import hatsune_miku.APIs.config as configLib
+    import sys
+    sys.path.append(".")
+
+import modules.APIs.config as configLib
 
 
 tenor_key = configLib.getConfig()["API_KEYS"]["TENOR"]

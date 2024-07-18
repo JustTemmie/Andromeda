@@ -2,12 +2,12 @@ from discord.ext import commands, tasks
 
 import time
 
-import hatsune_miku.database as DbLib
+import modules.database as DbLib
 
 
 class reminderTask(commands.Cog):
-    def __init__(self, miku):
-        self.miku = miku
+    def __init__(self, bot):
+        self.bot = bot
 
         self.reminder_task.start()
 
@@ -17,7 +17,7 @@ class reminderTask(commands.Cog):
         
         for reminder in data:
             if time.time() >= float(reminder[1]):
-                userobj = await self.miku.fetch_user(reminder[2])
+                userobj = await self.bot.fetch_user(reminder[2])
                 await userobj.send(f"**Reminder:** {reminder[3]}")
                 
                 DbLib.reminder_database.delete(reminder[0])

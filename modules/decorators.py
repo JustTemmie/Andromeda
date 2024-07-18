@@ -4,12 +4,11 @@ import os
 
 
 def is_host_owner():
-    async def predicate(ctx):
-        if ctx.author.id in ctx.bot.config["HOST_OWNERS"]:
-            return True
+    async def predicate(ctx) -> bool:
+        if not ctx.author.id in ctx.bot.config["HOST_OWNERS"]:
+            raise commands.NotOwner(f"You are not responsible for {os.uname()[1]}")
         else:
-            await ctx.send(f"hey, you're not responsible for {os.uname()[1]}")
-            return False
+            return True
         
     return commands.check(predicate)
 

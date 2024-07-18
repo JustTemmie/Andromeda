@@ -7,7 +7,7 @@ import time
 
 import re
 
-import hatsune_miku.database as DbLib
+import modules.database as DbLib
 
 # crazy ass regex that accepts strings such as "2 d", "5 days", "8day", "2.8hrs" and so on
 time_patterns = {
@@ -26,13 +26,14 @@ time_factors = {
 
 
 class reminder(commands.Cog):
-    def __init__(self, miku):
-        self.miku = miku
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.command(
         name="remind",
         aliases=["remindme", "reminder"],
         brief='reminds you of something\nmiku remind god damn it tell her i like beavers in 1 d 2 h 30 m\nyou can use "days, hours, minutes, and seconds"',
+        extras={"page": "main", "category":"utility"}
     )
     async def reminder_command(self, ctx, *, reminder: str):
         if " in " not in reminder:

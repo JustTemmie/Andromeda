@@ -1,16 +1,18 @@
 import discord
 from discord.ext import commands
 
-import hatsune_miku.APIs.tenor as tenorLib
-import hatsune_miku.helpers as helpers
+import modules.APIs.tenor as tenorLib
+import modules.helpers as helpers
 
 class Actions(commands.Cog):
-    def __init__(self, miku):
-        self.miku = miku
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.command(
         name="bite",
-        description="Aumch")
+        description="Aumch",
+        extras={"page": "main", "category":"actions"}
+    )
     async def bite_command(self, ctx, target: discord.Member):
         embed = helpers.create_embed(ctx)
         if ctx.author == target:
@@ -25,7 +27,9 @@ class Actions(commands.Cog):
     
     @commands.command(
         name="boop",
-        description="bleep")
+        description="bleep",
+        extras={"page": "main", "category":"actions"}
+    )
     async def boop_command(self, ctx, target: discord.Member):
         embed = helpers.create_embed(ctx)
         if ctx.author == target:
@@ -40,7 +44,9 @@ class Actions(commands.Cog):
     
     @commands.command(
         name="bonk",
-        description="ouchie :(")
+        description="ouchie :(",
+        extras={"page": "main", "category":"actions"}
+    )
     async def bonk_command(self, ctx, target: discord.Member):
         embed = helpers.create_embed(ctx)
         if ctx.author == target:
@@ -54,5 +60,5 @@ class Actions(commands.Cog):
         await ctx.send(embed = embed)
 
 
-async def setup(miku):
-    await miku.add_cog(Actions(miku))
+async def setup(bot):
+    await bot.add_cog(Actions(bot))

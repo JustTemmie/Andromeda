@@ -10,8 +10,8 @@ import time
 import math
 import random
 
-import hatsune_miku.helpers as helpers
-import hatsune_miku.user_input as user_input
+import modules.helpers as helpers
+import modules.user_input as user_input
 
 ytdlp_format_options = {
     "format": "bestaudio/best",
@@ -86,8 +86,8 @@ class YtDlpSource(discord.PCMVolumeTransformer):
         return cls(TrackedFFmpegPCMAudio(player, guild_id, filename, **player.data[guild_id]["ffmpeg_options"]), data=data)
 
 class MusicPlayer(commands.Cog):
-    def __init__(self, miku):
-        self.miku = miku
+    def __init__(self, bot):
+        self.bot = bot
         self.data = {}
         
         self.users_to_spy_on = []
@@ -95,10 +95,10 @@ class MusicPlayer(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        if self.miku.user:
+        if self.bot.user:
             self.users_to_spy_on = [
                 952427191226998854,
-                self.miku.user.id
+                self.bot.user.id
             ]
 
 
@@ -123,11 +123,11 @@ class MusicPlayer(commands.Cog):
                     message_content = f"downloading data for song {progress+2}/{total+2}, this might take a while..."
                     
                     if sent_messages[ctx.message.id] == None:
-                        job = asyncio.run_coroutine_threadsafe(ctx.reply(mention_author=False, content=message_content), self.miku.loop)
+                        job = asyncio.run_coroutine_threadsafe(ctx.reply(mention_author=False, content=message_content), self.bot.loop)
                         sent_messages[ctx.message.id] = job.result()
                     
                     elif progress % 5 == 0 or progress == total:
-                        job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(content=message_content), self.miku.loop)
+                        job = asyncio.run_coroutine_threadsafe(sent_messages[ctx.message.id].edit(content=message_content), self.bot.loop)
                         job.result()
                 
                 if progress == total:
@@ -144,7 +144,7 @@ class MusicPlayer(commands.Cog):
                 job = asyncio.run_coroutine_threadsafe(ctx.reply(
                     mention_author=False,
                     content=f"```{log}```"),
-                    self.miku.loop)
+                    self.bot.loop)
                 job.result()
 
 
@@ -188,7 +188,7 @@ class MusicPlayer(commands.Cog):
             ctx.voice_client.play(
                 self.data[guild_id]["player"],
                 after=lambda e: asyncio.run_coroutine_threadsafe(
-                    self.play_song(ctx), self.miku.loop
+                    self.play_song(ctx), self.bot.loop
                 )
             )
         
@@ -220,7 +220,7 @@ class MusicPlayer(commands.Cog):
                 ctx.voice_client.play(
                     self.data[guild_id]["player"],
                     after=lambda e: asyncio.run_coroutine_threadsafe(
-                        self.play_song(ctx), self.miku.loop
+                        self.play_song(ctx), self.bot.loop
                     )
                 )
 
@@ -381,7 +381,9 @@ class MusicPlayer(commands.Cog):
     @commands.command(
         name="playnext",
         brief="the play command, but added to the start of the queue rather than the end",
-        description="accepts any URL, direct attatchments, and keywords to search for")
+        description="accepts any URL, direct attatchments, and keywords to search for",
+        extras={"page": "main", "category":"music"}
+    )
     @commands.cooldown(6, 7200, commands.BucketType.member)
     async def playnext_command(self, ctx, *, search_query = None):
         await self.play_command(ctx, search_query, mode = list.insert)
@@ -390,7 +392,9 @@ class MusicPlayer(commands.Cog):
         name="play",
         aliases=["sing"],
         brief="play a song",
-        description="accepts any URL, direct attatchments, and keywords to search for")
+        description="accepts any URL, direct attatchments, and keywords to search for",
+        extras={"page": "main", "category":"music"}
+    )
     async def play_command_register(self, ctx, *, search_query = None):
         await self.play_command(ctx, search_query, mode = list.append)
     
@@ -406,7 +410,7 @@ class MusicPlayer(commands.Cog):
             await ctx.send(f"an exception was thrown:\n{e}")
             return
 
-        voice_client = discord.utils.get(self.miku.voice_clients, guild=ctx.guild) # This allows for more functionality with voice channels
+        voice_client = discord.utils.get(self.bot.voice_clients, guild=ctx.guild) # This allows for more functionality with voice channels
         guild_id = ctx.guild.id
 
         if voice_client != None:
@@ -482,14 +486,14 @@ class MusicPlayer(commands.Cog):
         playlist_download_count = 50
         if "entries" in song_data and len(song_data["entries"]) > 1:
             await ctx.reply(f"hey, would you like to play the entire playlist instead of just the first track?\n\nautomatically adding first track: <t:{round(time.time()) + 15}:R>")
-            add_full_playlist = await user_input.get_consent(self.miku, ctx, 17, ", adding the first track only")
+            add_full_playlist = await user_input.get_consent(self.bot, ctx, 17, ", adding the first track only")
 
             if add_full_playlist:
                 await add_playlist(ctx, song_data)
                 
-                if ctx.author.id in self.miku.config["TRUSTED_IDS"]:
+                if ctx.author.id in self.bot.config["TRUSTED_IDS"]:
                     await ctx.reply(f"how many songs would you like to add?")
-                    response = await user_input.get_input(self.miku, ctx, 10, f", deafaulting to {playlist_download_count}")
+                    response = await user_input.get_input(self.bot, ctx, 10, f", deafaulting to {playlist_download_count}")
                     try:
                         response = int(response.content)
                         playlist_download_count = response
@@ -519,13 +523,14 @@ class MusicPlayer(commands.Cog):
     @commands.command(
         name="filter",
         brief="apply an ffmpeg filter",
-        description="quite a complicated command, for technical reasons it's given to ffmpeg as `-af 'loudnorm, volume=0.4 {filter}'`, so your filter will need to start with a leading comma"
-        )
+        description="quite a complicated command, for technical reasons it's given to ffmpeg as `-af 'loudnorm, volume=0.4 {filter}'`, so your filter will need to start with a leading comma",
+        extras={"page": "main", "category":"music"}
+    )
     async def filter_command(self, ctx, filter = ""):
         voice_channel = ctx.author.voice.channel
 
         if voice_channel is not None:
-            voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
+            voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
             if voice is not None:
                 await self.change_ffmpeg_filter(ctx, filter)
             else:
@@ -536,7 +541,9 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="now-playing", aliases=["nowplaying", "np"],
-        description="In case you're wondering what song i'm playing")
+        description="In case you're wondering what song i'm playing",
+        extras={"page": "main", "category":"music"}
+    )
     async def nowplaying_command(self, ctx):
         guild_id = ctx.guild.id
         if not guild_id in self.data or self.data[guild_id]["playing"] == False:
@@ -575,7 +582,10 @@ class MusicPlayer(commands.Cog):
         await ctx.send(embed = embed)
 
 
-    @commands.hybrid_command(name="queue", aliases=["q"])
+    @commands.hybrid_command(
+        name="queue", aliases=["q"],
+        extras={"page": "main", "category":"music"}
+    )
     async def queue_command(self, ctx, page = 1):
         if type(page) != int:
             return await ctx.send(f"{page} is not a valid page number")
@@ -630,12 +640,15 @@ class MusicPlayer(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command(name="move", aliases=["psps"])
+    @commands.command(
+        name="move", aliases=["psps"],
+        extras={"page": "main", "category":"music"}
+    )
     async def move_command(self, ctx):
         voice_channel = ctx.author.voice.channel
 
         if voice_channel is not None:
-            voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
+            voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
             voice.pause()
             await ctx.send(f"oke, moving to {voice_channel.name}")
             await voice.move_to(voice_channel)
@@ -648,7 +661,9 @@ class MusicPlayer(commands.Cog):
     @commands.command(
         name="shuffle",
         brief="shuffle the playlist",
-        description="shuffle the currently playing music playlist")
+        description="shuffle the currently playing music playlist",
+        extras={"page": "main", "category":"music"}
+    )
     async def shuffle_command(self, ctx):
         if ctx.guild.id in self.data:
             random.shuffle(self.data[ctx.guild.id]["queue"])
@@ -658,9 +673,11 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(
         name="leave", aliases=["disconnect"],
-        description="Leave the VC and stop playing music")
+        description="Leave the VC and stop playing music",
+        extras={"page": "main", "category":"music"}
+    )
     async def leave_command(self, ctx):
-        voice = discord.utils.get(self.miku.voice_clients, guild=ctx.guild)
+        voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
 
         if ctx.guild.id in self.data:
             del self.data[ctx.guild.id]
@@ -674,18 +691,22 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="skip",
-        description="skipero!")
+        description="skipero!",
+        extras={"page": "main", "category":"music"}
+    )
     async def skip_command(self, ctx):
         try:
             # this stops the song, making the next song automatically start
-            discord.utils.get(self.miku.voice_clients, guild=ctx.guild).stop()
+            discord.utils.get(self.bot.voice_clients, guild=ctx.guild).stop()
         except:
             await ctx.send("an error has occured")
 
 
     @commands.hybrid_command(
         name="stop",
-        description="Stop playing music")
+        description="Stop playing music",
+        extras={"page": "main", "category":"music"}
+    )
     async def stop_command(self, ctx):
         if ctx.guild.id in self.data:
             del self.data[ctx.guild.id]
@@ -696,7 +717,9 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(
         name="join",
-        description="make me psps myself over to you")
+        description="make me psps myself over to you",
+        extras={"page": "main", "category":"music"}
+    )
     async def join_command(self, ctx):
         try:
             voice_channel = ctx.author.voice.channel
@@ -713,7 +736,7 @@ class MusicPlayer(commands.Cog):
     async def on_voice_state_update(self, member, before, after):
         if before.channel is not None:
             channel = before.channel
-            voice = discord.utils.get(self.miku.voice_clients, guild=channel.guild)
+            voice = discord.utils.get(self.bot.voice_clients, guild=channel.guild)
             
             if not voice:
                 return

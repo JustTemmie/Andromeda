@@ -1,12 +1,12 @@
 import discord
 from discord.ext import commands
 
-import hatsune_miku.APIs.tenor as tenorLib
-import hatsune_miku.helpers as helpers
+import modules.APIs.tenor as tenorLib
+import modules.helpers as helpers
 
 class AfterInvoke(commands.Cog):
-    def __init__(self, miku):
-        self.miku = miku
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
@@ -16,5 +16,5 @@ class AfterInvoke(commands.Cog):
     async def on_command_completion(self, ctx):
         pass
     
-async def setup(miku):
-    await miku.add_cog(AfterInvoke(miku))
+async def setup(bot):
+    await bot.add_cog(AfterInvoke(bot))
