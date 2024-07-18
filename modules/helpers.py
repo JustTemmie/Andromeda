@@ -12,7 +12,7 @@ def getProgressBar(current, max, width = 20):
     return bar
 
 # user still needs to set the title, description, and fields
-def create_embed(ctx: commands.Context, user: discord.User | discord.Member = None):
+def create_embed(ctx: commands.Context, user = None):
     if user == None:
         user = ctx.author
     
