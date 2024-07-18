@@ -3,9 +3,9 @@
         "listening-🎵",
         "listening-hey siri, call me mommy",
 
-        "watching-over {len(self.miku.users)} users",
-        "watching-over {len(self.miku.guilds)} guilds",
-        "watching-{random.choice(self.miku.users).display_name}",
+        "watching-over {len(self.bot.users)} users",
+        "watching-over {len(self.bot.guilds)} guilds",
+        "watching-{random.choice(self.bot.users).display_name}",
         "watching-cats go nya",
 
         "playing-Amogus Meme Compilation 2 -2021-.mp4 at my local coop extra's speakers",
