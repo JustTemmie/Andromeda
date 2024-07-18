@@ -46,7 +46,6 @@ class Owner(commands.Cog):
     @commands.is_owner()
     @commands.command(name="shutdown")
     async def shutdown_command(self, ctx):
-        print(dir(ctx))
         await ctx.send("shuting down...")
         print("Terminated using `shutdown` command.")
         await self.bot.close()

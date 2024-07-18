@@ -12,7 +12,7 @@ import asyncio
 import glob
 import os
 
-import hatsune_miku.APIs.config as configLib 
+import modules.APIs.config as configLib 
 
 
 config = configLib.getConfig()
@@ -57,7 +57,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 
-class Miku(commands.AutoShardedBot):
+class Bot(commands.AutoShardedBot):
     def __init__(self, *args, **kwargs):
         self.config = config
         self.settings = settings
@@ -96,14 +96,14 @@ class Miku(commands.AutoShardedBot):
         if self.config["SYNC_TREE"]:
             await sync_tree(self)
         else:
-            print("miku is set to not sync tree, continuing")
+            print(f"bot is set to not sync tree, continuing")
     
 
-miku = Miku()
-# miku.tree = discord.app_commands.CommandTree(miku)
-# miku.remove_command("help")
+bot = Bot()
+# bot.tree = discord.app_commands.CommandTree(bot)
+bot.remove_command("help")
 
-@miku.tree.command(
+@bot.tree.command(
     name="nickname",
     description="heh, hi :3",
     guild=discord.Object(id=885113462378876948)
@@ -116,21 +116,21 @@ async def nickname_command(interaction, victim: discord.Member, new_name: str):
 
 
 async def main():
-    async with miku:
-        if len(miku.config["COG_LIST_OVERWRITE"]) >= 1:
-            for cog in miku.config["COG_LIST_OVERWRITE"]:
-                await miku.load_extension(f"cogs.{cog}")
+    async with bot:
+        if len(bot.config["COG_LIST_OVERWRITE"]) >= 1:
+            for cog in bot.config["COG_LIST_OVERWRITE"]:
+                await bot.load_extension(f"cogs.{cog}")
         
         else:
             for filename in glob.iglob("./cogs/**", recursive=True):
                 if filename.endswith(".py"):
                     # goes from "./cogs/economy.py" to "cogs.economy"
                     filename = filename[2:].replace("/", ".")[:-3]
-                    await miku.load_extension(filename)
+                    await bot.load_extension(filename)
         
-        await miku.start(miku.config["API_KEYS"]["DISCORD"])
+        await bot.start(bot.config["API_KEYS"]["DISCORD"])
 
 
-miku.loop = asyncio.new_event_loop()
-asyncio.set_event_loop(miku.loop)
+bot.loop = asyncio.new_event_loop()
+asyncio.set_event_loop(bot.loop)
 asyncio.run(main())
