@@ -541,7 +541,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="now-playing", aliases=["nowplaying", "np"],
-        description="In case you're wondering what song i'm playing",
+        brief="In case you're wondering what song's playing",
         extras={"page": "main", "category":"music"}
     )
     async def nowplaying_command(self, ctx):
@@ -661,7 +661,7 @@ class MusicPlayer(commands.Cog):
     @commands.command(
         name="shuffle",
         brief="shuffle the playlist",
-        description="shuffle the currently playing music playlist",
+        description="this is a real shuffle, not spotify's smart shuffle or whatever",
         extras={"page": "main", "category":"music"}
     )
     async def shuffle_command(self, ctx):
@@ -691,7 +691,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="skip",
-        description="skipero!",
+        brief="skip the currently playing song",
         extras={"page": "main", "category":"music"}
     )
     async def skip_command(self, ctx):
@@ -704,7 +704,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="stop",
-        description="Stop playing music",
+        brief='stop the music, i\'ll stay in the VC until you run the "leave" command',
         extras={"page": "main", "category":"music"}
     )
     async def stop_command(self, ctx):
@@ -717,7 +717,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(
         name="join",
-        description="make me psps myself over to you",
+        brief="make me psps myself over to you",
         extras={"page": "main", "category":"music"}
     )
     async def join_command(self, ctx):
