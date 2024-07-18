@@ -36,7 +36,7 @@ class Help(commands.Cog):
             "main": "The main commands",
             "economy": "Economy related commands",
             "beta": "Commands in active development, expect bugs!",
-            "admin": "Moderator-only commands",
+            "admin": "Commands with higher permission requirements",
             None: "No description provided"
         }
     

@@ -75,7 +75,7 @@ class Owner(commands.Cog):
             var = subprocess.check_output(["git", "pull"])
             output = var.decode("utf-8")
         except Exception as error:
-            await ctx.send(f"```py\n{error}```")
+            await ctx.send(f"```\n{error}```")
             return
         
         pattern = r'(https?://\S+)'

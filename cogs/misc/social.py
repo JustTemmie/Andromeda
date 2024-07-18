@@ -4,14 +4,14 @@ from discord.ext import commands
 import modules.APIs.tenor as tenorLib
 import modules.helpers as helpers
 
-class Actions(commands.Cog):
+class Social(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(
         name="bite",
         description="Aumch",
-        extras={"page": "main", "category":"actions"}
+        extras={"page": "main", "category":"social"}
     )
     async def bite_command(self, ctx, target: discord.Member):
         embed = helpers.create_embed(ctx)
@@ -28,7 +28,7 @@ class Actions(commands.Cog):
     @commands.command(
         name="boop",
         description="bleep",
-        extras={"page": "main", "category":"actions"}
+        extras={"page": "main", "category":"social"}
     )
     async def boop_command(self, ctx, target: discord.Member):
         embed = helpers.create_embed(ctx)
@@ -45,7 +45,7 @@ class Actions(commands.Cog):
     @commands.command(
         name="bonk",
         description="ouchie :(",
-        extras={"page": "main", "category":"actions"}
+        extras={"page": "main", "category":"social"}
     )
     async def bonk_command(self, ctx, target: discord.Member):
         embed = helpers.create_embed(ctx)
@@ -61,4 +61,4 @@ class Actions(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(Actions(bot))
+    await bot.add_cog(Social(bot))
