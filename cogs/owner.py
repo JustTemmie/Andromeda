@@ -44,21 +44,30 @@ class Owner(commands.Cog):
         self.bot = bot
 
     @commands.is_owner()
-    @commands.command(name="shutdown")
+    @commands.command(
+        name="shutdown",
+        extras={"page": "admin", "category":"owner"}
+    )
     async def shutdown_command(self, ctx):
         await ctx.send("shuting down...")
         print("Terminated using `shutdown` command.")
         await self.bot.close()
 
     @decorators.is_host_owner()
-    @commands.command(name="bash", aliases=["sh"])
+    @commands.command(
+        name="bash", aliases=["sh"],
+        extras={"page": "admin", "category":"owner"}
+    )
     async def bashCommand(self, ctx, *, command):
         shell_output = subprocess.getoutput(command)
 
         await send_long_message(ctx, shell_output, f"`{command}` returned output:\n")
 
     @commands.is_owner()
-    @commands.command(name="update", brief="Updates the bot by pulling from github")
+    @commands.command(
+        name="update", brief="Updates the bot by pulling from github",
+        extras={"page": "admin", "category":"owner"}
+    )
     async def update_git_pull(self, ctx, restart="False"):
         try:
             subprocess.call(["git", "fetch"])
