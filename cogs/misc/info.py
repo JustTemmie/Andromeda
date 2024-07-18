@@ -26,7 +26,7 @@ class Info(commands.Cog):
         if page == 1:
             return {
                 "System": f"{self.uname.system} {self.uname.release}",
-                "Processor": f"{platform.machine()} CPU with {psutil.cpu_count()} threads, clocked at {self.max_cpu_frequency} GHz",
+                "Processor": f"{platform.machine()} CPU with {psutil.cpu_count()} threads, with a max speed of {self.max_cpu_frequency} GHz",
                 "Memory": f"using {round(psutil.virtual_memory().used / 1024**2)}/{round(psutil.virtual_memory().total / 1024**2)} MB",
                 "System Uptime": helpers.format_time(round(time.time() - psutil.boot_time())),
                 "Bot Uptime": helpers.format_time(round(time.time() - self.start_time)),
