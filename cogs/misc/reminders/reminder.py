@@ -32,7 +32,8 @@ class reminder(commands.Cog):
     @commands.command(
         name="remind",
         aliases=["remindme", "reminder"],
-        brief='reminds you of something\nmiku remind god damn it tell her i like beavers in 1 d 2 h 30 m\nyou can use "days, hours, minutes, and seconds"',
+        brief=f"reminds you of something",
+        usage=f'<reminder> in <duration>\nyou can use "days, hours, minutes, and seconds"',
         extras={"page": "main", "category":"utility"}
     )
     async def reminder_command(self, ctx, *, reminder: str):

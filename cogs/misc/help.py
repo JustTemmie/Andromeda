@@ -69,9 +69,75 @@ class Help(commands.Cog):
 
     @commands.command(
         name="help", aliases=["how??"],
+        brief="hey you're using it correctly!",
         extras={"page": "main", "category":"info"}
     )
-    async def help_command(self, ctx: commands.Context):
+    async def help_command(self, ctx: commands.Context, command: str = None):
+        if command:
+            await self.help_command_info(ctx, command)
+        
+        else:
+            await self.help_menu(ctx)
+    
+    async def help_command_info(self, ctx: commands.Context, command: str):
+        command_data = self.bot.get_command(command)
+        
+        if not command_data:
+            await ctx.send(f"sorry, i can't seem to find any commands named `{command}`")
+            return
+        
+        if command_data.hidden:
+            embed = helpers.create_embed(ctx)
+            embed.title = "Hidden Command"
+            embed.description = "sorry, i can't tell you anything about that one, it's a secret"
+            await ctx.send(embed=embed)
+            return
+
+        if not await helpers.can_run(ctx, command_data):
+            embed = helpers.create_embed(ctx)
+            embed.title = command_data.name
+            embed.description = "sorry, you don't have the permissions required to run this command"
+            await ctx.send(embed=embed)
+            return
+        
+        embed = helpers.create_embed(ctx)
+        embed.title = command_data.name
+        
+        if command_data.brief:
+            embed.description = command_data.brief
+        
+        if command_data.description:
+            embed.add_field(
+                name="In depth description",
+                value=command_data.description,
+                inline=False
+            )
+        
+        if command_data.aliases:
+            embed.add_field(
+                name="Aliases",
+                value=", ".join(command_data.aliases),
+                inline=False
+            )
+            
+        embed.add_field(
+            name="Usage",
+            value=f"{ctx.prefix}{command_data.name} {command_data.signature}",
+            inline=False
+        )
+
+        if command_data.cooldown:
+            value = f"{command_data.cooldown.rate} times per {command_data.cooldown.per} seconds"
+            embed.add_field(
+                name="Cooldown",
+                value=f"{value}",
+                inline=False
+            )
+            
+        await ctx.send(embed=embed)
+    
+    
+    async def help_menu(self, ctx: commands.Context):
         command_list = self.bot.commands
         
         hidden_commands = 0
@@ -119,9 +185,9 @@ class Help(commands.Cog):
                 command_data = {}
                 command_data["name"] = command.name
                 command_data["hidden"] = command.hidden
-                command_data["brief"] = command.brief
-                command_data["usage"] = command.usage
-                command_data["aliases"] = command.aliases
+                # command_data["brief"] = command.brief
+                # command_data["usage"] = command.usage
+                # command_data["aliases"] = command.aliases
                 
                 command_pages[page_index]["categories"][category_index]["commands"].append(command_data)
         
