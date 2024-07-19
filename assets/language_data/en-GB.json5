@@ -1,5 +1,5 @@
+// british english, read the README before contributing anything
 {
-
     // music cog
     "music_downloading_queue_progress": "downloading data for song {progress}/{total}, this might take a while...",
     "music_no_voice_channel_found": "i couldn't find the voice channel you're in, perhaps you're not in a voice channel?",
@@ -41,6 +41,6 @@
     "error_command_event_unhandled": "an unhandled error occured:\n```{exception}```",
     ////
     "error_not_responsible_for_host": "you are not responsible for {hostname}",
-    "error_music_generic_playing": "whoopsie, it looks like i encountered an error whilst trying to play your song\n{error_type}:\n```{error}```",
-    "error_music_start_playing": "error occured when trying to play {song} - skipping"
+    "error_music_generic_playing": "whoopsie, it looks like i encountered an error whilst trying to play your song\n`{error_type}`:\n```{error}```",
+    "error_music_start_playing": "error occured when trying to play {song} - skipping",
 }
