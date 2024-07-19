@@ -10,18 +10,21 @@
     "music_generic_invalid_search_query": "sorry, that's not a valid search query",
     "music_question_add_playlist": "hey, would you like to play the entire playlist instead of just the first track?\n\nautomatically adding first track: <t:{time}:R>",
     "music_question_add_song_amount": "how many songs would you like to add?",
-    "music_question_no_reply": ", defaulting to {default}", /* do note the leading ", " is very important */
+    "music_question_no_reply": ", defaulting to {default}", // do note the leading ", " is very important
     "music_question_invalid_reply": "sorry, that doesn't seem like a valid integer, defaulting to {default}",
     // embed stuff
     "music_embed_empty_queue": "The queue is currently empty, go ahead and add some songs with `{prefix}play`",
     "music_embed_queue_finished": "Queue Finished",
     "music_embed_now_playing": "Now Playing",
+    "music_embed_currently_playing:" "Currently Playing",
     "music_embed_added_songs_to_queue": "Added {song_count} songs to queue",
     "music_embed_added_song_to_queue": "Added song to queue",
+    "music_embed_queue_fetching": "Fetching...", // when the song's data hasn't finished installing yet it will display as "fetching..."
     "music_embed_duration": "Duration",
     "music_embed_uploader": "Uploader",
-    "music_embed_likes_and_dislikes": "Likes / Dislikes",
+    "music_embed_likes_and_dislikes": "Lqikes / Dislikes",
     "music_embed_views": "Views",
+    "music_embed_progress": "Progress",
     // these two are a set, one for the embed field's title, one for the field value
     "music_embed_livesteam_type_title": "Type",
     "music_embed_livestream_type_description": "Livestream",

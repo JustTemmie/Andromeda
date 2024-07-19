@@ -25,12 +25,15 @@
     "music_embed_empty_queue": "Jonossa ei ole tällä hetkellä kappaleita, lisää kappaleita komennolla `{prefix}play`",
     "music_embed_queue_finished": "Jono päättyi",
     "music_embed_now_playing": "Nyt Xoi",
+    "music_embed_currently_playing:" "Tällä Hetkellä Pelissä",
     "music_embed_added_songs_to_queue": "Lisätty {song_count} kappaletta jonoon",
     "music_embed_added_song_to_queue": "Kappale lisätty jonoon",
+    "music_embed_queue_fetching": "Haetaan...", // when the song's data hasn't finished installing yet it will display as "fetching..."
     "music_embed_duration": "Kesto",
     "music_embed_uploader": "Lataaja",
     "music_embed_likes_and_dislikes": "Tykkäykset / Ei tykkäykset",
     "music_embed_views": "Katselukerrat",
+    "music_embed_progress": "Edistystä",
     // these two are a set, one for the embed field's title, one for the field value
     "music_embed_livesteam_type_title": "Tyyppi",
     "music_embed_livestream_type_description": "Suoratoisto",

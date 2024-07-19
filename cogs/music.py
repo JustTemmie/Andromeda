@@ -551,7 +551,7 @@ class MusicPlayer(commands.Cog):
         meta_data = self.data[guild_id]["meta_data"]
 
         embed = helpers.create_embed(ctx)
-        embed.title = "Currently Playing"
+        embed.title = self.bot.lang.tr("music_embed_currently_playing", userID=ctx.author.id)
         if meta_data["original_url"] != "unknown":
             embed.description = f"[{meta_data['title']}]({meta_data['original_url']})"
         else:
@@ -567,7 +567,7 @@ class MusicPlayer(commands.Cog):
             pass
         
         embed.add_field(
-            name="Progress",
+            name=self.bot.lang.tr("music_embed_progress", userID=ctx.author.id),
             value=embed_value,
             inline=False
         )
