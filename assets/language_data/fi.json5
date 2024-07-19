@@ -24,7 +24,7 @@
     // embed stuff
     "music_embed_empty_queue": "Jonossa ei ole tällä hetkellä kappaleita, lisää kappaleita komennolla `{prefix}play`",
     "music_embed_queue_finished": "Jono päättyi",
-    "music_embed_now_playing": "Nyt Xoi"
+    "music_embed_now_playing": "Nyt Xoi",
     "music_embed_added_songs_to_queue": "Lisätty {song_count} kappaletta jonoon",
     "music_embed_added_song_to_queue": "Kappale lisätty jonoon",
     "music_embed_duration": "Kesto",
