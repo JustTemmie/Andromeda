@@ -61,7 +61,7 @@ class LangageHandler:
         
         # if the user isn't using a supported language, default to american english
         if language not in self.languages:
-            language = "en-GB"
+            language = "fi" # for testing purposes
         
         translation = self.languages[language].get(key, None)
         if translation is None:

@@ -15,6 +15,7 @@
     // embed stuff
     "music_embed_empty_queue": "The queue is currently empty, go ahead and add some songs with `{prefix}play`",
     "music_embed_queue_finished": "Queue Finished",
+    "music_embed_now_playing": "Now Playing"
     "music_embed_added_songs_to_queue": "Added {song_count} songs to queue",
     "music_embed_added_song_to_queue": "Added song to queue",
     "music_embed_duration": "Duration",

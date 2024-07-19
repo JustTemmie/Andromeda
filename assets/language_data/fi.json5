@@ -1,0 +1,56 @@
+// finnish, read the README before contributing anything
+
+
+
+// THIS FILE WAS AUTO GENERATED USING AN LLM FOR TESTING PURPOSES
+// if you have any issue regarding copyright or anything, just open an issue
+// if you're contributing to this file, please delete all of the existing translations before starting
+
+
+
+{
+    // music cog
+    "music_downloading_queue_progress": "ladataan kappaleen tietoja {progress}/{total}, tämä voi kestää hetken...",
+    "music_no_voice_channel_found": "en löytänyt ääni-kanavaa, jossa olet, ehkä et ole ääni-kanavalla?",
+    "music_playing_in_different_voice_channel": "anteeksi, olen jo soittamassa musiikkia muualla palvelimella",
+    "music_moving_channel": "okei, siirrytään kanavalle {voice_channel_name}",
+    "music_not_playing": "en soita tällä hetkellä mitään kappaleita palvelimella",
+    "music_invalid_queue_page_number": "{page} ei ole kelvollinen sivunumero",
+    "music_generic_invalid_search_query": "anteeksi, se ei ole kelvollinen hakukysely",
+    "music_question_add_playlist": "hei, haluaisitko soittaa koko soittolistan ensimmäisen kappaleen sijasta?\nautomaattisesti lisätään ensimmäinen kappale: <t:{time}:R>",
+    "music_question_add_song_amount": "kuinka monta kappaletta haluaisit lisätä?",
+    "music_question_no_reply": ", oletusarvona {default}", /* huomaa johtava ", " on erittäin tärkeä */
+    "music_question_invalid_reply": "anteeksi, tuo ei näytä olevan kelvollinen kokonaisluku, oletusarvona {default}",
+    // embed stuff
+    "music_embed_empty_queue": "Jonossa ei ole tällä hetkellä kappaleita, lisää kappaleita komennolla `{prefix}play`",
+    "music_embed_queue_finished": "Jono päättyi",
+    "music_embed_now_playing": "Nyt Xoi"
+    "music_embed_added_songs_to_queue": "Lisätty {song_count} kappaletta jonoon",
+    "music_embed_added_song_to_queue": "Kappale lisätty jonoon",
+    "music_embed_duration": "Kesto",
+    "music_embed_uploader": "Lataaja",
+    "music_embed_likes_and_dislikes": "Tykkäykset / Ei tykkäykset",
+    "music_embed_views": "Katselukerrat",
+    // these two are a set, one for the embed field's title, one for the field value
+    "music_embed_livesteam_type_title": "Tyyppi",
+    "music_embed_livestream_type_description": "Suoratoisto",
+    
+    
+    // generic stuff that will be used all over the place, to be used sparingly
+    "generic_unknown": "tuntematon",
+
+
+    // errors
+    "error_generic": "tapahtui odottamaton virhe",
+    "error_generic_with_error_passthru": "tapahtui odottamaton virhe\n```{error}```",
+    ////
+    "error_command_event_missing_required_argument": "yksi tai useampi tarvittava argumentti puuttuu, ehkä apukomento voisi auttaa sinua? `{prefix}help {command}`",
+    "error_command_event_user_input_error": "käyttäjän syöttövirhe tapahtui:\n```{exception}```",
+    "error_command_event_on_cooldown": "komento on jäähdytyksessä, yritä uudelleen {duration} sekunnin kuluttua",
+    "error_command_event_forbidden": "minulla ei ole lupaa tehdä tätä\n```{exception}```",
+    "error_command_event_unhandled": "käsittelemätön virhe tapahtui:\n```{exception}```",
+    ////
+    "error_not_responsible_for_host": "et ole vastuussa isännästä {hostname}",
+    "error_music_generic_playing": "hups, näyttää siltä, että kohtasin virheen yrittäessäni soittaa kappalettasi\n`{error_type}`:\n```{error}```",
+    "error_music_start_playing": "virhe tapahtui, kun yritettiin soittaa {song} - ohitetaan",
+}

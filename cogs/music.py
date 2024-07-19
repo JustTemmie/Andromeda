@@ -263,7 +263,7 @@ class MusicPlayer(commands.Cog):
 
         embed = helpers.create_embed(meta_data["ctx"])
         embed.title = meta_data["title"]
-        embed.description = "Now Playing"
+        embed.description = self.bot.lang.tr("music_embed_now_playing", userID=ctx.author.id)
 
         embed = await self.add_embed_fields(embed, meta_data, ctx.author.id)
 
