@@ -10,7 +10,7 @@
     "music_generic_invalid_search_query": "sorry, that's not a valid search query",
     "music_question_add_playlist": "hey, would you like to play the entire playlist instead of just the first track?\n\nautomatically adding first track: <t:{time}:R>",
     "music_question_add_song_amount": "how many songs would you like to add?",
-    "music_question_no_reply": ", deafaulting to {default}", /* do note the leading ", " is very important */
+    "music_question_no_reply": ", defaulting to {default}", /* do note the leading ", " is very important */
     "music_question_invalid_reply": "sorry, that doesn't seem like a valid integer, defaulting to {default}",
     // embed stuff
     "music_embed_empty_queue": "The queue is currently empty, go ahead and add some songs with `{prefix}play`",
