@@ -7,7 +7,7 @@ import time
 
 import re
 
-import modules.database as DbLib
+import modules.localAPIs.database as DbLib
 
 # crazy ass regex that accepts strings such as "2 d", "5 days", "8day", "2.8hrs" and so on
 time_patterns = {

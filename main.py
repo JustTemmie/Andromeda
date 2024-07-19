@@ -12,7 +12,8 @@ import asyncio
 import glob
 import os
 
-import modules.APIs.config as configLib 
+import modules.localAPIs.config as configLib 
+import modules.localAPIs.language as languageLib
 
 
 config = configLib.getConfig()
@@ -63,6 +64,7 @@ class Bot(commands.AutoShardedBot):
         self.settings = settings
         
         self.ready = False
+        self.lang = languageLib.LangageHandler()
         
         super().__init__(
             shards=self.config["SHARDS"],

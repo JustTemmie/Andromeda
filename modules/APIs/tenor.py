@@ -6,7 +6,7 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-import modules.APIs.config as configLib
+import modules.localAPIs.config as configLib
 import modules.decorators as decorators
 
 

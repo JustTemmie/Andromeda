@@ -2,7 +2,7 @@ from discord.ext import commands, tasks
 
 import time
 
-import modules.database as DbLib
+import modules.localAPIs.database as DbLib
 
 
 class reminderTask(commands.Cog):

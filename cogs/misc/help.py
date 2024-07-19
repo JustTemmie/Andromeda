@@ -3,7 +3,7 @@ from discord.ext import commands
 
 import modules.helpers as helpers
 import modules.decorators as decorators
-import modules.database as DbLib
+import modules.localAPIs.database as DbLib
 import modules.APIs.tenor as tenorLib
 
 class Help(commands.Cog):
