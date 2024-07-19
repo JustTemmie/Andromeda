@@ -58,11 +58,11 @@ class LangageHandler:
         
         # if the user isn't using a supported language, default to american english
         if language not in self.languages:
-            language = "en-US"
+            language = "en-GB"
         
         translation = self.languages[language].get(key, None)
         if translation is None:
-            translation = self.languages["en-US"].get(key, f"missing translation key for `{key}`")
+            translation = self.languages["en-GB"].get(key, f"missing translation key for `{key}`")
         
         return translation.format(**kwargs)
 
