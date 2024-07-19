@@ -1,5 +1,12 @@
 // british english, read the README before contributing anything
-{
+{    
+    "ping_command_latency_check": "measuring latency...",
+    "ping_command_latency_response": "pong!\nDiscord latency: {discord_latency}ms\nbot latency: {bot_latency}ms",
+    
+    // generic stuff that will be used all over the place, to be used sparingly
+    "generic_unknown": "unknown",
+
+
     // music cog
     "music_downloading_queue_progress": "downloading data for song {progress}/{total}, this might take a while...",
     "music_no_voice_channel_found": "i couldn't find the voice channel you're in, perhaps you're not in a voice channel?",
@@ -28,10 +35,6 @@
     // these two are a set, one for the embed field's title, one for the field value
     "music_embed_livesteam_type_title": "Type",
     "music_embed_livestream_type_description": "Livestream",
-    
-    
-    // generic stuff that will be used all over the place, to be used sparingly
-    "generic_unknown": "unknown",
 
 
     // errors

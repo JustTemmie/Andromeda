@@ -43,8 +43,3 @@ reminder_database = ReminderDatabase()
 
 if __name__ == "__main__":
     pass
-
-    # write("messages", 29841294142, "beav")
-    # delete("messages", 29841294142)
-    # update("messages", 29841294142, "message_content", "beaver!")
-    # print(read("messages"))

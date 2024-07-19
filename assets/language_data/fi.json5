@@ -9,6 +9,10 @@
 
 
 {
+    "ping_command_latency_check": "mitataan viivettä...",
+    "ping_command_latency_response": "pong!\nDiscordin viive: {discord_latency}ms\nbotin viive: {bot_latency}ms",
+
+
     // music cog
     "music_downloading_queue_progress": "ladataan kappaleen tietoja {progress}/{total}, tämä voi kestää hetken...",
     "music_no_voice_channel_found": "en löytänyt ääni-kanavaa, jossa olet, ehkä et ole ääni-kanavalla?",

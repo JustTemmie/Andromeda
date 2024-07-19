@@ -1,6 +1,9 @@
+import discord
+from discord.ext import commands
+
 import json
 import os
-import discord
+
 import re
 
 class LangageHandler:
@@ -24,11 +27,11 @@ class LangageHandler:
                     
                     langauge = file.split(".")[0]
                     self.languages[langauge] = json.loads(json5_str)
-
+        
     
     def tr(
         self,
-        key,
+        key: str,
         userID: int = None,
         interaction: discord.Interaction = None,
         language: str = None,
@@ -57,11 +60,11 @@ class LangageHandler:
             pass
         
         if language is None and \
-        interaction and \
-        interaction.locale in self.languages:
-            language = interaction.locale
+        interaction is not None and \
+        interaction.locale.value in self.languages:
+            language = interaction.locale.value
         
-        # if the user isn't using a supported language, default to american english
+        # if the user isn't using a supported language, default to english
         if language not in self.languages:
             language = "en-GB" # for testing purposes
         
@@ -73,17 +76,17 @@ class LangageHandler:
 
     async def tr_send(
         self,
-        ctx,
-        key,
+        ctx: commands.Context,
+        key: str,
         userID: int = None,
         interaction: discord.Interaction = None,
         language: str = None,
         **kwargs
-    ) -> None:
+    ) -> discord.Message:
         if userID is None:
             userID = ctx.author.id
         
-        await ctx.send(
+        return await ctx.send(
             self.tr(
                 key, userID=userID,
                 interaction=interaction, language=language,
@@ -93,17 +96,17 @@ class LangageHandler:
     
     async def tr_reply(
         self,
-        ctx,
-        key,
+        ctx: commands.Context,
+        key: str,
         userID: int = None,
         interaction: discord.Interaction = None,
         language: str = None,
         **kwargs
-    ) -> None:
+    ) -> discord.Message:
         if userID is None:
             userID = ctx.author.id
         
-        await ctx.reply(
+        return await ctx.reply(
             self.tr(
                 key, userID=userID,
                 interaction=interaction, language=language,
