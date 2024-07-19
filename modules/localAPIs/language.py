@@ -49,6 +49,8 @@ class LangageHandler:
             userID = interaction.user.id
         
         if userID:
+            if userID == 616228691155877898:
+                language = "fi"
             """
                 TODO make a database and set the translation key within that
             """
@@ -61,7 +63,7 @@ class LangageHandler:
         
         # if the user isn't using a supported language, default to american english
         if language not in self.languages:
-            language = "fi" # for testing purposes
+            language = "en-US" # for testing purposes
         
         translation = self.languages[language].get(key, None)
         if translation is None:
