@@ -81,7 +81,7 @@ class Weather(commands.Cog):
             view=view
         )
     
-    def get_yr_id(self, location: str) -> str | None:
+    def get_yr_id(self, location: str) -> str:
         with open("local_only/yrIDs.json", "r") as f:
             yr_cache = json.load(f)
             
