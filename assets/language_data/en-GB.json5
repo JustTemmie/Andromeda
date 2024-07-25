@@ -2,6 +2,8 @@
 {    
     "ping_command_latency_check": "measuring latency...",
     "ping_command_latency_response": "pong!\nDiscord latency: {discord_latency}ms\nbot latency: {bot_latency}ms",
+
+    "weather_command_location_fetch_failed": "sorry, I couldn't find the location in YRs database",
     
     // generic stuff that will be used all over the place, to be used sparingly
     "generic_unknown": "unknown",

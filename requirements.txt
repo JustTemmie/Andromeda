@@ -6,16 +6,18 @@ PyNaCl      # used for voice
 
 yt-dlp      # used to download audio
 python-ffmpeg # used to apply audio filters and such
-spotdl      # used to download audio ( from spotify )
+#spotdl      # used to download audio ( from spotify )
 
 #mutagen     # used to read metadata from audio files
 
 psutil      # gets system info, used for info command and such
 
 pillow      # for image manipulation
-pdf2image
+pdf2image   # translates pdfs to pngs
 
-midiutil
-sound_to_midi
-librosa
+beautifulsoup4 # for handling html files
+
+#midiutil
+#sound_to_midi
+#librosa
 

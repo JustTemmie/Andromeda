@@ -5,6 +5,7 @@ config.json
 local_only/
 testing/
 logs/
+temp/
 
 hatsune-miku-installed.service
 
