@@ -19,7 +19,16 @@ import modules.localAPIs.language as languageLib
 config = configLib.getConfig()
 settings = configLib.getSettings()
 
-directories_to_make = ["local_only"]
+directories_to_make = [
+    "local_only"
+    "assets",
+    "assets/music",
+    "assets/audio",
+    "assets/videos",
+    "assets/images",
+    "assets/misc",
+    "assets/language_data",
+]
 directories_to_empty = ["temp", "logs"]
 
 files_to_make = {

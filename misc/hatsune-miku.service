@@ -4,12 +4,12 @@ Description=Hatsune Miku!
 [Service]
 Type=simple
 
-ReadWritePaths=META_INSTALL_PATH
-WorkingDirectory=META_INSTALL_PATH
-ExecStart=META_INSTALL_PATH/venv/bin/python -u META_INSTALL_PATH/main.py
+ReadWritePaths=INSTALL_PATH
+WorkingDirectory=INSTALL_PATH
+ExecStart=INSTALL_PATH/venv/bin/python -u INSTALL_PATH/main.py
 NoNewPrivileges=true
 
-StartLimitIntervalSec=30
+StartLimitIntervalSec=15
 StartLimitBurst=2880
 
 Nice=19
