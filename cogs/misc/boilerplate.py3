@@ -2,13 +2,14 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
+if __name__ == "__main__":
+    import sys
+    sys.path.append(".")
+
 import modules.helpers as helpers
 import modules.localAPIs.database as DbLib
 import modules.APIs.tenor as tenorLib
 
-if __name__ == "__main__":
-    import sys
-    sys.path.append(".")
 
 class BOILERPLATE(commands.Cog):
     def __init__(self, bot: commands.Bot):

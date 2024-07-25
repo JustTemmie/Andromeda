@@ -54,7 +54,11 @@ class PrideCog(commands.Cog):
 
         if len(flags) > 25:
             flags = flags[:24]
-            flags.append(app_commands.Choice(name="Keep typing to find more...", value="Pride.png"))
+            flags.append(app_commands.Choice(
+                name=self.bot.lang.tr("autocomplete_too_many_values", interaction=interaction),
+                value="Pride.png"
+            ))
+
         return flags
     
     @app_commands.command(name="flag", description="check what a flag looks like")

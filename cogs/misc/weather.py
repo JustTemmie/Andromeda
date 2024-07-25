@@ -9,14 +9,12 @@ import requests
 from bs4 import BeautifulSoup
 from pdf2image import convert_from_path
 
-import modules.helpers as helpers
-import modules.localAPIs.database as DbLib
-import modules.localAPIs.config as configLib
-import modules.APIs.tenor as tenorLib
-
 if __name__ == "__main__":
     import sys
     sys.path.append(".")
+    
+import modules.localAPIs.config as configLib
+
 
 config = configLib.getConfig()
 DEFAULT_WEATHER_LOCATION = config["COMMAND_DEFAULTS"]["WEATHER_LOCATION"]
@@ -33,11 +31,12 @@ class Weather(commands.Cog):
     async def weather_text_command(self, ctx: commands.Context, location: str = DEFAULT_WEATHER_LOCATION):
         yrID = self.get_yr_id(location.lower())
         if not yrID:
-            await self.bot.lang.tr_send("weather_command_location_fetch_failed", userID=ctx.author.id)
+            await self.bot.lang.tr_send(ctx, "weather_command_location_fetch_failed")
             return
         
         yr_embed_path = self.get_yr_embed(
             yrID,
+            language=self.bot.lang.get_user_language(userID=ctx.author.id),
             forecast_link="https://" + self.bot.lang.tr("weather_command_yr_link", userID=ctx.author.id, yrID=yrID)
         )
         
@@ -61,28 +60,29 @@ class Weather(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def weather_slash_command(
-        self, intercation: discord.Interaction,
+        self, interaction: discord.Interaction,
         location: str = DEFAULT_WEATHER_LOCATION
     ):
         yrID = self.get_yr_id(location.lower())
         if not yrID:
-            await intercation.response.send_message(self.bot.lang.tr("weather_command_location_fetch_failed", intercation=intercation))
+            await interaction.response.send_message(self.bot.lang.tr("weather_command_location_fetch_failed", interaction=interaction))
             return
 
         yr_embed_path = self.get_yr_embed(
             yrID,
-            forecast_link="https://" + self.bot.lang.tr("weather_command_yr_link", intercation=intercation, yrID=yrID)
+            language=self.bot.lang.get_user_language(interaction=interaction),
+            forecast_link="https://" + self.bot.lang.tr("weather_command_yr_link", interaction=interaction, yrID=yrID)
         )
         
         av_button = discord.ui.Button(
-            label=self.bot.lang.tr("weather_command_open_link_externally", intercation=intercation),
-            url="https://" + self.bot.lang.tr("weather_command_yr_link", intercation=intercation, yrID=yrID),
+            label=self.bot.lang.tr("weather_command_open_link_externally", interaction=interaction),
+            url="https://" + self.bot.lang.tr("weather_command_yr_link", interaction=interaction, yrID=yrID),
             emoji="📩",
         )
         view = discord.ui.View()
         view.add_item(av_button)
 
-        await intercation.response.send_message(
+        await interaction.response.send_message(
             file=discord.File(yr_embed_path),
             view=view
         )
@@ -120,19 +120,16 @@ class Weather(commands.Cog):
         
         return ID
 
-    def get_yr_embed(self, yrID: str, forecast_link: str) -> str:
-        if os.path.exists(f"temp/yr-{yrID}.png"):
-            return f"temp/yr-{yrID}.png"
-        
+    def get_yr_embed(self, yrID: str, language: str, forecast_link: str) -> str:
         r = requests.get(forecast_link)
 
-        with open(f"temp/yr-{yrID}.pdf", "wb") as f:
+        with open(f"temp/yr-{language}-{yrID}.pdf", "wb") as f:
             f.write(r.content)
 
-        png = convert_from_path(f"temp/yr-{yrID}.pdf", dpi=150)[0]
-        png.save(f"temp/yr-{yrID}.png", "PNG")
+        png = convert_from_path(f"temp/yr-{language}-{yrID}.pdf", dpi=200)[0]
+        png.save(f"temp/yr-{language}-{yrID}.png", "PNG")
 
-        return f"temp/yr-{yrID}.png"
+        return f"temp/yr-{language}-{yrID}.png"
 
 
 async def setup(bot):

@@ -1,6 +1,6 @@
 # general style guide
 
-in general, all messages should be kept lowercase - with the exception of embeds, where the main and sub titles should be written in [AP Stylebook Title Case](https://en.wikipedia.org/wiki/Title_case#AP_Stylebook) if this is either uncommon or doesn't apply to your language, don't do it - but do mention what style you've used in your pull request so it can be added to the list.
+in general, all messages should be kept lowercase - with the exception of slash command autocompletes, and embeds, where both the embed's main and sub title should be written using [AP Stylebook Title Case](https://en.wikipedia.org/wiki/Title_case#AP_Stylebook), if this is either uncommon or doesn't apply to your language, don't do it - but do mention what style you've used in your pull request so it can be documented for future contributions.
 
 the bot speaks in first person, it should never refer to itself as "the bot"
 

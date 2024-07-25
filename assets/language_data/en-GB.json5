@@ -5,11 +5,19 @@
 
     "weather_command_location_fetch_failed": "sorry, I couldn't find the location in YRs database",
     "weather_command_open_link_externally": "Open Externally",
-    // this can be set to the two norwegian variants, danish, and sami
+    // this can be set to the two norwegian variants, english, and sami, you probably don't want to touch this
     "weather_command_yr_link": "www.yr.no/en/print/forecast/{yrID}/",
+    
+    "language_setter_invalid_language": "sorry, `{new_language}` is not a valid language, our valid languages codes are:\n`{valid_languages}`",
+    "language_setter_success": "successfully set your preferred language to `{new_language}`!",
+    "language_setter_current_language": "your current language is set to `{current_language}`",
+    "language_setter_no_language_set_text_command": "you've yet to set a desired language, you can do so with this very command by using {prefix}{command_name} <language>",
+    "language_setter_no_language_set_slash_command": "you've yet to set a desired language, but you can do so with this very command!",
+
     
     // generic stuff that will be used all over the place, to be used sparingly
     "generic_unknown": "unknown",
+    "autocomplete_too_many_values": "Keep typing to find more...",
 
 
     // music cog
@@ -24,14 +32,14 @@
     "music_question_add_song_amount": "how many songs would you like to add?",
     "music_question_no_reply": ", defaulting to {default}", /* do note the leading ", " is very important */
     "music_question_invalid_reply": "sorry, that doesn't seem like a valid integer, defaulting to {default}",
-    // embed stuff
+    // embed stuff for music cog
     "music_embed_empty_queue": "The queue is currently empty, go ahead and add some songs with `{prefix}play`",
     "music_embed_queue_finished": "Queue Finished",
     "music_embed_now_playing": "Now Playing",
     "music_embed_currently_playing": "Currently Playing",
     "music_embed_added_songs_to_queue": "Added {song_count} songs to queue",
     "music_embed_added_song_to_queue": "Added song to queue",
-    "music_embed_queue_fetching": "Fetching...", /* when the song's data hasn't finished installing yet it will display as "fetching..." */
+    "music_embed_queue_fetching": "Fetching...", /* when the song's data hasn't finished installing yet it will display as "Fetching..." */
     "music_embed_duration": "Duration",
     "music_embed_uploader": "Uploader",
     "music_embed_likes_and_dislikes": "Lqikes / Dislikes",

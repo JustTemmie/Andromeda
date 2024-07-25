@@ -13,7 +13,7 @@ class reminderTask(commands.Cog):
 
     @tasks.loop(seconds=5)
     async def reminder_task(self):
-        data = DbLib.reminder_database.read()
+        data = DbLib.reminder_database.read_all()
         
         for reminder in data:
             if time.time() >= float(reminder[1]):

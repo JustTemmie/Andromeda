@@ -1,0 +1,5 @@
+// norwegian nynorsk, read the README before contributing anything
+// this is kinda treated as a 2nd class language, as discord doesn't officially support it in their client, but it can be set manually by the user 
+{
+    "weather_command_yr_link": "www.yr.no/nn/utskrift/v%C3%AArvarsel/{yrID}/"
+}

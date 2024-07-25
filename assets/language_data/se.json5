@@ -1,4 +1,6 @@
 // northern sami, read the README before contributing anything
+// this is kinda treated as a 2nd class language, as discord doesn't officially support it in their client, but it can be set manually by the user 
+
 {
-    "weather_command_yr_link": "www.yr.no/sme/%C4%8D%C3%A1lihit/d%C3%A1lkedie%C4%91%C3%A1hus/1-305409/{yrID}/"
+    "weather_command_yr_link": "www.yr.no/sme/%C4%8D%C3%A1lihit/d%C3%A1lkedie%C4%91%C3%A1hus/{yrID}/"
 }

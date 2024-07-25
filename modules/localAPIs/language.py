@@ -3,8 +3,9 @@ from discord.ext import commands
 
 import json
 import os
-
 import re
+
+import modules.localAPIs.database as DbLib
 
 class LangageHandler:
     def __init__(self):
@@ -27,7 +28,28 @@ class LangageHandler:
                     
                     langauge = file.split(".")[0]
                     self.languages[langauge] = json.loads(json5_str)
+    
+    def get_user_language(
+        self,
+        userID: int = None,
+        interaction: discord.Interaction = None
+    ) -> str:
+        if userID is None and interaction:
+            userID = interaction.user.id
         
+        if userID:
+            language = DbLib.language_database.read_value(userID)
+        
+        if language is None and \
+        interaction is not None and \
+        interaction.locale.value in self.languages:
+            language = interaction.locale.value
+        
+        # if the user isn't using a supported language, default to english
+        if language not in self.languages:
+            language = "en-GB" # for testing purposes
+        
+        return language
     
     def tr(
         self,
@@ -48,25 +70,7 @@ class LangageHandler:
             the language paramater should be avoided, only really meant for debugging purposes
         """
 
-        if userID is None and interaction:
-            userID = interaction.user.id
-        
-        if userID:
-            if userID == 616228691155877898:
-                language = "fi"
-            """
-                TODO make a database and set the translation key within that
-            """
-            pass
-        
-        if language is None and \
-        interaction is not None and \
-        interaction.locale.value in self.languages:
-            language = interaction.locale.value
-        
-        # if the user isn't using a supported language, default to english
-        if language not in self.languages:
-            language = "en-GB" # for testing purposes
+        language = self.get_user_language(userID=userID, interaction=interaction)
         
         translation = self.languages[language].get(key, None)
         if translation is None:

@@ -15,7 +15,7 @@ class Ping(commands.Cog):
     @commands.command(
         name="ping",
         brief="measure my latency",
-        extras={"page": "main", "category":"undefined"}
+        extras={"page": "main", "category":"info"}
     )
     async def ping_text_command(self, ctx: commands.Context):
         start = perf_counter()
@@ -23,6 +23,7 @@ class Ping(commands.Cog):
         end = perf_counter()
         msg_content = self.bot.lang.tr(
             "ping_command_latency_response",
+            userID=ctx.author.id,
             discord_latency=round(self.bot.latency * 1000),
             bot_latency=round((end - start) * 1000)
         )
