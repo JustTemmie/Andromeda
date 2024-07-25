@@ -225,10 +225,11 @@ class Help(commands.Cog):
             await interaction.response.defer()
         
         
-        select_page_list = discord.ui.Select(placeholder="Change the current page", options=page_options)
-        select_page_list.callback = set_page_callback
         view = discord.ui.View()
-        view.add_item(select_page_list)
+        if len(page_options) > 1:
+            select_page_list = discord.ui.Select(placeholder="Change the current page", options=page_options)
+            select_page_list.callback = set_page_callback
+            view.add_item(select_page_list)
 
         msg = await ctx.send(embed=embed, view=view)
 

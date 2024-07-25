@@ -20,7 +20,7 @@ config = configLib.getConfig()
 settings = configLib.getSettings()
 
 directories_to_make = [
-    "local_only"
+    "local_only",
     "assets",
     "assets/music",
     "assets/audio",

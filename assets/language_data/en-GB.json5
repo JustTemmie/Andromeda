@@ -4,6 +4,9 @@
     "ping_command_latency_response": "pong!\nDiscord latency: {discord_latency}ms\nbot latency: {bot_latency}ms",
 
     "weather_command_location_fetch_failed": "sorry, I couldn't find the location in YRs database",
+    "weather_command_open_link_externally": "Open Externally",
+    // this can be set to the two norwegian variants, danish, and sami
+    "weather_command_yr_link": "www.yr.no/en/print/forecast/{yrID}/",
     
     // generic stuff that will be used all over the place, to be used sparingly
     "generic_unknown": "unknown",

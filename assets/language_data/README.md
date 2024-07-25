@@ -23,6 +23,7 @@ NEVER touch the translation keys, even if they have typos in them - they won't b
 
 the above also applies to the variables found within the curly brackets {}
 
+links shall not specify their protocol (i.e https://), so www.xyz is good, https://www.xyz is bad
 
 # technical info
 

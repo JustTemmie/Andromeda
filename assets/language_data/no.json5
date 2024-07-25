@@ -1,4 +1,4 @@
-// norwegian, read the README before contributing anything
+// norwegian bokmål, (we don't have nynorsk) read the README before contributing anything
 {
-    
+    "weather_command_yr_link": "www.yr.no/nb/utskrift/v%C3%A6rvarsel/{yrID}/"
 }

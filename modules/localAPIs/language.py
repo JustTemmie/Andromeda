@@ -11,7 +11,7 @@ class LangageHandler:
         self.languages = {}
         
         # some regexes to remove comments and trailing commas
-        def to_json5(json5_str):
+        def json5_to_json(json5_str):
             json5_str = re.sub(r'//.*', '', json5_str)
             json5_str = re.sub(r'/\*.*?\*/', '', json5_str, flags=re.DOTALL)
             
@@ -23,7 +23,7 @@ class LangageHandler:
             if file.endswith(".json5"):
                 with open(f"assets/language_data/{file}", "r") as f:
                     json5_str = f.read()
-                    json5_str = to_json5(json5_str)
+                    json5_str = json5_to_json(json5_str)
                     
                     langauge = file.split(".")[0]
                     self.languages[langauge] = json.loads(json5_str)

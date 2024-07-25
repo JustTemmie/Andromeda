@@ -33,14 +33,17 @@ class Weather(commands.Cog):
     async def weather_text_command(self, ctx: commands.Context, location: str = DEFAULT_WEATHER_LOCATION):
         yrID = self.get_yr_id(location.lower())
         if not yrID:
-            await self.bot.lang.tr_send("weather_command_location_fetch_failed")
+            await self.bot.lang.tr_send("weather_command_location_fetch_failed", userID=ctx.author.id)
             return
         
-        yr_embed_path = self.get_yr_embed(yrID)
+        yr_embed_path = self.get_yr_embed(
+            yrID,
+            forecast_link="https://" + self.bot.lang.tr("weather_command_yr_link", userID=ctx.author.id, yrID=yrID)
+        )
         
         av_button = discord.ui.Button(
-            label="Open Externally",
-            url=f"https://www.yr.no/en/print/forecast/{yrID}/",
+            label=self.bot.lang.tr("weather_command_open_link_externally", userID=ctx.author.id),
+            url="https://" + self.bot.lang.tr("weather_command_yr_link", userID=ctx.author.id, yrID=yrID),
             emoji="📩",
         )
         view = discord.ui.View()
@@ -53,7 +56,7 @@ class Weather(commands.Cog):
     
     @app_commands.command(
         name="weather",
-        description="get a weather forecast for the spcified location"
+        description="get a weather forecast for the specified location"
     )
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -63,14 +66,17 @@ class Weather(commands.Cog):
     ):
         yrID = self.get_yr_id(location.lower())
         if not yrID:
-            await intercation.response.send_message(self.bot.lang.tr("weather_command_location_fetch_failed"))
+            await intercation.response.send_message(self.bot.lang.tr("weather_command_location_fetch_failed", intercation=intercation))
             return
 
-        yr_embed_path = self.get_yr_embed(yrID)
+        yr_embed_path = self.get_yr_embed(
+            yrID,
+            forecast_link="https://" + self.bot.lang.tr("weather_command_yr_link", intercation=intercation, yrID=yrID)
+        )
         
         av_button = discord.ui.Button(
-            label="Open Externally",
-            url=f"https://www.yr.no/en/print/forecast/{yrID}/",
+            label=self.bot.lang.tr("weather_command_open_link_externally", intercation=intercation),
+            url="https://" + self.bot.lang.tr("weather_command_yr_link", intercation=intercation, yrID=yrID),
             emoji="📩",
         )
         view = discord.ui.View()
@@ -80,6 +86,7 @@ class Weather(commands.Cog):
             file=discord.File(yr_embed_path),
             view=view
         )
+    
     
     def get_yr_id(self, location: str) -> str:
         with open("local_only/yrIDs.json", "r") as f:
@@ -113,11 +120,11 @@ class Weather(commands.Cog):
         
         return ID
 
-    def get_yr_embed(self, yrID: int) -> str:
+    def get_yr_embed(self, yrID: str, forecast_link: str) -> str:
         if os.path.exists(f"temp/yr-{yrID}.png"):
             return f"temp/yr-{yrID}.png"
         
-        r = requests.get(f"https://www.yr.no/en/print/forecast/{yrID}/")
+        r = requests.get(forecast_link)
 
         with open(f"temp/yr-{yrID}.pdf", "wb") as f:
             f.write(r.content)
