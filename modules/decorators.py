@@ -4,10 +4,11 @@ import os
 import time
 
 import functools
+import config
 
 def is_host_owner():
     async def predicate(ctx) -> bool:
-        if ctx.author.id in ctx.bot.config["HOST_OWNERS"]:
+        if ctx.author.id in config["HOST_OWNERS"]:
             return True
         else:
             raise commands.NotOwner(ctx.bot.lang.tr("error_not_responsible_for_host", hostname=os.uname()[1]))

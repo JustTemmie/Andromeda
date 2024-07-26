@@ -12,6 +12,7 @@ import random
 
 import modules.helpers as helpers
 import modules.user_input as user_input
+import config
 from launcher import lang
 
 ytdlp_format_options = {
@@ -479,7 +480,7 @@ class MusicPlayer(commands.Cog):
             if add_full_playlist:
                 await add_playlist(ctx, song_data)
                 
-                if ctx.author.id in self.bot.config["TRUSTED_IDS"]:
+                if ctx.author.id in config["TRUSTED_IDS"]:
                     await ctx.reply(lang.tr("music_question_add_song_amount"))
                     response = await user_input.get_input(
                         self.bot, ctx, 10,

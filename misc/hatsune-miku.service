@@ -6,7 +6,7 @@ Type=simple
 
 ReadWritePaths=INSTALL_PATH
 WorkingDirectory=INSTALL_PATH
-ExecStart=INSTALL_PATH/venv/bin/python -u INSTALL_PATH/main.py
+ExecStart=INSTALL_PATH/venv/bin/python -u INSTALL_PATH/launcher.py
 NoNewPrivileges=true
 
 StartLimitIntervalSec=15
