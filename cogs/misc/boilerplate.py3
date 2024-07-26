@@ -17,7 +17,7 @@ class BOILERPLATE(commands.Cog):
 
     @commands.command(
         name="explode", aliases=["detonate", "dnace"],
-        brief="a brief description of the command, i probably forgot to change this, whoopsie",
+        brief="command_brief_CHANGEME",
         extras={"page": "main", "category":"undefined"}
     )
     async def explode_text_command(self, ctx: commands.Context):

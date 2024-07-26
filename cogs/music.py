@@ -367,8 +367,8 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(
         name="playnext",
-        brief="the play command, but added to the start of the queue rather than the end",
-        description="accepts any URL, direct attatchments, and keywords to search for",
+        brief="command_brief_playnext",
+        description="command_description_playnext",
         extras={"page": "main", "category":"music"}
     )
     @commands.cooldown(6, 7200, commands.BucketType.member)
@@ -378,8 +378,8 @@ class MusicPlayer(commands.Cog):
     @commands.command(
         name="play",
         aliases=["sing"],
-        brief="play a song",
-        description="accepts any URL, direct attatchments, and keywords to search for",
+        brief="command_brief_play",
+        description="command_description_play",
         extras={"page": "main", "category":"music"}
     )
     async def play_command_register(self, ctx, *, search_query = None):
@@ -517,8 +517,8 @@ class MusicPlayer(commands.Cog):
     @commands.cooldown(1, 4, commands.BucketType.guild)
     @commands.command(
         name="filter",
-        brief="apply an ffmpeg filter",
-        description="quite a complicated command, for technical reasons it's given to ffmpeg as `-af 'loudnorm, volume=0.4 {filter}'`, so your filter will need to start with a leading comma",
+        brief="command_brief_filter",
+        description="command_description_filter",
         extras={"page": "main", "category":"music"}
     )
     async def filter_command(self, ctx, filter = ""):
@@ -536,7 +536,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="now-playing", aliases=["nowplaying", "np"],
-        brief="In case you're wondering what song's playing",
+        brief="command_brief_nowplaying",
         extras={"page": "main", "category":"music"}
     )
     async def nowplaying_command(self, ctx):
@@ -655,8 +655,8 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(
         name="shuffle",
-        brief="shuffle the playlist",
-        description="this is a real shuffle, not spotify's smart shuffle or whatever",
+        brief="command_brief_shuffle",
+        description="command_description_shuffle",
         extras={"page": "main", "category":"music"}
     )
     async def shuffle_command(self, ctx):
@@ -668,7 +668,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(
         name="leave", aliases=["disconnect"],
-        description="Leave the VC and stop playing music",
+        brief="command_brief_leave",
         extras={"page": "main", "category":"music"}
     )
     async def leave_command(self, ctx):
@@ -686,7 +686,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="skip",
-        brief="skip the currently playing song",
+        brief="command_brief_skip",
         extras={"page": "main", "category":"music"}
     )
     async def skip_command(self, ctx):
@@ -699,7 +699,7 @@ class MusicPlayer(commands.Cog):
 
     @commands.hybrid_command(
         name="stop",
-        brief='stop the music, i\'ll stay in the VC until you run the "leave" command',
+        brief="command_brief_stop",
         extras={"page": "main", "category":"music"}
     )
     async def stop_command(self, ctx):
@@ -712,7 +712,6 @@ class MusicPlayer(commands.Cog):
 
     @commands.command(
         name="join",
-        brief="make me psps myself over to you",
         extras={"page": "main", "category":"music"}
     )
     async def join_command(self, ctx):
@@ -742,5 +741,6 @@ class MusicPlayer(commands.Cog):
 
                 if voice:
                     await voice.disconnect()
+    
 async def setup(bot):
     await bot.add_cog(MusicPlayer(bot))

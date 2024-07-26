@@ -17,13 +17,6 @@ class Help(commands.Cog):
             "beta"
         ]
         
-        self.page_names = {
-            "main": "Main Page",
-            "economy": "Economy Page",
-            "beta": "Beta Page",
-            "admin": "Administator Page",
-        }
-        
         self.page_emojis = {
             "main": "❓",
             "economy": "💰",
@@ -31,29 +24,21 @@ class Help(commands.Cog):
             "beta": "✨",
             None: "🪄"
         }
-        
-        self.page_decriptions = {
-            "main": "The main commands",
-            "economy": "Economy related commands",
-            "beta": "Commands in active development, expect bugs!",
-            "admin": "Commands with higher permission requirements",
-            None: "No description provided"
-        }
-    
-    def get_page_name(self, page_ID):
-        return self.page_names.get(page_ID, f"{page_ID.title()} Page")
+
+    def get_page_name(self, page_ID: str, userID: int):
+        return self.bot.lang.tr(f"help_command_page_{page_ID}", userID = userID)
     
     def get_page_emoji(self, page_ID):
         return self.page_emojis.get(page_ID, self.page_emojis[None])
 
-    def get_page_description(self, page_ID):
-        return self.page_decriptions.get(page_ID, self.page_decriptions[None])
+    def get_page_description(self, pageID: str, userID: int):
+        return self.bot.lang.tr(f"help_command_page_description_{pageID}", userID=userID)
     
-    def set_page_content(self, embed: discord.Embed, page_number: int, command_pages) -> discord.Embed:
+    def set_page_content(self, embed: discord.Embed, page_number: int, command_pages, userID: int) -> discord.Embed:
         page: dict[list[dict[list]]] = command_pages[page_number]
                     
         page_emoji = self.get_page_emoji(page["ID"])
-        page_name = self.get_page_name(page["ID"])
+        page_name = self.get_page_name(page["ID"], userID)
         embed.title = f"{page_emoji} {page_name}"
         while len(embed.fields) > 0:
             embed.remove_field(0)
@@ -69,7 +54,7 @@ class Help(commands.Cog):
 
     @commands.command(
         name="help", aliases=["how??"],
-        brief="hey you're using it correctly!",
+        brief="command_brief_help",
         extras={"page": "main", "category":"info"}
     )
     async def help_command(self, ctx: commands.Context, command: str = None):
@@ -83,20 +68,20 @@ class Help(commands.Cog):
         command_data = self.bot.get_command(command)
         
         if not command_data:
-            await ctx.send(f"sorry, i can't seem to find any commands named `{command}`")
+            await self.bot.lang.tr_send(ctx, "help_command_missing_command", command=command)
             return
         
         if command_data.hidden:
             embed = helpers.create_embed(ctx)
-            embed.title = "Hidden Command"
-            embed.description = "sorry, i can't tell you anything about that one, it's a secret"
+            embed.title = self.bot.lang.tr("help_command_hidden_command_title", userID=ctx.author.id)
+            embed.description = self.bot.lang.tr("help_command_hidden_command_description", userID=ctx.author.id)
             await ctx.send(embed=embed)
             return
 
         if not await helpers.can_run(ctx, command_data):
             embed = helpers.create_embed(ctx)
             embed.title = command_data.name
-            embed.description = "sorry, you don't have the permissions required to run this command"
+            embed.description = self.bot.lang.tr("help_command_invalid_permissions", userID=ctx.author.id)
             await ctx.send(embed=embed)
             return
         
@@ -104,32 +89,37 @@ class Help(commands.Cog):
         embed.title = command_data.name
         
         if command_data.brief:
-            embed.description = command_data.brief
+            embed.description = self.bot.lang.tr(command_data.brief, userID=ctx.author.id)
         
         if command_data.description:
             embed.add_field(
-                name="In depth description",
-                value=command_data.description,
+                name=self.bot.lang.tr("help_command_command_description", userID=ctx.author.id),
+                value=self.bot.lang.tr(command_data.description, userID=ctx.author.id),
                 inline=False
             )
         
         if command_data.aliases:
             embed.add_field(
-                name="Aliases",
+                name=self.bot.lang.tr("help_command_command_aliases", userID=ctx.author.id),
                 value=", ".join(command_data.aliases),
                 inline=False
             )
             
         embed.add_field(
-            name="Usage",
+            name=self.bot.lang.tr("help_command_command_signature", userID=ctx.author.id),
             value=f"{ctx.prefix}{command_data.name} {command_data.signature}",
             inline=False
         )
 
         if command_data.cooldown:
-            value = f"{command_data.cooldown.rate} times per {command_data.cooldown.per} seconds"
+            value = self.bot.lang
             embed.add_field(
-                name="Cooldown",
+                name=self.bot.lang.tr(
+                    "help_command_command_cooldown",
+                    userID=ctx.author.id,
+                    times=command_data.cooldown.rate,
+                    duration=command_data.cooldown.per
+                ),
                 value=f"{value}",
                 inline=False
             )
@@ -201,15 +191,15 @@ class Help(commands.Cog):
         for page_number, page in enumerate(command_pages):
             if len(page["categories"]) > 0:
                 page_options.append(discord.SelectOption(
-                    label=self.get_page_name(page["ID"]),
+                    label=self.get_page_name(page["ID"], ctx.author.id),
                     value=page_number,
                     emoji=self.get_page_emoji(page["ID"]),
-                    description=self.get_page_description(page["ID"])
+                    description=self.get_page_description(page["ID"], userID=ctx.author.id)
                 ))
         
         
         embed = helpers.create_embed(ctx)
-        self.set_page_content(embed, 0, command_pages)
+        self.set_page_content(embed, 0, command_pages, ctx.author.id)
         
         # function to be called when the user tries to switch pages
         async def set_page_callback(interaction: discord.interactions.Interaction):
@@ -219,7 +209,7 @@ class Help(commands.Cog):
             
             new_page_index = int(select_page_list.values[0])
             
-            self.set_page_content(embed, new_page_index, command_pages)
+            self.set_page_content(embed, new_page_index, command_pages, interaction.user.id)
 
             await msg.edit(embed=embed)
             await interaction.response.defer()
@@ -227,7 +217,10 @@ class Help(commands.Cog):
         
         view = discord.ui.View()
         if len(page_options) > 1:
-            select_page_list = discord.ui.Select(placeholder="Change the current page", options=page_options)
+            select_page_list = discord.ui.Select(
+                placeholder=self.bot.lang.tr("help_command_change_page_placeholder", userID=ctx.author.id),
+                options=page_options
+            )
             select_page_list.callback = set_page_callback
             view.add_item(select_page_list)
 

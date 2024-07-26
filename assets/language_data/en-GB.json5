@@ -1,23 +1,44 @@
 // british english, read the README before contributing anything
 {    
     "ping_command_latency_check": "measuring latency...",
-    "ping_command_latency_response": "pong!\nDiscord latency: {discord_latency}ms\nbot latency: {bot_latency}ms",
+    "ping_command_latency_response": "pong!\nDiscord latency: {discord_latency}ms\nbot latency: {bot_latency}ms", // Discord is a company
 
     "weather_command_location_fetch_failed": "sorry, I couldn't find the location in YRs database",
-    "weather_command_open_link_externally": "Open Externally",
+    "weather_command_open_link_externally": "Open Externally", // title case applies due to being a "view button"
     // this can be set to the two norwegian variants, english, and sami, you probably don't want to touch this
     "weather_command_yr_link": "www.yr.no/en/print/forecast/{yrID}/",
     
-    "language_setter_invalid_language": "sorry, `{new_language}` is not a valid language, our valid languages codes are:\n`{valid_languages}`",
+    // language command
+    "language_setter_invalid_language": "sorry, `{new_language}` is not a valid language, my valid languages codes are:\n`{valid_languages}`",
     "language_setter_success": "successfully set your preferred language to `{new_language}`!",
     "language_setter_current_language": "your current language is set to `{current_language}`",
     "language_setter_no_language_set_text_command": "you've yet to set a desired language, you can do so with this very command by using {prefix}{command_name} <language>",
     "language_setter_no_language_set_slash_command": "you've yet to set a desired language, but you can do so with this very command!",
 
-    
+    // help command
+    "help_command_page_main": "Main Page",
+    "help_command_page_economy": "Economy Page",
+    "help_command_page_beta": "Beta Page",
+    "help_command_page_admin": "Administator Page",
+    // do note that there's not a lot of space for these, so you have to be fairly concise with your wording
+    "help_command_page_description_main": "The main commands",
+    "help_command_page_description_economy": "Economy related commands",
+    "help_command_page_description_beta": "Commands in active development, expect bugs!",
+    "help_command_page_description_admin": "Commands with higher permission requirements",
+    //
+    "help_command_missing_command": "sorry, i can't seem to find any commands named `{command}`",
+    "help_command_hidden_command_title": "Hidden Command",
+    "help_command_hidden_command_description": "sorry, i can't tell you anything about that one, it's a secret",
+    "help_command_invalid_permissions": "sorry, you don't have the permissions required to run this command",
+    "help_command_command_description": "In depth description",
+    "help_command_command_aliases": "Aliases",
+    "help_command_command_signature": "Usage",
+    "help_command_command_cooldown": "{times} times per {duration} seconds",
+    "help_command_change_page_placeholder": "Change the Current Page", // a dropdown menu component, titlecase
+
     // generic stuff that will be used all over the place, to be used sparingly
     "generic_unknown": "unknown",
-    "autocomplete_too_many_values": "Keep typing to find more...",
+    "slash_command_autocomplete_too_many_values": "Keep typing to find more...", // title case applies due to being a slash command entry
 
 
     // music cog
@@ -32,7 +53,7 @@
     "music_question_add_song_amount": "how many songs would you like to add?",
     "music_question_no_reply": ", defaulting to {default}", /* do note the leading ", " is very important */
     "music_question_invalid_reply": "sorry, that doesn't seem like a valid integer, defaulting to {default}",
-    // embed stuff for music cog
+    // embed stuff for music cog, title case applies for all entries
     "music_embed_empty_queue": "The queue is currently empty, go ahead and add some songs with `{prefix}play`",
     "music_embed_queue_finished": "Queue Finished",
     "music_embed_now_playing": "Now Playing",
@@ -42,10 +63,9 @@
     "music_embed_queue_fetching": "Fetching...", /* when the song's data hasn't finished installing yet it will display as "Fetching..." */
     "music_embed_duration": "Duration",
     "music_embed_uploader": "Uploader",
-    "music_embed_likes_and_dislikes": "Lqikes / Dislikes",
+    "music_embed_likes_and_dislikes": "Likes / Dislikes",
     "music_embed_views": "Views",
     "music_embed_progress": "Progress",
-    // these two are a set, one for the embed field's title, one for the field value
     "music_embed_livesteam_type_title": "Type",
     "music_embed_livestream_type_description": "Livestream",
 
@@ -63,4 +83,33 @@
     "error_not_responsible_for_host": "you are not responsible for {hostname}",
     "error_music_generic_playing": "whoopsie, it looks like i encountered an error whilst trying to play your song\n`{error_type}`:\n```{error}```",
     "error_music_start_playing": "error occured when trying to play {song} - skipping",
+
+
+    // command briefs and descriptions, in the format of `command_<brief or description>_<command ID>, these should typically be all lowercase
+    // slash commands are not supported due to discord limitations
+    "command_brief_CHANGEME": "there was meant to be a description here, looks like i forgot what it was", // used when brief hasn't been set
+    "command_brief_language": "set your preferred language",
+    "command_brief_dance": "look at my moves!!",
+    "command_brief_boop": "bleep",
+    "command_brief_bite": "aumch!",
+    "command_brief_bonk": "ouchie :(",
+    "command_brief_tickle": "gosh i feel bad for them already",
+    "command_brief_cuddle": "it's like hugs, but even more wholesome",
+    "command_brief_hug": "hugs!",
+    "command_brief_help": "hey you're using it correctly!",
+    "command_brief_remind": "ask me to remind you of something",
+    "command_brief_update": "updates me by downloading the latest code from GitHub", // GitHub is a company
+    "command_brief_play": "play a song",
+    "command_description_play": "accepts any URL, direct attatchments, and keywords to search for",
+    "command_brief_playnext": "the play command, but added to the start of the queue rather than the end",
+    "command_description_playnext": "accepts any URL, direct attatchments, and keywords to search for", // same as the play command
+    "command_brief_filter": "apply an ffmpeg filter",
+    "command_description_filter": "quite a complicated command, for technical reasons it's given to ffmpeg as `-af 'loudnorm, volume=0.4 <filter>'`, so your filter will need to start with a leading comma", // don't change the values between the backticks
+    "command_brief_nowplaying": "incase you're wondering what song i'm playing",
+    "command_brief_shuffle": "shuffle the playlist",
+    "command_description_shuffle": "this is a real shuffle, not Spotify's smart shuffle", // Spotify is a company, context: spotify's shuffle isn't a real shuffle, they call it a "smart shuffle"
+    "command_brief_leave": "ask me to leave the VC and stop playing music",
+    "command_brief_skip": "skip the song that is currently playing",
+    "command_brief_stop": "stop the music, i'll stay in the VC until you run the \"leave\" command", // leave is a command, probably shouldn't be translated
+    
 }

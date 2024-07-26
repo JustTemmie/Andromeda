@@ -10,7 +10,7 @@ class Social(commands.Cog):
 
     @commands.command(
         name="bite",
-        description="Aumch",
+        brief="command_brief_bite",
         extras={"page": "main", "category":"social"}
     )
     async def bite_command(self, ctx, target: discord.Member):
@@ -27,7 +27,7 @@ class Social(commands.Cog):
     
     @commands.command(
         name="boop",
-        description="bleep",
+        brief="command_brief_boop",
         extras={"page": "main", "category":"social"}
     )
     async def boop_command(self, ctx, target: discord.Member):
@@ -44,7 +44,7 @@ class Social(commands.Cog):
     
     @commands.command(
         name="bonk",
-        description="ouchie :(",
+        brief="command_brief_bonk",
         extras={"page": "main", "category":"social"}
     )
     async def bonk_command(self, ctx, target: discord.Member):
@@ -61,7 +61,7 @@ class Social(commands.Cog):
     
     @commands.command(
         name="tickle",
-        description="god i feel bad for them already",
+        brief="command_brief_tickle",
         extras={"page": "main", "category":"social"}
     )
     async def tickle_command(self, ctx, target: discord.Member):
@@ -78,7 +78,7 @@ class Social(commands.Cog):
     
     @commands.command(
         name="cuddle", aliases=["hug²"],
-        description="it's like hugs, but even more wholesome",
+        brief="command_brief_cuddle",
         extras={"page": "main", "category":"social"}
     )
     async def cuddle_command(self, ctx, target: discord.Member):
@@ -95,7 +95,7 @@ class Social(commands.Cog):
         
     @commands.command(
         name="hug",
-        description="hugs!",
+        brief="command_brief_hug",
         extras={"page": "main", "category":"social"}
     )
     async def hug_command(self, ctx, target: discord.Member):

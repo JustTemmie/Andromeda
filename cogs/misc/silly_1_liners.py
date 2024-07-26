@@ -7,7 +7,6 @@ import random
 import modules.helpers as helpers
 import modules.APIs.tenor as tenorLib
 
-
 class Silly(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -19,22 +18,13 @@ class Silly(commands.Cog):
     async def explode_command(self, ctx):
         await ctx.send("https://tenor.com/view/miku-hatsune-hatsune-miku-miku-explosion-explosion-gif-gif-26996455")
     
-    @commands.hybrid_command(
+    @commands.command(
         name="dance",
-        description="Look at my moves!!",
+        brief="command_brief_dance",
         extras={"page": "main", "category":"silly"}
     )
-    async def danceCommand(self, ctx):
+    async def dance_command(self, ctx):
         await ctx.send(tenorLib.getRandomGifLink("hatsune miku dancing", 10))
-
-    @commands.command(name="save", aliases=["sav"], hidden=True)
-    async def save_command(self, ctx):
-        msg = await ctx.reply("saving...")
-        time.sleep(2)
-        if random.random() > 0.95:
-            await msg.reply("error: could not save file")
-        else:
-            await msg.reply("save file updated succesful")
 
 
 async def setup(bot):

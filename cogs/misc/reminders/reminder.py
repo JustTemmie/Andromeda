@@ -32,11 +32,11 @@ class reminder(commands.Cog):
     @commands.command(
         name="remind",
         aliases=["remindme", "reminder"],
-        brief=f"reminds you of something",
+        brief="command_brief_remind",
         usage=f'<reminder> in <duration>\nyou can use "days, hours, minutes, and seconds"',
         extras={"page": "main", "category":"utility"}
     )
-    async def reminder_command(self, ctx, *, reminder: str):
+    async def remind_command(self, ctx, *, reminder: str):
         if " in " not in reminder:
             await ctx.send('could not find the seperator "in" within the reminder, please try again')
             return

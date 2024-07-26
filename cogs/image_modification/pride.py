@@ -55,7 +55,7 @@ class PrideCog(commands.Cog):
         if len(flags) > 25:
             flags = flags[:24]
             flags.append(app_commands.Choice(
-                name=self.bot.lang.tr("autocomplete_too_many_values", interaction=interaction),
+                name=self.bot.lang.tr("slash_command_autocomplete_too_many_values", interaction=interaction),
                 value="Pride.png"
             ))
 

@@ -5,6 +5,7 @@ from discord import app_commands
 import json
 import time
 import os
+from math import floor
 import requests
 from bs4 import BeautifulSoup
 from pdf2image import convert_from_path
@@ -121,15 +122,23 @@ class Weather(commands.Cog):
         return ID
 
     def get_yr_embed(self, yrID: str, language: str, forecast_link: str) -> str:
+        unix_hour = floor(time.time() // 3600)
+        
+        png_path = f"temp/yr-{unix_hour}-{language}-{yrID}.png"
+        pdf_path = f"temp/yr-{unix_hour}-{language}-{yrID}.pdf"
+        
+        if os.path.exists(png_path):
+            return png_path
+        
         r = requests.get(forecast_link)
 
-        with open(f"temp/yr-{language}-{yrID}.pdf", "wb") as f:
+        with open(pdf_path, "wb") as f:
             f.write(r.content)
 
-        png = convert_from_path(f"temp/yr-{language}-{yrID}.pdf", dpi=200)[0]
-        png.save(f"temp/yr-{language}-{yrID}.png", "PNG")
+        png = convert_from_path(pdf_path, dpi=200)[0]
+        png.save(png_path, "PNG")
 
-        return f"temp/yr-{language}-{yrID}.png"
+        return png_path
 
 
 async def setup(bot):

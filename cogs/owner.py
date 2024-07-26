@@ -65,7 +65,7 @@ class Owner(commands.Cog):
 
     @commands.is_owner()
     @commands.command(
-        name="update", brief="Updates me by pulling from github",
+        name="update", brief="command_brief_update",
         extras={"page": "admin", "category":"owner"}
     )
     async def update_git_pull(self, ctx, restart="False"):

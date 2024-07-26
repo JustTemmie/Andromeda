@@ -40,7 +40,7 @@ class Language(commands.Cog):
 
     @commands.command(
         name="language",
-        brief="set your preferred language",
+        brief="command_brief_language",
         extras={"page": "main", "category":"settings"}
     )
     async def language_text_command(self, ctx: commands.Context, *, language: str = None):
@@ -66,10 +66,8 @@ class Language(commands.Cog):
 
         if language not in valid_languages:
             await self.bot.lang.tr_send(
-                ctx,
-                "language_setter_invalid_language",
-                userID=ctx.author.id,
-                new_language=language,
+                ctx, "language_setter_invalid_language",
+                userID=ctx.author.id, new_language=language,
                 valid_languages=", ".join(f'{ID} ({display_name})' for ID, display_name in zip(valid_languages, language_friendly_names.values()))
             )
             return
@@ -95,7 +93,7 @@ class Language(commands.Cog):
         if len(languages) > 25:
             languages = languages[:24]
             languages.append(app_commands.Choice(
-                name=self.bot.lang.tr("autocomplete_too_many_values", interaction=interaction),
+                name=self.bot.lang.tr("slash_command_autocomplete_too_many_values", interaction=interaction),
                 value=None
             ))
         
@@ -118,8 +116,7 @@ class Language(commands.Cog):
                 current_language = self.get_language_friendly_name(current_language_ID)
                 await intercation.response.send_message(self.bot.lang.tr(
                     "language_setter_current_language",
-                    intercation=intercation,
-                    current_language=current_language
+                    intercation=intercation, current_language=current_language
                 ))
                 return
             else:
@@ -133,8 +130,7 @@ class Language(commands.Cog):
             await intercation.response.send_message(
                 self.bot.lang.tr(
                     "language_setter_invalid_language",
-                    intercation=intercation,
-                    new_language=language,
+                    intercation=intercation, new_language=language,
                     valid_languages=", ".join(f'{ID} ({display_name})' for ID, display_name in zip(valid_languages, language_friendly_names.values()))
                 )
             )
