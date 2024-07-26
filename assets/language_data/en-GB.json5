@@ -102,7 +102,7 @@
     "command_brief_play": "play a song",
     "command_description_play": "accepts any URL, direct attatchments, and keywords to search for",
     "command_brief_playnext": "the play command, but added to the start of the queue rather than the end",
-    "command_description_playnext": "accepts any URL, direct attatchments, and keywords to search for", // same as the play command
+    "command_description_playnext": "accepts any URL, direct attatchments, and keywords to search for", // yes, this is the same as the play command
     "command_brief_filter": "apply an ffmpeg filter",
     "command_description_filter": "quite a complicated command, for technical reasons it's given to ffmpeg as `-af 'loudnorm, volume=0.4 <filter>'`, so your filter will need to start with a leading comma", // don't change the values between the backticks
     "command_brief_nowplaying": "incase you're wondering what song i'm playing",
@@ -111,5 +111,5 @@
     "command_brief_leave": "ask me to leave the VC and stop playing music",
     "command_brief_skip": "skip the song that is currently playing",
     "command_brief_stop": "stop the music, i'll stay in the VC until you run the \"leave\" command", // leave is a command, probably shouldn't be translated
-    
+    "command_brief_weather": "get a weather forecast for the spcified location"
 }

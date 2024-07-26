@@ -26,7 +26,7 @@ class Weather(commands.Cog):
 
     @commands.command(
         name="weather", aliases=["yr"],
-        brief="get a weather forecast for the spcified location",
+        brief="command_brief_weather",
         extras={"page": "main", "category":"utility"}
     )
     async def weather_text_command(self, ctx: commands.Context, location: str = DEFAULT_WEATHER_LOCATION):
@@ -64,9 +64,11 @@ class Weather(commands.Cog):
         self, interaction: discord.Interaction,
         location: str = DEFAULT_WEATHER_LOCATION
     ):
+        await interaction.response.defer()
         yrID = self.get_yr_id(location.lower())
         if not yrID:
-            await interaction.response.send_message(self.bot.lang.tr("weather_command_location_fetch_failed", interaction=interaction))
+            original_response = await interaction.original_response()
+            await original_response.edit(content=self.bot.lang.tr("weather_command_location_fetch_failed", interaction=interaction))
             return
 
         yr_embed_path = self.get_yr_embed(
@@ -82,9 +84,10 @@ class Weather(commands.Cog):
         )
         view = discord.ui.View()
         view.add_item(av_button)
-
-        await interaction.response.send_message(
-            file=discord.File(yr_embed_path),
+        
+        original_response = await interaction.original_response()
+        await original_response.edit(
+            attachments=[discord.File(yr_embed_path)],
             view=view
         )
     
