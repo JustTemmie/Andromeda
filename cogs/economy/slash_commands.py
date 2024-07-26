@@ -14,7 +14,7 @@ from launcher import lang
 
 class EconomyGroup(app_commands.Group):
     def __init__(self, bot: commands.Bot):
-        super().__init__(name="economy", description="economy related commands", guild_ids=[config.DEVELOPMENT_GUILD])
+        super().__init__(name="economy", description="economy related commands")
         self.bot = bot
     
     @app_commands.command(name="testycommand")
