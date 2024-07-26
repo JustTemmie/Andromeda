@@ -1,10 +1,4 @@
-Miku Bot 
-
-Currently in early-development, massive refactoring is happening every couple weeks.
-
-
-
-to setup miku-bot on your own, copy the config_example.json file to a file name config.json then fill in the values, not all keys are required but certain commands will crash the bot if you for example don't have a tenor key
+to setup Andromeda on your own, copy the config_example.json file to a file name config.json then fill in the values, not all keys are required but certain commands will crash the bot if you for example don't have a tenor key
 
 you will also need ffmpeg and poppler installed in your path, on debian-based distros this can be done with `sudo apt install ffmpeg poppler`
 

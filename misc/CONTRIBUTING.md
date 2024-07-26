@@ -4,6 +4,9 @@ This is for code contributions. For translations, see [TRANSLATING](../assets/la
 
 # Basic Guidelines
 
+## Sign the CLA
+You'll have to sign the Contributor license agreement (CLA) to merge any code, in short (non legally binding words) it gives me the rights to do anything with the code, while still allowing it to be licensed under the GPL-3 license, you still keep full rights over the changes you submitted. This is done just incase i want to monitize the project in the future - but i'm mentioning it here as this might understandably the a turnoff for some
+
 ## Use an IDE.
 I recommend VS Code, but anything works
 
