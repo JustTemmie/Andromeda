@@ -8,6 +8,8 @@ import os
 from PIL import Image, ImageDraw, ImageFilter
 from io import BytesIO
 
+from launcher import lang
+
 FLAG_DIR = "assets/images/flags"
 PFP_SIZE = 1024
 
@@ -55,7 +57,7 @@ class PrideCog(commands.Cog):
         if len(flags) > 25:
             flags = flags[:24]
             flags.append(app_commands.Choice(
-                name=self.bot.lang.tr("slash_command_autocomplete_too_many_values", interaction=interaction),
+                name=lang.tr("slash_command_autocomplete_too_many_values", interaction=interaction),
                 value="Pride.png"
             ))
 

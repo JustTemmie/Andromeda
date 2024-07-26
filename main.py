@@ -5,19 +5,12 @@ import logging
 import logging.handlers
 
 from datetime import datetime
-import time
 
-import json
-import asyncio
 import glob
 import os
 
-import modules.localAPIs.config as configLib 
 import modules.localAPIs.language as languageLib
-
-
-config = configLib.getConfig()
-settings = configLib.getSettings()
+import config
 
 directories_to_make = [
     "local_only",
@@ -47,7 +40,7 @@ for path, content in files_to_make.items():
             f.write(content)
     
         
-if config["DEVELOPMENT"]:
+if config.DEVELOPMENT:
     for dir in directories_to_empty:
         for file in os.listdir(dir):
             os.remove(f"{dir}/{file}")
@@ -68,26 +61,22 @@ logger.addHandler(handler)
 
 
 class Bot(commands.AutoShardedBot):
-    def __init__(self, *args, **kwargs):
-        self.config = config
-        self.settings = settings
-        
+    def __init__(self, *args, **kwargs):        
         self.ready = False
-        self.lang = languageLib.LangageHandler()
         
         super().__init__(
-            shards=self.config["SHARDS"],
+            shards=config.SHARDS,
             command_prefix=(self.get_prefix),
             strip_after_prefix=True,
             case_insensitive=True,
-            owner_ids=self.config["OWNER_IDS"],
+            owner_ids=config.OWNER_IDS,
             intents=discord.Intents.all(),
         *args, **kwargs)
 
         self.start_time = datetime.now()
 
     async def get_prefix(self, message):
-        return commands.when_mentioned_or(*self.config["PREFIXES"])(self, message)
+        return commands.when_mentioned_or(*config.PREFIXES)(self, message)
 
     async def on_ready(self) -> None:
         print(f"Succesfully logged in as {self.user}")
@@ -96,15 +85,15 @@ class Bot(commands.AutoShardedBot):
     async def setup_hook(self) -> None:
         async def sync_tree(self):
             print(f"Syncing command tree...")
-            if self.config["DEVELOPMENT"]:
-                guild = discord.Object(id=config["DEVELOPMENT_GUILD"])
-                self.tree.copy_global_to(guild=guild)
-                await self.tree.sync()
+            if config.DEVELOPMENT:
+                guild = discord.Object(id=config.DEVELOPMENT_GUILD)
+                self.tree.clear_commands(guild=guild)
+                await self.tree.sync(guild=guild)
             else:
                 await self.tree.sync()
             print(f"Command tree synced!")
             
-        if self.config["SYNC_TREE"]:
+        if config.SYNC_TREE:
             await sync_tree(self)
         else:
             print(f"bot is set to not sync tree, continuing")
@@ -125,11 +114,11 @@ async def nickname_command(interaction, victim: discord.Member, new_name: str):
     await interaction.response.send_message(f"renamed {original_name} to {new_name}", ephemeral=True)
     
 
-
-async def main():
+async def init():
     async with bot:
-        if len(bot.config["COG_LIST_OVERWRITE"]) >= 1:
-            for cog in bot.config["COG_LIST_OVERWRITE"]:
+        
+        if len(config.COG_LIST_OVERWRITE) >= 1:
+            for cog in config.COG_LIST_OVERWRITE:
                 await bot.load_extension(f"cogs.{cog}")
         
         else:
@@ -139,9 +128,4 @@ async def main():
                     filename = filename[2:].replace("/", ".")[:-3]
                     await bot.load_extension(filename)
         
-        await bot.start(bot.config["API_KEYS"]["DISCORD"])
-
-
-bot.loop = asyncio.new_event_loop()
-asyncio.set_event_loop(bot.loop)
-asyncio.run(main())
+        await bot.start(config.API_KEYS["DISCORD"])

@@ -1,6 +1,6 @@
 venv/
 
-config.json
+config.py
 
 local_only/
 testing/

@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 
 import time
 import random
@@ -7,9 +8,11 @@ import random
 import modules.helpers as helpers
 import modules.APIs.tenor as tenorLib
 
+
 class Silly(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        
 
     @commands.command(
         name="explode", aliases=["detonate", "dnace"],

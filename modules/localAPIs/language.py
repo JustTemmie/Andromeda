@@ -34,11 +34,13 @@ class LangageHandler:
         userID: int = None,
         interaction: discord.Interaction = None
     ) -> str:
+        language: str = None
+        
         if userID is None and interaction:
             userID = interaction.user.id
         
         if userID:
-            language = DbLib.language_database.read_value(userID)
+            language = DbLib.language_table.read_value(userID)
         
         if language is None and \
         interaction is not None and \

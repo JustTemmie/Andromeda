@@ -6,10 +6,7 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-import modules.helpers as helpers
-import modules.localAPIs.database as DbLib
-import modules.APIs.tenor as tenorLib
-
+from launcher import lang
 
 class BOILERPLATE(commands.Cog):
     def __init__(self, bot: commands.Bot):

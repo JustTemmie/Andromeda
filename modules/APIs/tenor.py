@@ -6,12 +6,11 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-import modules.localAPIs.config as configLib
 import modules.decorators as decorators
+import config
 
-
-tenor_key = configLib.getConfig()["API_KEYS"]["TENOR"]
-tenor_ckey = configLib.getConfig()["IDENTIFIERS"]["TENOR"]
+tenor_key = config.API_KEYS["TENOR"]
+tenor_ckey = config.IDENTIFIERS["TENOR"]
 
 @decorators.time_cache(60*60*6)
 def getGifs(query, limit):

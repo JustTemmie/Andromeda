@@ -12,6 +12,7 @@ import random
 
 import modules.helpers as helpers
 import modules.user_input as user_input
+from launcher import lang
 
 ytdlp_format_options = {
     "format": "bestaudio/best",
@@ -109,7 +110,7 @@ class MusicPlayer(commands.Cog):
                 total = int(items.split(" ")[-1])
 
                 if total > 2:
-                    message_content = self.bot.lang.tr("music_downloading_queue_progress", userID=ctx.author.id, progress=progress+2, total=total+2)
+                    message_content = lang.tr("music_downloading_queue_progress", userID=ctx.author.id, progress=progress+2, total=total+2)
                     
                     if sent_messages[ctx.message.id] == None:
                         job = asyncio.run_coroutine_threadsafe(ctx.reply(mention_author=False, content=message_content), self.bot.loop)
@@ -153,7 +154,7 @@ class MusicPlayer(commands.Cog):
         try:
             duration = self.data[guild_id]["meta_data"]["duration"]
         except:
-            duration = self.bot.lang.tr("generic_unknown", userID=ctx.author.id)
+            duration = lang.tr("generic_unknown", userID=ctx.author.id)
         
         # make sure that the progress is at the latest 1 second before the end of the song
         if type(duration) == int:
@@ -216,11 +217,11 @@ class MusicPlayer(commands.Cog):
                 await self.send_now_playing_embed(ctx)
 
             else:
-                await self.bot.lang.tr_send(ctx, "error_music_start_playing", song=self.data[guild_id]['song'])
+                await lang.tr_send(ctx, "error_music_start_playing", song=self.data[guild_id]['song'])
                 self.play_song(ctx)
 
         except Exception as err:
-            await self.bot.lang.tr_send(ctx, "error_music_generic_playing", error_type=type(err), error=err)
+            await lang.tr_send(ctx, "error_music_generic_playing", error_type=type(err), error=err)
 
 
     async def get_like_dislike_ratio(self, video_id):
@@ -263,7 +264,7 @@ class MusicPlayer(commands.Cog):
 
         embed = helpers.create_embed(meta_data["ctx"])
         embed.title = meta_data["title"]
-        embed.description = self.bot.lang.tr("music_embed_now_playing", userID=ctx.author.id)
+        embed.description = lang.tr("music_embed_now_playing", userID=ctx.author.id)
 
         embed = await self.add_embed_fields(embed, meta_data, ctx.author.id)
 
@@ -276,31 +277,31 @@ class MusicPlayer(commands.Cog):
                 # LIVE STATUS
                 if meta_data["live_status"] == "is_live":
                     embed.add_field(
-                        name = self.bot.lang.tr("music_embed_livestream_type_title", userID=authorID),
-                        value = self.bot.lang.tr("music_embed_livestream_type_title", userID=authorID))
+                        name = lang.tr("music_embed_livestream_type_title", userID=authorID),
+                        value = lang.tr("music_embed_livestream_type_title", userID=authorID))
 
                 # DURATION
                 if "readable_duration" in meta_data and meta_data["readable_duration"] != "unknown":
                     embed.add_field(
-                        name = self.bot.lang.tr("music_embed_duration", userID=authorID),
+                        name = lang.tr("music_embed_duration", userID=authorID),
                         value = meta_data["readable_duration"])
 
                 # UPLOADER
                 if meta_data["uploader"] != "unknown":
                     if meta_data["uploader_url"] in ["unknown", "None", None]:
                         embed.add_field(
-                            name=self.bot.lang.tr("music_embed_uploader", userID=authorID),
+                            name=lang.tr("music_embed_uploader", userID=authorID),
                             value=meta_data['uploader'])
                     else:
                         embed.add_field(
-                            name=self.bot.lang.tr("music_embed_uploader", userID=authorID),
+                            name=lang.tr("music_embed_uploader", userID=authorID),
                             value=f"[{meta_data['uploader']}]({meta_data['uploader_url']})")
 
 
                 # LIKE DISLIKE RATIO
                 if meta_data["dislikes"] != "unknown":
                     embed.add_field(
-                        name=self.bot.lang.tr("music_embed_likes_and_dislikes", userID=authorID),
+                        name=lang.tr("music_embed_likes_and_dislikes", userID=authorID),
                         value=f"{meta_data['likes']} / {meta_data['dislikes']}",
                     )
 
@@ -308,7 +309,7 @@ class MusicPlayer(commands.Cog):
                 # VIEW COUNT
                 if meta_data["views"] != "unknown":
                     embed.add_field(
-                        name=self.bot.lang.tr("music_embed_views", userID=authorID),
+                        name=lang.tr("music_embed_views", userID=authorID),
                         value=meta_data["views"])
                     
 
@@ -328,7 +329,7 @@ class MusicPlayer(commands.Cog):
             
             except Exception as e:
                 embed.add_field(
-                    name=self.bot.lang.tr("error_generic", userID=authorID),
+                    name=lang.tr("error_generic", userID=authorID),
                     value=e
                 )
 
@@ -338,7 +339,7 @@ class MusicPlayer(commands.Cog):
     async def send_queue_finished_embed(self, ctx):
         embed = helpers.create_embed(ctx)
 
-        embed.title = self.bot.lang.tr("music_embed_queue_finished")
+        embed.title = lang.tr("music_embed_queue_finished")
         await ctx.send(embed = embed)
 
     async def get_meta_data(self, data, fetch_like_dislike_ratio = True):
@@ -390,11 +391,11 @@ class MusicPlayer(commands.Cog):
             voice_channel = ctx.author.voice.channel
 
         except AttributeError as e:
-            await self.bot.lang.tr_send(ctx, "music_no_voice_channel_found")
+            await lang.tr_send(ctx, "music_no_voice_channel_found")
             return
 
         except Exception as e:
-            await self.bot.lang.tr_send(ctx, "error_generic_with_error_passthru", error=e)
+            await lang.tr_send(ctx, "error_generic_with_error_passthru", error=e)
             return
 
         voice_client = discord.utils.get(self.bot.voice_clients, guild=ctx.guild) # This allows for more functionality with voice channels
@@ -402,7 +403,7 @@ class MusicPlayer(commands.Cog):
 
         if voice_client != None:
             if voice_client.channel != voice_channel:
-                await self.bot.lang.tr_send(ctx, "music_playing_in_different_voice_channel")
+                await lang.tr_send(ctx, "music_playing_in_different_voice_channel")
                 return
 
 
@@ -431,7 +432,7 @@ class MusicPlayer(commands.Cog):
 
             if len(song_data["entries"]) > 2:
                 embed = helpers.create_embed(ctx)
-                embed.title = self.bot.lang.tr("music_embed_added_songs_to_queue", userID=ctx.author.id, song_count=len(song_data['entries']) + 2)
+                embed.title = lang.tr("music_embed_added_songs_to_queue", userID=ctx.author.id, song_count=len(song_data['entries']) + 2)
 
                 await ctx.send(embed = embed)
 
@@ -445,7 +446,7 @@ class MusicPlayer(commands.Cog):
             if self.data[guild_id]["playing"]:
                 meta_data = await self.get_meta_data(song_data)
                 embed = helpers.create_embed(ctx)
-                embed.title = self.bot.lang.tr("music_embed_added_song_to_queue", userID=ctx.author.id)
+                embed.title = lang.tr("music_embed_added_song_to_queue", userID=ctx.author.id)
                 embed.description = meta_data["title"]
 
                 embed = await self.add_embed_fields(embed, meta_data, ctx.author.id)
@@ -455,7 +456,7 @@ class MusicPlayer(commands.Cog):
         
         if search_query == None:
             if len(ctx.message.attachments) == 0:
-                await self.bot.lang.tr_send(ctx, "music_generic_invalid_search_query")
+                await lang.tr_send(ctx, "music_generic_invalid_search_query")
                 return
             
             song_data = await self.download_song(ctx.message.attachments[0].url, ctx)
@@ -472,17 +473,17 @@ class MusicPlayer(commands.Cog):
         add_full_playlist = False
         playlist_download_count = 50
         if "entries" in song_data and len(song_data["entries"]) > 1:
-            await self.bot.lang.tr_reply(ctx, "music_question_add_playlist", time=round(time.time()) + 15)
+            await lang.tr_reply(ctx, "music_question_add_playlist", time=round(time.time()) + 15)
             add_full_playlist = await user_input.get_consent(self.bot, ctx, 17, ", adding the first track only")
 
             if add_full_playlist:
                 await add_playlist(ctx, song_data)
                 
                 if ctx.author.id in self.bot.config["TRUSTED_IDS"]:
-                    await ctx.reply(self.bot.lang.tr("music_question_add_song_amount"))
+                    await ctx.reply(lang.tr("music_question_add_song_amount"))
                     response = await user_input.get_input(
                         self.bot, ctx, 10,
-                        self.bot.lang.tr(
+                        lang.tr(
                             "music_question_no_reply",
                             userID=ctx.author.id,
                             default=playlist_download_count
@@ -493,7 +494,7 @@ class MusicPlayer(commands.Cog):
                         response = int(response.content)
                         playlist_download_count = response
                     except:
-                        await self.bot.lang.tr_send(ctx, "music_question_invalid_reply", default=playlist_download_count)
+                        await lang.tr_send(ctx, "music_question_invalid_reply", default=playlist_download_count)
 
             # take first item from a playlist
             else:
@@ -529,9 +530,9 @@ class MusicPlayer(commands.Cog):
             if voice is not None:
                 await self.change_ffmpeg_filter(ctx, filter)
             else:
-                await self.bot.lang.tr_send(ctx, "error_generic")
+                await lang.tr_send(ctx, "error_generic")
         else: 
-            await self.bot.lang.tr_send(ctx, "music_no_voice_channel_found")
+            await lang.tr_send(ctx, "music_no_voice_channel_found")
 
 
     @commands.hybrid_command(
@@ -542,7 +543,7 @@ class MusicPlayer(commands.Cog):
     async def nowplaying_command(self, ctx):
         guild_id = ctx.guild.id
         if not guild_id in self.data or self.data[guild_id]["playing"] == False:
-            await self.bot.lang.tr_send(ctx, "music_not_playing")
+            await lang.tr_send(ctx, "music_not_playing")
             return
 
         if "meta_data" not in self.data[guild_id]:
@@ -551,7 +552,7 @@ class MusicPlayer(commands.Cog):
         meta_data = self.data[guild_id]["meta_data"]
 
         embed = helpers.create_embed(ctx)
-        embed.title = self.bot.lang.tr("music_embed_currently_playing", userID=ctx.author.id)
+        embed.title = lang.tr("music_embed_currently_playing", userID=ctx.author.id)
         if meta_data["original_url"] != "unknown":
             embed.description = f"[{meta_data['title']}]({meta_data['original_url']})"
         else:
@@ -567,7 +568,7 @@ class MusicPlayer(commands.Cog):
             pass
         
         embed.add_field(
-            name=self.bot.lang.tr("music_embed_progress", userID=ctx.author.id),
+            name=lang.tr("music_embed_progress", userID=ctx.author.id),
             value=embed_value,
             inline=False
         )
@@ -583,11 +584,11 @@ class MusicPlayer(commands.Cog):
     )
     async def queue_command(self, ctx, page = 1):
         if type(page) != int:
-            return await self.bot.lang.tr_send(ctx, "music_invalid_queue_page_number", page=page)
+            return await lang.tr_send(ctx, "music_invalid_queue_page_number", page=page)
 
         guild_id = ctx.guild.id
         if not guild_id in self.data or self.data[guild_id]["playing"] == False:
-            return await self.bot.lang.tr_send(ctx, "music_not_playing")
+            return await lang.tr_send(ctx, "music_not_playing")
 
 
         queue = self.data[guild_id]["queue"]
@@ -628,7 +629,7 @@ class MusicPlayer(commands.Cog):
         else:
             embed.add_field(
                 name="None",
-                value=self.bot.lang.tr("music_embed_empty_queue", userID=ctx.author.id, prefix=ctx.prefix),
+                value=lang.tr("music_embed_empty_queue", userID=ctx.author.id, prefix=ctx.prefix),
                 inline=False
             )
 
@@ -645,12 +646,12 @@ class MusicPlayer(commands.Cog):
         if voice_channel is not None:
             voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
             voice.pause()
-            await self.bot.lang.tr_send(ctx, "voice_channel_name", voice_channel_name=voice_channel.name)
+            await lang.tr_send(ctx, "voice_channel_name", voice_channel_name=voice_channel.name)
             await voice.move_to(voice_channel)
             await asyncio.sleep(2)
             voice.resume()
         else:
-            await self.bot.lang.tr_send(ctx, "music_no_voice_channel_found")
+            await lang.tr_send(ctx, "music_no_voice_channel_found")
 
 
     @commands.command(
@@ -663,7 +664,7 @@ class MusicPlayer(commands.Cog):
         if ctx.guild.id in self.data:
             random.shuffle(self.data[ctx.guild.id]["queue"])
         else:
-            await self.bot.lang.tr_send(ctx, "music_not_playing")
+            await lang.tr_send(ctx, "music_not_playing")
 
 
     @commands.command(
@@ -681,7 +682,7 @@ class MusicPlayer(commands.Cog):
             await voice.disconnect()
             await ctx.message.add_reaction("✅")
         else:
-            await self.bot.lang.tr_send(ctx, "music_not_playing")
+            await lang.tr_send(ctx, "music_not_playing")
 
 
     @commands.hybrid_command(
@@ -694,7 +695,7 @@ class MusicPlayer(commands.Cog):
             # this stops the song, making the next song automatically start
             discord.utils.get(self.bot.voice_clients, guild=ctx.guild).stop()
         except:
-            await self.bot.lang.tr_send(ctx, "error_generic")
+            await lang.tr_send(ctx, "error_generic")
 
 
     @commands.hybrid_command(
@@ -707,7 +708,7 @@ class MusicPlayer(commands.Cog):
             del self.data[ctx.guild.id]
             await ctx.message.add_reaction("✅")
         else:
-            await self.bot.lang.tr_send(ctx, "music_not_playing")
+            await lang.tr_send(ctx, "music_not_playing")
 
 
     @commands.command(
@@ -720,10 +721,10 @@ class MusicPlayer(commands.Cog):
             await voice_channel.connect(self_deaf=True)
 
         except AttributeError as e:
-            await self.bot.lang.tr_send(ctx, "music_no_voice_channel_found")
+            await lang.tr_send(ctx, "music_no_voice_channel_found")
 
         except Exception as e:
-            await self.bot.lang.tr_send(ctx, "error_generic_with_error_passthru", error=e)
+            await lang.tr_send(ctx, "error_generic_with_error_passthru", error=e)
 
 
     @commands.Cog.listener()

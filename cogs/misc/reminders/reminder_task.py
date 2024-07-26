@@ -13,14 +13,14 @@ class reminderTask(commands.Cog):
 
     @tasks.loop(seconds=5)
     async def reminder_task(self):
-        data = DbLib.reminder_database.read_all()
+        data = DbLib.reminder_table.read_all()
         
         for reminder in data:
             if time.time() >= float(reminder[1]):
                 userobj = await self.bot.fetch_user(reminder[2])
                 await userobj.send(f"**Reminder:** {reminder[3]}")
                 
-                DbLib.reminder_database.delete(reminder[0])
+                DbLib.reminder_table.delete(reminder[0])
 
 
 async def setup(bot):

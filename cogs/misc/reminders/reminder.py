@@ -92,7 +92,7 @@ class reminder(commands.Cog):
 
 
     def save_reminder(self, entry_ID, send_time, author, reminder_content) -> bool:
-        DbLib.reminder_database.write(
+        DbLib.reminder_table.write(
             entry_ID,
             send_time,
             author.id,

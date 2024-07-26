@@ -14,11 +14,11 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
     
-import modules.localAPIs.config as configLib
 
+from launcher import lang
+import config
 
-config = configLib.getConfig()
-DEFAULT_WEATHER_LOCATION = config["COMMAND_DEFAULTS"]["WEATHER_LOCATION"]
+DEFAULT_WEATHER_LOCATION = config.COMMAND_DEFAULTS["WEATHER_LOCATION"]
 
 class Weather(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -32,18 +32,18 @@ class Weather(commands.Cog):
     async def weather_text_command(self, ctx: commands.Context, location: str = DEFAULT_WEATHER_LOCATION):
         yrID = self.get_yr_id(location.lower())
         if not yrID:
-            await self.bot.lang.tr_send(ctx, "weather_command_location_fetch_failed")
+            await lang.tr_send(ctx, "weather_command_location_fetch_failed")
             return
         
         yr_embed_path = self.get_yr_embed(
             yrID,
-            language=self.bot.lang.get_user_language(userID=ctx.author.id),
-            forecast_link="https://" + self.bot.lang.tr("weather_command_yr_link", userID=ctx.author.id, yrID=yrID)
+            language=lang.get_user_language(userID=ctx.author.id),
+            forecast_link="https://" + lang.tr("weather_command_yr_link", userID=ctx.author.id, yrID=yrID)
         )
         
         av_button = discord.ui.Button(
-            label=self.bot.lang.tr("weather_command_open_link_externally", userID=ctx.author.id),
-            url="https://" + self.bot.lang.tr("weather_command_yr_link", userID=ctx.author.id, yrID=yrID),
+            label=lang.tr("weather_command_open_link_externally", userID=ctx.author.id),
+            url="https://" + lang.tr("weather_command_yr_link", userID=ctx.author.id, yrID=yrID),
             emoji="📩",
         )
         view = discord.ui.View()
@@ -68,18 +68,18 @@ class Weather(commands.Cog):
         yrID = self.get_yr_id(location.lower())
         if not yrID:
             original_response = await interaction.original_response()
-            await original_response.edit(content=self.bot.lang.tr("weather_command_location_fetch_failed", interaction=interaction))
+            await original_response.edit(content=lang.tr("weather_command_location_fetch_failed", interaction=interaction))
             return
 
         yr_embed_path = self.get_yr_embed(
             yrID,
-            language=self.bot.lang.get_user_language(interaction=interaction),
-            forecast_link="https://" + self.bot.lang.tr("weather_command_yr_link", interaction=interaction, yrID=yrID)
+            language=lang.get_user_language(interaction=interaction),
+            forecast_link="https://" + lang.tr("weather_command_yr_link", interaction=interaction, yrID=yrID)
         )
         
         av_button = discord.ui.Button(
-            label=self.bot.lang.tr("weather_command_open_link_externally", interaction=interaction),
-            url="https://" + self.bot.lang.tr("weather_command_yr_link", interaction=interaction, yrID=yrID),
+            label=lang.tr("weather_command_open_link_externally", interaction=interaction),
+            url="https://" + lang.tr("weather_command_yr_link", interaction=interaction, yrID=yrID),
             emoji="📩",
         )
         view = discord.ui.View()
