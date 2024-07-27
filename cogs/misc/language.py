@@ -67,7 +67,7 @@ class Language(commands.Cog):
             await lang.tr_send(
                 ctx, "language_setter_invalid_language",
                 userID=ctx.author.id, new_language=language,
-                valid_languages=", ".join(f'{ID} ({display_name})' for ID, display_name in zip(valid_languages, language_friendly_names.values()))
+                valid_languages=", ".join(f'{ID} ({display_name})' for ID, display_name in language_friendly_names.items())
             )
             return
 

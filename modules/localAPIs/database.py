@@ -38,19 +38,19 @@ class BaseTable:
         self.cursor.execute(query, (new_data, id))
         self.database.commit()
     
-    def add_column(self, db, column_name, column_type):
+    def add_column(self, column_name, column_type):
         # check if the column already exists
-        cursor = db.execute(f"PRAGMA table_info({self.table})")
-        columns = [row[1] for row in self.cursor.fetchall()]
+        cursor = self.database.execute(f"PRAGMA table_info({self.table})")
+        columns = [row[1] for row in cursor.fetchall()]
         
         # if it doesnt, add it
         if column_name not in columns:
-            db.execute(f"ALTER TABLE {self.table} ADD COLUMN {column_name} {column_type}")
+            self.database.execute(f"ALTER TABLE {self.table} ADD COLUMN {column_name} {column_type}")
 
 class ReminderTable(BaseTable):
     def __init__(self, db) -> None:
         super().__init__("reminders", db)
-        db.execute(f"CREATE TABLE IF NOT EXISTS {self.table}(id INTEGER, timestamp INTEGER, author_id INTEGER, message_content STRING)")
+        db.execute(f"CREATE TABLE IF NOT EXISTS {self.table} (id INTEGER, timestamp INTEGER, author_id INTEGER, message_content STRING)")
         
     
     def write(self, id, timestamp, author_id, message_content):
@@ -61,7 +61,7 @@ class ReminderTable(BaseTable):
 class LanguageTable(BaseTable):
     def __init__(self, db) -> None:
         super().__init__("language", db)
-        db.execute(f"CREATE TABLE IF NOT EXISTS {self.table}(id INTEGER, preferred_language STRING)")
+        db.execute(f"CREATE TABLE IF NOT EXISTS {self.table} (id INTEGER, preferred_language STRING)")
 
 class MarriageDatabase(BaseDatabase):
     class MarriageTable(BaseTable):
@@ -123,16 +123,19 @@ class MarriageDatabase(BaseDatabase):
         self.marriage_reference_table.delete(user2, marriageID)
 
 class EconomyDatabase(BaseDatabase):    
-    class GenericEconomyTable(BaseTable):
+    class CommonEconomyTable(BaseTable):
         def __init__(self, db) -> None:
             super().__init__("economy", db)
-            db.execute(f"CREATE TABLE IF NOT EXISTS {self.table}(userID INTEGER, balance INT FOREIGN KEY (marriage_id))")
+            db.execute(f"CREATE TABLE IF NOT EXISTS {self.table} (userID INTEGER)")
+            self.add_column("balance", "INTEGER") # the user's wallet balance
+            self.add_column("daily_streak", "INTEGER") # how many days the user have claimed their daily in a row
+            self.add_column("last_daily_day", "INTEGER") # the unix day of the last time the user claimed their daily
     
     def __init__(self) -> None:
         db = sqlite3.connect("local_only/economy_database.db")
 
-
-        # self.add_column(db, "lodge", "INT")
+        self.common_table = self.CommonEconomyTable(db)
+        # self.add_column("lodge", "INT")
         
 
 

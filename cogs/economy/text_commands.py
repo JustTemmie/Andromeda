@@ -17,7 +17,7 @@ class EconomyText(commands.Cog):
     
     @commands.command("hi")
     async def command_hi(self, ctx):
-        await ctx.send("helol world!!!")
+        await ctx.send(await common.econonmy_daily_command(ctx.author.id))
     
     
 async def setup(bot):

@@ -4,25 +4,7 @@ from discord.ext import commands, tasks
 import random
 import time
 
-import modules.helpers as helpers
-
-STATUSES = [
-    "listening-🎵",
-    "listening-hey siri, call me mommy",
-
-    "watching-over {len(self.bot.users)} users",
-    "watching-over {len(self.bot.guilds)} guilds",
-    "watching-{random.choice(self.bot.users).display_name}",
-    "watching-cats go nya",
-
-    "playing-Amogus Meme Compilation 2 -2021-.mp4 at my local coop extra's speakers",
-    "playing-with your heart <3",
-    "playing-main.py",
-
-    "competing-a fight for your heart <3",
-    "competing-the Beaver Clicker World Finals"
-]
-
+from settings import STATUSES
 
 class StatusChanger(commands.Cog):
     def __init__(self, bot):

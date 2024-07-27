@@ -28,6 +28,9 @@ Links shall not specify their protocol (i.e https://), so www.xyz is good, https
 ## uploading your changes
 I can't give exact details on how to contribute, but in short just create a merge/pull request - if you need help, contact me
 
+## other
+if you're looking for the bot's status list, it's in english only, but it can be found [here](../../settings.py)
+
 # technical info
 If a translation value for a given key isn't found, or a command fails to fetch a user's locale, it will default to the key found in en-GB as it'll be the most up-to-date one (i REFUSE to write color)
 
