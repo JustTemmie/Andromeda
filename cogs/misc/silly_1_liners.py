@@ -23,7 +23,7 @@ class Silly(commands.Cog):
     
     @app_commands.command(
         name="dance",
-        description=="command_brief_dance",
+        description=="command_brief_dance"
     )
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
