@@ -21,6 +21,15 @@ class Silly(commands.Cog):
     async def explode_command(self, ctx):
         await ctx.send("https://tenor.com/view/miku-hatsune-hatsune-miku-miku-explosion-explosion-gif-gif-26996455")
     
+    @app_commands.command(
+        name="dance",
+        brief="command_brief_dance",
+    )
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def dance_slash_command(self, ctx):
+        await ctx.send(tenorLib.getRandomGifLink("hatsune miku dancing", 10))
+        
     @commands.command(
         name="dance",
         brief="command_brief_dance",
