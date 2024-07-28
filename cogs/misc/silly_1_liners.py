@@ -23,12 +23,12 @@ class Silly(commands.Cog):
     
     @app_commands.command(
         name="dance",
-        description="command_brief_dance"
+        description="look at my moves!"
     )
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def dance_slash_command(self, ctx):
-        await ctx.send(tenorLib.getRandomGifLink("hatsune miku dancing", 10))
+    async def dance_slash_command(self, interaction: discord.Interaction):
+        await interaction.response.send_message(tenorLib.getRandomGifLink("hatsune miku dancing", 10))
         
     @commands.command(
         name="dance",
