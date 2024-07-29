@@ -138,7 +138,7 @@ class Weather(commands.Cog):
         with open(pdf_path, "wb") as f:
             f.write(r.content)
 
-        png = convert_from_path(pdf_path, dpi=200, poppler_path="/usr/lib64/")[0]
+        png = convert_from_path(pdf_path, dpi=200)[0]
         png.save(png_path, "PNG")
 
         return png_path
