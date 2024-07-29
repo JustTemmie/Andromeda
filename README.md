@@ -6,7 +6,7 @@ create a virtual environment for the bot `python -m venv venv/` on linux
 
 install the required libraries `./venv/bin/python -m pip install -r requirements.txt`
 
-then run the bot with `./venv/bin/python main.py`
+then run the bot with `./venv/bin/python launcher.py`
 
 
 
