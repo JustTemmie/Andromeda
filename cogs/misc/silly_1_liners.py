@@ -28,7 +28,7 @@ class Silly(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def dance_slash_command(self, interaction: discord.Interaction):
-        await interaction.response.send_message(tenorLib.getRandomGifLink("hatsune miku dancing", 10))
+        await interaction.response.send_message("https://media.tenor.com/U2Dc0p3RLWcAAAAC/miku-dance.gif")
         
     @commands.command(
         name="dance",
@@ -36,7 +36,7 @@ class Silly(commands.Cog):
         extras={"page": "main", "category":"silly"}
     )
     async def dance_command(self, ctx):
-        await ctx.send(tenorLib.getRandomGifLink("hatsune miku dancing", 10))
+        await ctx.send("https://media.tenor.com/U2Dc0p3RLWcAAAAC/miku-dance.gif")
 
 
 async def setup(bot):
