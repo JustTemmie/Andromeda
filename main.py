@@ -1,3 +1,7 @@
+if __name__ == "__main__":
+    print("do not launch main.py itself, please run launcher.py instead")
+    exit()
+
 import discord
 from discord.ext import commands
 
@@ -12,9 +16,6 @@ import os
 import modules.localAPIs.language as languageLib
 import config
 
-if __name__ == "__main__":
-    print("do not launch main.py itself, please run launcher.py instead")
-    exit()
 
 directories_to_make = [
     "local_only",
