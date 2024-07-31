@@ -4,6 +4,10 @@ import modules.helpers as helpers
 
 success = 1
 
+if __name__ == "__main__":
+    import sys
+    sys.path.append(".")
+
 for file in os.listdir("assets/language_data"):
     if file.endswith(".json5"):
         with open(f"assets/language_data/{file}", "r") as f:
