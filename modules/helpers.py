@@ -4,6 +4,7 @@ from discord.ext import commands
 import os
 import random
 import math
+import re
 
 def getProgressBar(current, max, width = 20):
     percent = int(width * current / max)
@@ -52,3 +53,11 @@ async def can_run(ctx: commands.context, command: commands.command) -> bool:
         return False
     
     return True
+
+# some regexes to remove comments and trailing commas
+def json5_to_json(json5_str):
+    json5_str = re.sub(r'//.*', '', json5_str)
+    json5_str = re.sub(r'/\*.*?\*/', '', json5_str, flags=re.DOTALL)
+    
+    json5_str = re.sub(r',\s*([}\]])', r'\1', json5_str)
+    return json5_str

@@ -3,28 +3,19 @@ from discord.ext import commands
 
 import json
 import os
-import re
 
 import modules.localAPIs.database as DbLib
+import modules.helpers as helpers
 
 class LangageHandler:
     def __init__(self):
         self.languages = {}
         
-        # some regexes to remove comments and trailing commas
-        def json5_to_json(json5_str):
-            json5_str = re.sub(r'//.*', '', json5_str)
-            json5_str = re.sub(r'/\*.*?\*/', '', json5_str, flags=re.DOTALL)
-            
-            json5_str = re.sub(r',\s*([}\]])', r'\1', json5_str)
-            return json5_str
-
-        
         for file in os.listdir("assets/language_data"):
             if file.endswith(".json5"):
                 with open(f"assets/language_data/{file}", "r") as f:
                     json5_str = f.read()
-                    json5_str = json5_to_json(json5_str)
+                    json5_str = helpers.json5_to_json(json5_str)
                     
                     langauge = file.split(".")[0]
                     self.languages[langauge] = json.loads(json5_str)
