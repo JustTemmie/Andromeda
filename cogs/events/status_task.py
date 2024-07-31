@@ -5,6 +5,13 @@ import random
 import time
 
 from settings import STATUSES
+import config
+
+try:
+    if len(config.STATUS_OVERWRITES) > 1:
+        STATUSES = config.STATUS_OVERWRITES
+except:
+    pass
 
 class StatusChanger(commands.Cog):
     def __init__(self, bot):
