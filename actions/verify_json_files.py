@@ -17,12 +17,15 @@ for file in os.listdir("assets/language_data"):
             
             try:
                 json.loads(json_str)
+                print(f"assets/language_data/{file} verified!")
+                
             except:
                 print(f"failed to parse assets/language_data/{file}")
                 success = 0
 
 try:
     import settings
+    print("settings.py verified!")
 except:
     print("failed to import settings.py")
     success = 0
