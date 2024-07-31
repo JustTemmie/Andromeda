@@ -16,40 +16,6 @@ import os
 import modules.localAPIs.language as languageLib
 import config
 
-
-directories_to_make = [
-    "local_only",
-    "assets",
-    "assets/music",
-    "assets/audio",
-    "assets/videos",
-    "assets/images",
-    "assets/misc",
-    "assets/language_data",
-]
-directories_to_empty = ["temp", "logs"]
-
-files_to_make = {
-    "local_only/yrIDs.json": "{}"
-}
-
-for path in directories_to_make + directories_to_empty:
-    if not os.path.exists(path):
-        print(f'creating folders at: "{path}"')
-        os.mkdir(path)
-
-for path, content in files_to_make.items():
-    if not os.path.exists(path):
-        print(f'creating file at: "{path}" with content: "{content}"')
-        with open(path, "w") as f:
-            f.write(content)
-    
-        
-if config.DEVELOPMENT:
-    for dir in directories_to_empty:
-        for file in os.listdir(dir):
-            os.remove(f"{dir}/{file}")
-
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
 logging.getLogger('discord.http').setLevel(logging.INFO)
