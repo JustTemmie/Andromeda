@@ -21,6 +21,12 @@ for file in os.listdir("assets/language_data"):
                 print(f"failed to parse assets/language_data/{file}")
                 success = 0
 
+try:
+    import settings
+except:
+    print("failed to import settings.py")
+    success = 0
+
 if success:
     exit()
 
