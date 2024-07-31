@@ -120,8 +120,8 @@ async def nickname_command(interaction, victim: discord.Member, new_name: str):
 async def init():
     async with bot:
         
-        if len(config.COG_LIST_OVERWRITE) >= 1:
-            for cog in config.COG_LIST_OVERWRITE:
+        if len(config.COG_LIST_OVERWRITES) >= 1:
+            for cog in config.COG_LIST_OVERWRITES:
                 await bot.load_extension(f"cogs.{cog}")
         
         else:
