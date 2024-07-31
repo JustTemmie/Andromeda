@@ -1,19 +1,56 @@
 // british english, read the README before contributing anything
 {    
+    "social_bite_self_title": "{user} just bit themselves",
+    "social_bite_self_description": "i don't think this is normal, even for a vampire",
+    "social_bite_target_title": "{user} just bit {target}",
+    "social_bite_target_description": "rawr >:3",
+    //
+    "social_boop_self_title": "{user} just booped themselves",
+    "social_boop_self_description": "bleep",
+    "social_boop_target_title": "{user} just booped {target}",
+    "social_boop_target_description": "*boop*",
+    //
+    "social_bonk_self_title": "{user} just bonked themselves",
+    "social_bonk_self_description": "alright... sure..",
+    "social_bonk_target_title": "{user} just bonked {target}",
+    "social_bonk_target_description": "youch",
+    ///
+    "social_tickle_self_title": "{user} just started tickling themselves",
+    "social_tickle_self_description": "wait i thought that was meant to be impossible?",
+    "social_tickle_target_title": "{user} started tickling {target}",
+    "social_tickle_target_description": "teeheehehee",
+    //
+    "social_cuddle_self_title": "{user} is showing themselves some love",
+    "social_cuddle_self_description": ":3",
+    "social_cuddle_target_title": "{user} took {target} and started cuddling them",
+    "social_cuddle_target_description": "awwweee",
+    //
+    "social_hug_self_title": "{user} is showing themselves some love",
+    "social_hug_self_description": ":3",
+    "social_hug_target_title": "{user} is hugging {target}",
+    "social_hug_target_description": "hugs! :)",
+
+
     "ping_command_latency_check": "measuring latency...",
     "ping_command_latency_response": "pong!\nDiscord latency: {discord_latency}ms\nbot latency: {bot_latency}ms", // Discord is a company
+
 
     "weather_command_location_fetch_failed": "sorry, I couldn't find the location in YRs database",
     "weather_command_open_link_externally": "Open Externally", // title case applies due to being a "view button"
     // this can be set to the two norwegian variants, english, and sami, you probably don't want to touch this
     "weather_command_yr_link": "www.yr.no/en/print/forecast/{yrID}/",
     
+    
+    "default_embed_footer": "invoked by {author}",
+
+
     // language command
     "language_setter_invalid_language": "sorry, `{new_language}` is not a valid language, my valid languages codes are:\n`{valid_languages}`",
     "language_setter_success": "successfully set your preferred language to `{new_language}`!",
     "language_setter_current_language": "your current language is set to `{current_language}`",
     "language_setter_no_language_set_text_command": "you've yet to set a desired language, you can do so with this very command by using {prefix}{command_name} <language>",
     "language_setter_no_language_set_slash_command": "you've yet to set a desired language, but you can do so with this very command!",
+
 
     // help command
     "help_command_page_main": "Main Page",
@@ -35,10 +72,6 @@
     "help_command_command_signature": "Usage",
     "help_command_command_cooldown": "{times} times per {duration} seconds",
     "help_command_change_page_placeholder": "Change the Current Page", // a dropdown menu component, titlecase
-
-    // generic stuff that will be used all over the place, to be used sparingly
-    "generic_unknown": "unknown",
-    "slash_command_autocomplete_too_many_values": "Keep typing to find more...", // title case applies due to being a slash command entry
 
 
     // music cog
@@ -70,6 +103,13 @@
     "music_embed_livestream_type_description": "Livestream",
 
 
+
+    // generic stuff that will be used all over the place, to be used sparingly
+    "generic_unknown": "unknown",
+    "slash_command_autocomplete_too_many_values": "Keep typing to find more...", // title case applies due to being a slash command entry
+
+
+
     // errors
     "error_generic": "an unexpected error occured",
     "error_generic_with_error_passthru": "an unexpected error occured\n```{error}```",
@@ -83,6 +123,7 @@
     "error_not_responsible_for_host": "you are not responsible for {hostname}",
     "error_music_generic_playing": "whoopsie, it looks like i encountered an error whilst trying to play your song\n`{error_type}`:\n```{error}```",
     "error_music_start_playing": "error occured when trying to play {song} - skipping",
+
 
 
     // command briefs and descriptions, in the format of `command_<brief or description>_<command ID>, these should typically be all lowercase

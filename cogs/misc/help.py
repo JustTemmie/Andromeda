@@ -7,6 +7,8 @@ from launcher import lang
 class Help(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        bot.remove_command("help")
+                
         
         self.page_order = [
             "main",

@@ -7,6 +7,7 @@ import subprocess
 import time
 from datetime import datetime
 
+import modules.generic_helpers as generic_helpers
 import modules.helpers as helpers
 
 class Info(commands.Cog):
@@ -28,8 +29,8 @@ class Info(commands.Cog):
                 "System": f"{self.uname.system} {self.uname.release}",
                 "Processor": f"{platform.machine()} CPU with {psutil.cpu_count()} threads, with a max speed of {self.max_cpu_frequency} GHz",
                 "Memory": f"using {round(psutil.virtual_memory().used / 1024**2)}/{round(psutil.virtual_memory().total / 1024**2)} MB",
-                "System Uptime": helpers.format_time(round(time.time() - psutil.boot_time())),
-                "Bot Uptime": helpers.format_time(round(time.time() - self.start_time)),
+                "System Uptime": generic_helpers.format_time(round(time.time() - psutil.boot_time())),
+                "Bot Uptime": generic_helpers.format_time(round(time.time() - self.start_time)),
                 "Ping": f"{round(self.bot.latency * 1000)}ms",
                 "Python": f"version {platform.python_version()}",
                 "Discord.py": f"version {discord.__version__}"

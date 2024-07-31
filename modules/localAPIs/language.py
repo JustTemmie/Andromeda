@@ -5,7 +5,7 @@ import json
 import os
 
 import modules.localAPIs.database as DbLib
-import modules.helpers as helpers
+import modules.generic_helpers as generic_helpers
 
 class LangageHandler:
     def __init__(self):
@@ -15,7 +15,7 @@ class LangageHandler:
             if file.endswith(".json5"):
                 with open(f"assets/language_data/{file}", "r") as f:
                     json5_str = f.read()
-                    json5_str = helpers.json5_to_json(json5_str)
+                    json5_str = generic_helpers.json5_to_json(json5_str)
                     
                     langauge = file.split(".")[0]
                     self.languages[langauge] = json.loads(json5_str)

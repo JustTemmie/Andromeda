@@ -105,7 +105,6 @@ class Bot(commands.AutoShardedBot):
 
 bot = Bot()
 # bot.tree = discord.app_commands.CommandTree(bot)
-bot.remove_command("help")
 
 @bot.tree.command(
     name="nickname",

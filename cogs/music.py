@@ -10,6 +10,7 @@ import time
 import math
 import random
 
+import modules.generic_helpers as generic_helpers
 import modules.helpers as helpers
 import modules.user_input as user_input
 import config
@@ -361,7 +362,7 @@ class MusicPlayer(commands.Cog):
                 meta_data[entry] = "unknown"
 
         try:
-            meta_data["readable_duration"] = helpers.format_time(data["duration"])
+            meta_data["readable_duration"] = generic_helpers.format_time(data["duration"])
         except:
             meta_data["readable_duration"] = "unknown"
 
@@ -563,7 +564,7 @@ class MusicPlayer(commands.Cog):
         progress = self.data[guild_id]["progress"] / 1000
         embed_value = f"{progress}/?"
         try:
-            progress_bar = helpers.getProgressBar(progress, meta_data["duration"], 23)
+            progress_bar = generic_helpers.getProgressBar(progress, meta_data["duration"], 23)
             embed_value = f"{round((progress / meta_data['duration']) * 100)}% - {progress_bar}"
         except:
             pass
