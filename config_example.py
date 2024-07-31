@@ -9,7 +9,7 @@ IDENTIFIERS = {
 }
 
 COMMAND_DEFAULTS = {
-    "WEATHER_LOCATION": "New York"
+    "WEATHER_LOCATION": "Stockholm"
 }
 
 PREFIXES= ["a!"]
@@ -24,4 +24,5 @@ STATUS_OVERWRITES = []
 SHARDS = 1
 SYNC_TREE = True
 DEVELOPMENT = False
+# irrelevant if the bot isn't in development mode
 DEVELOPMENT_GUILD = 1016777760305320036
