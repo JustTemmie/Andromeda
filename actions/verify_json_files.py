@@ -17,7 +17,7 @@ for file in os.listdir("assets/language_data"):
             
             try:
                 json.loads(json_str)
-                print(f"assets/language_data/{file} verified!")
+                print(f"successfully parsed assets/language_data/{file}!")
                 
             except:
                 print(f"failed to parse assets/language_data/{file}")
@@ -25,7 +25,7 @@ for file in os.listdir("assets/language_data"):
 
 try:
     import settings
-    print("settings.py verified!")
+    print("successfully imported settings.py!")
 except:
     print("failed to import settings.py")
     success = 0

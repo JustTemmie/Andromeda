@@ -39,7 +39,7 @@
     "music_embed_views": "Katselukerrat",
     "music_embed_progress": "Edistystä",
     // these two are a set, one for the embed field's title, one for the field value
-    "music_embed_livesteam_type_title": "Tyyppi"
+    "music_embed_livesteam_type_title": "Tyyppi",
     "music_embed_livestream_type_description": "Suoratoisto",
     
     
