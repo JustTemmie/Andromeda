@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
 import modules.localAPIs.database as DbLib
 import settings
-from launcher import lang
+from objects import lang
 
 async def econonmy_daily_command(userID) -> str:
     # DbLib.economy_database.

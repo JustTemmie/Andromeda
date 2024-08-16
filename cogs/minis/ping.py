@@ -8,7 +8,7 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-from launcher import lang
+from objects import lang
 
 class Ping(commands.Cog):
     def __init__(self, bot: commands.Bot):

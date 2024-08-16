@@ -10,7 +10,7 @@ if __name__ == "__main__":
     sys.path.append(".")
 
 import modules.localAPIs.database as DbLib
-from launcher import lang
+from objects import lang
 
 language_friendly_names = {
     "en-GB": "English",
@@ -105,6 +105,7 @@ class Language(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     @app_commands.autocomplete(language=language_autocomplete)
+    @app_commands.describe(language="Your prefered language")
     async def language_slash_command(
         self, intercation: discord.Interaction,
         language: str = None

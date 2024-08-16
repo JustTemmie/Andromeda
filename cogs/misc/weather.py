@@ -15,7 +15,7 @@ if __name__ == "__main__":
     sys.path.append(".")
     
 
-from launcher import lang
+from objects import lang
 import config
 
 DEFAULT_WEATHER_LOCATION = config.COMMAND_DEFAULTS["WEATHER_LOCATION"]
@@ -60,6 +60,7 @@ class Weather(commands.Cog):
     )
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.describe(location="Name of the region you want to query the weather for")
     async def weather_slash_command(
         self, interaction: discord.Interaction,
         location: str = DEFAULT_WEATHER_LOCATION

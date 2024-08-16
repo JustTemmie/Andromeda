@@ -10,7 +10,7 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-from launcher import lang
+from objects import lang
 
 # user still needs to set the title, description, and fields
 def create_embed(ctx: commands.Context, user = None):

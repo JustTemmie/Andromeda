@@ -65,6 +65,7 @@ class reminder(commands.Cog):
     )
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.describe(reminder="The thing you want to be reminded about")
     async def reminder_slash_command(
                 self, intercation: discord.Interaction, reminder: str,
                 days: float = 0.0, hours: float = 0.0,

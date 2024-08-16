@@ -11,7 +11,7 @@ import os
 from time import time
 from math import floor
 
-from launcher import lang
+from objects import lang
 
 IGNORE_EXCEPTIONS = (CommandNotFound)
 

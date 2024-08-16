@@ -14,7 +14,7 @@ import modules.generic_helpers as generic_helpers
 import modules.helpers as helpers
 import modules.user_input as user_input
 import config
-from launcher import lang
+from objects import lang
 
 ytdlp_format_options = {
     "format": "bestaudio/best",
@@ -270,7 +270,7 @@ class MusicPlayer(commands.Cog):
 
         embed = await self.add_embed_fields(embed, meta_data, ctx.author.id)
 
-        await ctx.send(embed=embed)
+        await ctx.send(embed=embed, silent=True)
 
     async def add_embed_fields(self, embed, meta_data, authorID):
             existing_field_count = len(embed.fields)

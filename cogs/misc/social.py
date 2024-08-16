@@ -3,7 +3,7 @@ from discord.ext import commands
 
 import modules.APIs.tenor as tenorLib
 import modules.helpers as helpers
-from launcher import lang
+from objects import lang
 
 class Social(commands.Cog):
     def __init__(self, bot):

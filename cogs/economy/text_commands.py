@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
 import modules.localAPIs.database as DbLib
 import cogs.economy.common as common
-from launcher import lang
+from objects import lang
 
 class EconomyText(commands.Cog):
     def __init__(self, bot: commands.Bot):

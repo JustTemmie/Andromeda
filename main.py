@@ -1,7 +1,3 @@
-if __name__ == "__main__":
-    print("do not launch main.py itself, please run launcher.py instead")
-    exit()
-
 import discord
 from discord.ext import commands
 
@@ -9,12 +5,46 @@ import logging
 import logging.handlers
 
 from datetime import datetime
-
+import asyncio
 import glob
 import os
 
-import modules.localAPIs.language as languageLib
 import config
+
+# create some folders what are required for a first run
+directories_to_make = [
+    "local_only",
+    "assets",
+    "assets/music",
+    "assets/audio",
+    "assets/videos",
+    "assets/images",
+    "assets/misc",
+    "assets/language_data",
+]
+
+directories_to_empty = ["temp", "logs"]
+
+files_to_make = {
+    "local_only/yrIDs.json": "{}"
+}
+
+for path in directories_to_make + directories_to_empty:
+    if not os.path.exists(path):
+        print(f'creating folders at: "{path}"')
+        os.mkdir(path)
+
+for path, content in files_to_make.items():
+    if not os.path.exists(path):
+        print(f'creating file at: "{path}" with content: "{content}"')
+        with open(path, "w") as f:
+            f.write(content)
+    
+        
+if config.DEVELOPMENT:
+    for dir in directories_to_empty:
+        for file in os.listdir(dir):
+            os.remove(f"{dir}/{file}")
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
@@ -58,7 +88,7 @@ class Bot(commands.AutoShardedBot):
             print(f"Syncing command tree...")
             if config.DEVELOPMENT:
                 guild = discord.Object(id=config.DEVELOPMENT_GUILD)
-                self.tree.clear_commands(guild=guild)
+                # self.tree.clear_commands(guild=guild)
                 await self.tree.sync(guild=guild)
             else:
                 await self.tree.sync()
@@ -71,7 +101,8 @@ class Bot(commands.AutoShardedBot):
     
 
 bot = Bot()
-# bot.tree = discord.app_commands.CommandTree(bot)
+if not bot.tree:
+    bot.tree = discord.app_commands.CommandTree(bot)
 
 @bot.tree.command(
     name="nickname",
@@ -99,3 +130,7 @@ async def init():
                     await bot.load_extension(filename)
         
         await bot.start(config.API_KEYS["DISCORD"])
+
+bot.loop = asyncio.new_event_loop()
+asyncio.set_event_loop(bot.loop)
+asyncio.run(init())

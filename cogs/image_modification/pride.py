@@ -8,7 +8,7 @@ import os
 from PIL import Image, ImageDraw, ImageFilter
 from io import BytesIO
 
-from launcher import lang
+from objects import lang
 
 FLAG_DIR = "assets/images/flags"
 PFP_SIZE = 1024
