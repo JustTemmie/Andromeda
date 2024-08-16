@@ -1,31 +1,38 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-import asyncio
 
 if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-import modules.localAPIs.database as DbLib
-import cogs.economy.common as common
 import config
-from launcher import lang
 
-class EconomyGroup(app_commands.Group):
-    def __init__(self, bot: commands.Bot):
-        super().__init__(name="economy", description="economy related commands")
-        self.bot = bot
-    
-    @app_commands.command(name="testycommand")
-    async def marry_slash_command(
-        self, interaction: discord.Interaction
-    ):
-        await interaction.response.send_message("hello!!!!")
+import modules.localAPIs.database as DbLib
+from objects import lang
+import cogs.economy.common as common
+
+slash_economy_group = app_commands.Group(
+    name="economy",
+    description="economy commands",
+    guild_ids=[1016777760305320036]
+)
 
 class SlashEconomyLoader(commands.Cog):
     def __init__(self, bot: commands.Bot):
-        bot.tree.add_command(EconomyGroup(bot))
+        bot.tree.add_command(slash_economy_group)
+        @slash_economy_group.command()
+        async def hello(interaction: discord.Interaction):
+            await interaction.response.send_message('Hello')
 
+        @slash_economy_group.command(name="version")
+        async def version(interaction: discord.Interaction):
+            await interaction.response.send_message('This is an untested test version')
+
+        @slash_economy_group.command(name="marry")
+        async def marry_slash_command(interaction: discord.Interaction):
+                await interaction.response.send_message("mrrp :3")
+        
+            
 async def setup(bot):
     await bot.add_cog(SlashEconomyLoader(bot))
