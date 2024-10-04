@@ -8,7 +8,7 @@ if __name__ == "__main__":
     sys.path.append(".")
 
 import modules.localAPIs.database as DbLib
-import cogs.economy.common as common
+import cogs.economy.common.daily as daily
 from objects import lang
 
 class EconomyText(commands.Cog):
@@ -17,7 +17,7 @@ class EconomyText(commands.Cog):
     
     @commands.command("hi")
     async def command_hi(self, ctx):
-        await ctx.send(await common.econonmy_daily_command(ctx.author.id))
+        await ctx.send(await daily.econonmy_daily_command(ctx.author.id))
     
     
 async def setup(bot):

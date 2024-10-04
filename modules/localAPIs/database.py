@@ -69,10 +69,8 @@ class MarriageDatabase(BaseDatabase):
             super().__init__("marriage", db)
             db.execute(f"CREATE TABLE IF NOT EXISTS {self.table} (marriageID INTEGER PRIMARY KEY AUTOINCREMENT, proposerID INTEGER, recipientID INTEGER, time INTEGER, ring TEXT)")
 
+        # returns the marriage ID of the newly created entry
         def write(self, proposerID, recipientID, timestamp, ring) -> int:
-            """
-                returns thee marriage ID of the newly created entry
-            """
             query = f"INSERT INTO {self.table} (proposerID, recipientID, time, ring) VALUES (?, ?, ?, ?)"
             self.cursor.execute(query, (proposerID, recipientID, timestamp, ring))
             self.database.commit()

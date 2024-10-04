@@ -104,7 +104,7 @@ class reminder(commands.Cog):
 
 
     def create_embed(self, reminder, send_time, author) -> discord.Embed:
-        embed = discord.Embed(title=reminder, description=f"i will remind you <t:{round(send_time)}:R>", color=author.colour)
+        embed = discord.Embed(title=reminder, description=f"i will remind you <t:{round(send_time + 5)}:R>", color=author.colour)
         embed.set_footer(text=f"{author.name}", icon_url=author.display_avatar.url)
 
         return embed

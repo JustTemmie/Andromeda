@@ -10,7 +10,7 @@ import config
 
 import modules.localAPIs.database as DbLib
 from objects import lang
-import cogs.economy.common as common
+import cogs.economy.common.daily as daily
 
 slash_economy_group = app_commands.Group(
     name="economy",

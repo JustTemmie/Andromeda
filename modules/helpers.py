@@ -1,3 +1,6 @@
+
+# helpers.py are discord bot specific, generic_helpers.py work in any python script
+
 import discord
 from discord.ext import commands
 

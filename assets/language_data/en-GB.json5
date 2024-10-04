@@ -102,11 +102,25 @@
     "music_embed_livesteam_type_title": "Type",
     "music_embed_livestream_type_description": "Livestream",
 
-
-
     // generic stuff that will be used all over the place, to be used sparingly
     "generic_unknown": "unknown",
     "slash_command_autocomplete_too_many_values": "Keep typing to find more...", // title case applies due to being a slash command entry
+    
+    // economy commands
+    // daily rewards for specific dates
+    "daily_event_red_panda_message": "om g.. it's red panda day:))\ni love those silly guys, they're adorable!!",
+    "daily_event_easter_message": "happy easter!!",
+    "daily_event_pancake_message": "oh wow, would you look at that, it's my favourite day of the year! it's pancake day today!!",
+    "daily_event_waffle_message": "holyshit, today's my favourite day of the year! it's waffle day today!!",
+    "daily_event_new_years_message": "happy new years!!!",
+    "daily_event_valentines_message": "love is in the air!\nall rings are 25% off today",
+    "daily_event_pi_message": "IT'S MATH DAY YAY!",
+    "daily_event_ice_cream_message": "YAY! it's the american creative ice cream flavours day! i'll spend my day sitting here trying out some different flavours, you should try something funky too!",
+    "daily_event_mango_message": "oh wait my notes menti-...\n\nit...\nthey..\n*sigh*, india is celebrating their yearly mango festival today, and i, i HATE mangos - don't worry i'll help ease your sorrows, take these {coin_emoji}",
+    "daily_event_st_patrick_message": "happy leprechaun day!",
+    "daily_event_international_beaver_message": "\n\noh my, i almost forgot, today's international beaver da- oh would you look at that, they're already here to celebrate!\n\nsome beavers showed up with 2000 {log_emoji} for you!",
+    "daily_event_halloween_message": "happy hall-owee-n!!", 
+
 
 
 

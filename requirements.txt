@@ -1,8 +1,7 @@
 discord.py # main discord library
 #git+https://github.com/Rapptz/discord.py
 
-
-PyNaCl      # used for voice
+PyNaCl      # used for voice calls
 
 yt-dlp      # used to download audio
 python-ffmpeg # used to apply audio filters and such
@@ -16,6 +15,8 @@ pillow      # for image manipulation
 pdf2image   # translates pdfs to pngs
 
 beautifulsoup4 # for handling html files
+
+python-dateutil # extension for the datetime library
 
 #midiutil
 #sound_to_midi

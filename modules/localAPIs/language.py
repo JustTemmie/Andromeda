@@ -6,6 +6,12 @@ import os
 
 import modules.localAPIs.database as DbLib
 import modules.generic_helpers as generic_helpers
+import settings
+
+substitutes = {
+    "coin_emoji": settings.emojis.coin,
+    "log_emoji": settings.emojis.log,
+}
 
 class LangageHandler:
     def __init__(self):
@@ -69,7 +75,7 @@ class LangageHandler:
         if translation is None:
             translation = self.languages["en-GB"].get(key, f"missing translation for translation key: `{key}`")
         
-        return translation.format(**kwargs)
+        return translation.format(**kwargs | substitutes)
 
     async def tr_send(
         self,

@@ -2,6 +2,7 @@ import os
 import random
 import math
 import re
+from datetime import timedelta, datetime, date
 
 if __name__ == "__main__":
     import sys
@@ -44,3 +45,17 @@ def json5_to_json(json5_str):
     
     json5_str = re.sub(r',\s*([}\]])', r'\1', json5_str)
     return json5_str
+
+# returns the date of the red panda day for a given year
+def get_red_panda_day(year) -> date:
+    # start with the first day of September in the given year
+    date = datetime(year, 9, 1)
+
+    # find the first sunday by looping until we find it
+    while date.weekday() != 6:
+        date += timedelta(days=1)
+
+    # move to the third Sunday (add 14 days twice)
+    date += timedelta(weeks=2)
+
+    return date

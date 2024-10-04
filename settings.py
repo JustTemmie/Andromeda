@@ -3,6 +3,7 @@
 class Emojis:
     def __init__(self):
         self.coin = "<a:coin:1266553468064235590>"
+        self.log = "LOG"
 
 STATUSES = [
     # listening to (x)
