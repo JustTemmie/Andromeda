@@ -43,7 +43,7 @@ class Png2pdfCog(commands.Cog):
         png_path = file.filename.replace("pdf", "png")
         png_pathes = []
         
-        with open(path_prefix + pdf_path, pdf_path, "wb") as f:
+        with open(path_prefix + pdf_path, "wb") as f:
             f.write(response.content)
 
         pages = convert_from_path(pdf_path, dpi=400)
