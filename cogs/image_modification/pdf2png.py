@@ -47,7 +47,7 @@ class Png2pdfCog(commands.Cog):
 
         pages = convert_from_path(pdf_path, dpi=400)
         for page_index in range(0, min(10, len(pages))):
-            path = f"{png_path}-{page_index}"
+            path = f"{page_index}-{png_path}"
             png_pathes.append(path)
             pages[page_index].save(path, "PNG")
         
