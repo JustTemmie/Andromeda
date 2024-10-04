@@ -38,16 +38,17 @@ class Png2pdfCog(commands.Cog):
     async def pdf2png_converter(self, file: discord.Attachment):
         response = requests.get(file.url)
 
-        pdf_path = f"temp/pdf2png-{file.filename}"
-        png_path = f"temp/pdf2png-{file.filename}".replace("pdf", "png")
+        path_prefix = "temp/pdf2png-"
+        pdf_path = file.filename
+        png_path = file.filename.replace("pdf", "png")
         png_pathes = []
         
-        with open(pdf_path, "wb") as f:
+        with open(path_prefix + pdf_path, pdf_path, "wb") as f:
             f.write(response.content)
 
         pages = convert_from_path(pdf_path, dpi=400)
         for page_index in range(0, min(10, len(pages))):
-            path = f"{page_index}-{png_path}"
+            path = f"{path_prefix}-{page_index}-{png_path}"
             png_pathes.append(path)
             pages[page_index].save(path, "PNG")
         
