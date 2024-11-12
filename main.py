@@ -14,6 +14,7 @@ import config
 # create some folders what are required for a first run
 directories_to_make = [
     "local_only",
+    "local_only/databases",
     "assets",
     "assets/music",
     "assets/audio",

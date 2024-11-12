@@ -10,4 +10,5 @@ temp/
 hatsune-miku-installed.service
 
 *.pyc
+__pycache__
 *.env

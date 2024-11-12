@@ -9,7 +9,7 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-import modules.localAPIs.database as DbLib
+import modules.database.user as userDB
 from objects import lang
 
 language_friendly_names = {
@@ -44,24 +44,15 @@ class Language(commands.Cog):
     )
     async def language_text_command(self, ctx: commands.Context, *, language: str = None):
         if language is None:
-            current_language_ID = DbLib.language_table.read_value(ctx.author.id)
-            if current_language_ID:
-                current_language = self.get_language_friendly_name(current_language_ID)
-                await lang.tr_send(
-                    ctx,
-                    "language_setter_current_language",
-                    userID=ctx.author.id,
-                    current_language=current_language
-                )
-                return
-            else:
-                await lang.tr_send(
-                    ctx,
-                    "language_setter_no_language_set_text_command",
-                    prefix=ctx.prefix,
-                    command_name=ctx.invoked_with
-                )
-                return
+            current_language_ID = lang.get_user_language(ctx.author.id)
+            current_language = self.get_language_friendly_name(current_language_ID)
+            await lang.tr_send(
+                ctx,
+                "language_setter_current_language",
+                userID=ctx.author.id,
+                current_language=current_language
+            )
+            return
 
         if language not in valid_languages:
             await lang.tr_send(
@@ -71,10 +62,15 @@ class Language(commands.Cog):
             )
             return
 
-        self.set_database_value(ctx.author.id, language)
+        success = self.set_database_value(ctx.author.id, language)
+        
+                
+        if not success:
+            await lang.tr_send(ctx, "language_setter_database_error")
+            return
         
         new_language = f"{language} ({self.get_language_friendly_name(language)})"
-        await lang.tr_send(ctx, "language_setter_success", userID=ctx.author.id, new_language=new_language)
+        await lang.tr_send(ctx, "language_setter_success", new_language=new_language)
     
     
     async def language_autocomplete(self,
@@ -107,46 +103,50 @@ class Language(commands.Cog):
     @app_commands.autocomplete(language=language_autocomplete)
     @app_commands.describe(language="Your prefered language")
     async def language_slash_command(
-        self, intercation: discord.Interaction,
+        self, interaction: discord.Interaction,
         language: str = None
     ):
         if language is None:
-            current_language_ID = DbLib.language_table.read_value(intercation.user.id)
-            if current_language_ID:
-                current_language = self.get_language_friendly_name(current_language_ID)
-                await intercation.response.send_message(lang.tr(
-                    "language_setter_current_language",
-                    intercation=intercation, current_language=current_language
-                ))
-                return
-            else:
-                await intercation.response.send_message(lang.tr(
-                    "language_setter_no_language_set_slash_command",
-                    intercation=intercation,
-                ))
-                return
+            current_language_ID = lang.get_user_language(interaction.user.id)
+            current_language = self.get_language_friendly_name(current_language_ID)
+            await interaction.response.send_message(lang.tr(
+                "language_setter_current_language",
+                interaction=interaction, current_language=current_language
+            ))
+            return
 
         if language not in valid_languages:
-            await intercation.response.send_message(
+            await interaction.response.send_message(
                 lang.tr(
                     "language_setter_invalid_language",
-                    intercation=intercation, new_language=language,
+                    interaction=interaction, new_language=language,
                     valid_languages=", ".join(f'{ID} ({display_name})' for ID, display_name in zip(valid_languages, language_friendly_names.values()))
                 )
             )
             return
 
-        self.set_database_value(intercation.user.id, language)
+        success = self.set_database_value(interaction.user.id, language)
+        
+        if not success:
+            await interaction.response.send_message(lang.tr("language_setter_database_error", interaction=interaction))
+            return
         
         new_language = f"{language} ({self.get_language_friendly_name(language)})"
-        await intercation.response.send_message(lang.tr("language_setter_success", intercation=intercation, new_language=new_language))
+        await interaction.response.send_message(lang.tr("language_setter_success", interaction=interaction, new_language=new_language))
     
-    def set_database_value(self, userID, new_language) -> str:
-        if DbLib.language_table.read_value(userID):
-            DbLib.language_table.update(userID, "preferred_language", new_language)
-
-        else:
-            DbLib.language_table.write(userID, new_language)
+    def set_database_value(self, userID, new_language) -> bool:
+        with userDB.Driver.SessionMaker() as db_session:
+            user_query = db_session.query(userDB.User)
+            user_query = user_query.where(userID == userDB.User.id)
+            user = user_query.first()
+            
+            if not user:
+                return False
+            
+            user.preferred_language = new_language
+            db_session.commit()
+            
+            return True
     
     
     def get_language_friendly_name(self, languageID):

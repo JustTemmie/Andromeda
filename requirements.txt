@@ -14,9 +14,13 @@ psutil      # gets system info, used for info command and such
 pillow      # for image manipulation
 pdf2image   # translates pdfs to pngs
 
-beautifulsoup4 # for handling html files
+beautifulsoup4 # for handling html data
 
 python-dateutil # extension for the datetime library
+
+# database stuff
+SQLAlchemy
+alembic
 
 #midiutil
 #sound_to_midi

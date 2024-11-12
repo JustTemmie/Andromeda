@@ -8,7 +8,6 @@ if __name__ == "__main__":
 
 import config
 
-import modules.localAPIs.database as DbLib
 from objects import lang
 import cogs.economy.common.daily as daily
 
@@ -21,6 +20,7 @@ slash_economy_group = app_commands.Group(
 class SlashEconomyLoader(commands.Cog):
     def __init__(self, bot: commands.Bot):
         bot.tree.add_command(slash_economy_group)
+        
         @slash_economy_group.command()
         async def hello(interaction: discord.Interaction):
             await interaction.response.send_message('Hello')

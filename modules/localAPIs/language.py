@@ -4,7 +4,7 @@ from discord.ext import commands
 import json
 import os
 
-import modules.localAPIs.database as DbLib
+import modules.database.user as userDB
 import modules.generic_helpers as generic_helpers
 import settings
 
@@ -37,7 +37,12 @@ class LangageHandler:
             userID = interaction.user.id
         
         if userID:
-            language = DbLib.language_table.read_value(userID)
+            with userDB.Driver.SessionMaker() as db_session:
+                user_query = db_session.query(userDB.User)
+                user = user_query.where(userDB.User.id == userID).first()
+                
+                if user:
+                    language = user.preferred_language
         
         if language is None and \
         interaction is not None and \

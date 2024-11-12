@@ -47,9 +47,8 @@
     // language command
     "language_setter_invalid_language": "sorry, `{new_language}` is not a valid language, my valid languages codes are:\n`{valid_languages}`",
     "language_setter_success": "successfully set your preferred language to `{new_language}`!",
+    "language_setter_database_error": "an error occured whilst trying to set your language :(",
     "language_setter_current_language": "your current language is set to `{current_language}`",
-    "language_setter_no_language_set_text_command": "you've yet to set a desired language, you can do so with this very command by using {prefix}{command_name} <language>",
-    "language_setter_no_language_set_slash_command": "you've yet to set a desired language, but you can do so with this very command!",
 
 
     // help command

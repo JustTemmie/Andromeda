@@ -11,7 +11,6 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-import modules.localAPIs.database as DbLib
 import modules.generic_helpers as generic_helpers
 import settings
 from objects import lang
@@ -32,7 +31,7 @@ daily_events = {
         "extra_coins": random.randint(7, 10) * 100,
     },
     "waffle": {
-        "date": datetime(current_year, 25, 3).date(),
+        "date": datetime(current_year, 3, 25).date(),
         "extra_coins": random.randint(7, 10) * 100,
     },
     "new_years": {
@@ -41,26 +40,26 @@ daily_events = {
         "extra_coins": 5000
     },
     "valentines": {
-        "date": datetime(current_year, 14, 2).date(),
+        "date": datetime(current_year, 2, 14).date(),
     },
     "pi": {
-        "date": datetime(current_year, 14, 3).date(),
+        "date": datetime(current_year, 3, 14).date(),
         "extra_coins": 314
     },
     "ice_cream": {
-        "date": datetime(current_year, 1, 7).date(),
+        "date": datetime(current_year, 7, 1).date(),
         "extra_coins": 500
     },
     "mango": {
-        "date": datetime(current_year, 22, 7).date(),
+        "date": datetime(current_year, 7, 22).date(),
         "extra_coins": 500
     },
     "st_patrick": {
-        "date": datetime(current_year, 17, 3).date(),
+        "date": datetime(current_year, 3, 17).date(),
         "extra_coins": random.randint(10, 30) * 25,
     },
     "international_beaver": {
-        "date": datetime(current_year, 7, 4).date(),
+        "date": datetime(current_year, 4, 7).date(),
         "extra_logs": 2500,
     },
     "halloween": {
