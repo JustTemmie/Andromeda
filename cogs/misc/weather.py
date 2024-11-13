@@ -126,7 +126,7 @@ class Weather(commands.Cog):
         return ID
 
     def get_yr_embed(self, yrID: str, language: str, forecast_link: str) -> str:
-        unix_hour = floor(time.time() // 3600)
+        unix_hour = floor(time.time() / 3600)
         
         png_path = f"temp/yr-{unix_hour}-{language}-{yrID}.png"
         pdf_path = f"temp/yr-{unix_hour}-{language}-{yrID}.pdf"
