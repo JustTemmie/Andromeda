@@ -6,7 +6,7 @@ Companies are entities, and should follow the casing of your country's language
 
 The bot speaks in first person
 
-If translating to a language where the speaker's gender matters, the bot is gender non-conforming, if that's not possible, it's feminine
+If translating to a language where the speaker's gender matters, the bot is gender non-conforming, if that's either not possible or simply unweildly, it's feminine
 
 
 # how to write
