@@ -26,3 +26,4 @@ alembic
 #sound_to_midi
 #librosa
 
+requests
