@@ -10,7 +10,7 @@ class VoiceChannelMonitor(commands.Cog):
     
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        logging.info(f"{member.id} joined vc {after.channel.id}")
+        logging.info(f"{member.id} joined vc")
         if member.id == self.user_to_monitor and after.channel is not None:
             for channel_member in after.channel.members:
                 if channel_member.id == self.target_user:
