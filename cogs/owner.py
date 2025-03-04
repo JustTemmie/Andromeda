@@ -117,6 +117,58 @@ class Owner(commands.Cog):
                     ),
                 )
                 await self.bot.close()
+    
+    # command to run python stuff
+    @commands.is_owner()
+    @commands.command(
+        name="run", brief="command_brief_run",
+        extras={"page": "admin", "category":"owner"}
+    )
+    async def run_command(self, ctx, *, code: str):
+        fn_name = "_eval_expr"
+
+        code = code.strip("` ")  # get rid of whitespace and code blocks
+        if code.startswith("py\n"):
+            code = code[3:]
+
+        try:
+            # add a layer of indentation
+            cmd = "\n    ".join(code.splitlines())
+
+            # wrap in async def body
+            body = f"async def {fn_name}():\n    {cmd}"
+
+            parsed = ast.parse(body)
+            body = parsed.body[0].body
+
+            insert_returns(body)
+
+            env = {
+                "bot": self.bot,
+                "ctx": ctx,
+                "message": ctx.message,
+                "server": ctx.message.guild,
+                "channel": ctx.message.channel,
+                "author": ctx.message.author,
+                "commands": commands,
+                "discord": discord,
+                "guild": ctx.message.guild,
+            }
+            env.update(globals())
+
+            exec(compile(parsed, filename="<ast>", mode="exec"), env)
+
+            result = await eval(f"{fn_name}()", env)
+
+            out = ">>> " + code + "\n"
+            output = "```py\n{}\n\n{}```".format(out, result)
+
+            if len(output) > 2000:
+                await ctx.send("The output is too long?")
+            else:
+                await ctx.send(output.format(result))
+        except Exception as e:
+            await ctx.send("```py\n>>> {}\n\n\n{}```".format(code, e))
                 
 
 async def setup(bot):
