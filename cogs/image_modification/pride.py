@@ -76,7 +76,7 @@ class PrideCog(commands.Cog):
             flag_2: typing.Optional[str],
             seperator: typing.Optional[str],
             user: typing.Optional[discord.Member],
-            pfp_margin: int = 50,
+            pfp_margin: int = 25,
             background_blur: int = 0,
             rotation: int = 0,
             flag_overwrite: typing.Optional[discord.Attachment] = None,
@@ -112,7 +112,8 @@ class PrideCog(commands.Cog):
         if rotation:
             background = background.rotate(rotation)
         
-        pfp = self.init_image(BytesIO(await user.display_avatar.read()), (PFP_SIZE - pfp_margin, PFP_SIZE - pfp_margin))
+        pfp: Image = self.init_image(BytesIO(await user.display_avatar.read()), (PFP_SIZE, PFP_SIZE))
+        pfp = pfp.crop((pfp_margin, pfp_margin, PFP_SIZE-pfp_margin, PFP_SIZE-pfp_margin))
         
         image = self.render_circle_on_background(image=pfp, background=background, border_blur=border_blur)
         
