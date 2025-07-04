@@ -104,13 +104,13 @@ class PrideCog(commands.Cog):
         background: Image = self.init_image(flag, background_size)
         if flag_2:
             flag_2_image = self.init_image(flag_2, background_size)
-            background: Image = self.merge_images(background, flag_2_image, (PFP_SIZE, PFP_SIZE), seperator)
+            background = self.merge_images(background, flag_2_image, (PFP_SIZE, PFP_SIZE), seperator)
         
         if background_blur:
-            background: Image = background.filter(ImageFilter.GaussianBlur(background_blur))
+            background = background.filter(ImageFilter.GaussianBlur(background_blur))
         
         if rotation:
-            background.rotate(rotation)
+            background = background.rotate(rotation)
         
         pfp = self.init_image(BytesIO(await user.display_avatar.read()), (PFP_SIZE - pfp_margin, PFP_SIZE - pfp_margin))
         
