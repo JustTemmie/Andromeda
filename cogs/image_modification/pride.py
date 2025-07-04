@@ -78,6 +78,7 @@ class PrideCog(commands.Cog):
             user: typing.Optional[discord.Member],
             pfp_margin: int = 50,
             background_blur: int = 0,
+            rotation: int = 0,
             flag_overwrite: typing.Optional[discord.Attachment] = None,
             flag_2_overwrite: typing.Optional[discord.Attachment] = None,
     ) -> None:
@@ -100,13 +101,16 @@ class PrideCog(commands.Cog):
             user = interaction.user
         
         background_size = (PFP_SIZE, PFP_SIZE)
-        background = self.init_image(flag, background_size)
+        background: Image = self.init_image(flag, background_size)
         if flag_2:
             flag_2_image = self.init_image(flag_2, background_size)
-            background = self.merge_images(background, flag_2_image, (PFP_SIZE, PFP_SIZE), seperator)
+            background: Image = self.merge_images(background, flag_2_image, (PFP_SIZE, PFP_SIZE), seperator)
         
         if background_blur:
-            background = background.filter(ImageFilter.GaussianBlur(background_blur))
+            background: Image = background.filter(ImageFilter.GaussianBlur(background_blur))
+        
+        if rotation:
+            background.rotate(rotation)
         
         pfp = self.init_image(BytesIO(await user.display_avatar.read()), (PFP_SIZE - pfp_margin, PFP_SIZE - pfp_margin))
         
