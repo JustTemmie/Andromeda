@@ -49,7 +49,7 @@ class Owner(commands.Cog):
         extras={"page": "admin", "category":"owner"}
     )
     async def shutdown_command(self, ctx):
-        await ctx.send("shuting down...")
+        await ctx.send("shutting down...")
         print("Terminated using `shutdown` command.")
         await self.bot.close()
 
