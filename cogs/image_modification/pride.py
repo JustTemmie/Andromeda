@@ -113,7 +113,7 @@ class PrideCog(commands.Cog):
             background = background.rotate(rotation)
         
         pfp: Image = self.init_image(BytesIO(await user.display_avatar.read()), (PFP_SIZE, PFP_SIZE))
-        pfp = pfp.crop((pfp_margin, pfp_margin, PFP_SIZE-pfp_margin, PFP_SIZE-pfp_margin))
+        pfp = pfp.crop((0, 0, PFP_SIZE-pfp_margin, PFP_SIZE-pfp_margin))
         
         image = self.render_circle_on_background(image=pfp, background=background, border_blur=border_blur)
         
